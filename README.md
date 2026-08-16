@@ -96,7 +96,7 @@ both fail immediately without a real one. The placeholder currently in
 `.env.local` is a syntactically-valid-but-fake key (built from your
 instance's JWKS domain) that gets past the format check for local
 testing — swap it for your real one before actually using auth.
-
+                                                                                                                                                                                                                                                                                                                                     
 Everything else:
 
 **Gemini** (`backend/.env`):
@@ -146,7 +146,7 @@ services — do that before shipping.
 
 ## Getting started
 
-```bash
+```bash []
 # frontend
 cd frontend
 npm install

@@ -420,12 +420,6 @@ All providers implement the same `AIProvider` interface (`services/ai/base.py`).
 
 ---
 
-## Local Development Tips
-
-- Run `python check_setup.py` in the backend directory to verify your `.env`, dependencies, and database connectivity before starting the server
-- The frontend shows a "Backend isn't reachable" error if the backend is not running on port 8000 — check `NEXT_PUBLIC_API_URL` in `.env.local`
-- Uploaded files land in `backend/storage_data/` by default (local disk provider). Set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to switch to Supabase Storage automatically
-- Use `AI_PROVIDER=mock` during development to avoid AI API costs
 
 ---
 

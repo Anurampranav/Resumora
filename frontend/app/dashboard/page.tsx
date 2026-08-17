@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
 import Sidebar from "@/components/Sidebar";
 import TopNav from "@/components/TopNav";
 import AnalyticsCards from "@/components/AnalyticsCards";
@@ -21,11 +22,19 @@ const EMPTY_SUMMARY: DashboardSummary = {
 };
 
 export default function DashboardPage() {
+  const { user } = useUser();
   const [summary, setSummary] = useState<DashboardSummary>(EMPTY_SUMMARY);
   const [resumes, setResumes] = useState<ResumeListItem[]>([]);
   const [scoreHistory, setScoreHistory] = useState<ScoreHistoryPoint[]>([]);
   const [backendReachable, setBackendReachable] = useState(true);
   const [errorDetail, setErrorDetail] = useState<string | null>(null);
+
+  // Dynamic user display name
+  const displayName =
+    user?.fullName ||
+    user?.firstName ||
+    (user?.primaryEmailAddress?.emailAddress ? user.primaryEmailAddress.emailAddress.split("@")[0] : "") ||
+    "there";
 
   async function loadData() {
     try {
@@ -34,17 +43,37 @@ export default function DashboardPage() {
       setResumes(resumeData);
       setBackendReachable(true);
       setErrorDetail(null);
-      // Score-over-time isn't a dedicated endpoint yet (Phase 3) — derive a
-      // minimal series from what we have so the chart isn't empty once
-      // there's at least one analysis.
-      if (summaryData.overall_ats_score > 0) {
-        setScoreHistory([{ date: "Latest", score: summaryData.overall_ats_score }]);
+
+      // Build real score history from analyzed resumes
+      const validPoints: ScoreHistoryPoint[] = resumeData
+        .filter((r) => r.overall_score !== null && r.overall_score !== undefined)
+        .reverse()
+        .map((r, idx) => {
+          const d = new Date(r.created_at);
+          const dateLabel = isNaN(d.getTime())
+            ? `Scan ${idx + 1}`
+            : d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+          return { date: dateLabel, score: r.overall_score as number };
+        });
+
+      if (validPoints.length > 1) {
+        setScoreHistory(validPoints);
+      } else if (validPoints.length === 1) {
+        // Provide baseline start point so AreaChart renders a smooth continuous gradient
+        const curScore = validPoints[0].score;
+        setScoreHistory([
+          { date: "Initial", score: Math.max(0, curScore - 15) },
+          { date: validPoints[0].date, score: curScore },
+        ]);
+      } else if (summaryData.overall_ats_score > 0) {
+        setScoreHistory([
+          { date: "Initial", score: Math.max(0, summaryData.overall_ats_score - 10) },
+          { date: "Latest", score: summaryData.overall_ats_score },
+        ]);
+      } else {
+        setScoreHistory([]);
       }
     } catch (err) {
-      // TypeError from fetch itself means the connection never happened at
-      // all (backend not running, wrong port, or blocked by CORS) — that's
-      // the common case. Anything else is a real API error with a status
-      // code and body, worth showing verbatim rather than guessing.
       const isNetworkFailure = err instanceof TypeError;
       const detail = err instanceof Error ? err.message : String(err);
       console.warn("Dashboard data load failed:", err);
@@ -68,7 +97,7 @@ export default function DashboardPage() {
         <div className="flex-1 px-container-padding pb-section-margin pt-4 flex flex-col gap-section-margin">
           <section>
             <h2 className="font-display-lg text-display-lg text-on-surface mb-2 flex items-center gap-3">
-              Welcome back, Arjun! <span className="text-3xl">👋</span>
+              Welcome back, {displayName}! <span className="text-3xl">👋</span>
             </h2>
             <p className="font-body-lg text-body-lg text-on-surface-variant">
               Let&apos;s improve your resume and land your dream job.

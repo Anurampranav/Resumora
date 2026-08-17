@@ -17,7 +17,7 @@ Upload your resume, choose a target job role, and get a deterministic ATS score 
 
 ---
 
-## Overview
+## Overview .
 
 Resumora is a full-stack resume analysis platform that helps job seekers understand how their resume performs against Applicant Tracking Systems (ATS). Users upload a PDF or DOCX resume, optionally select a target role from 15 seeded job profiles, and instantly receive:
 
@@ -29,7 +29,7 @@ Resumora is a full-stack resume analysis platform that helps job seekers underst
 
 ---
 
-## Features
+## Features .
 
 | Feature | Status |
 |---|---|
@@ -57,7 +57,7 @@ Resumora is a full-stack resume analysis platform that helps job seekers underst
 
 ---
 
-## Tech Stack
+## Tech Stack .
 
 | Layer | Technology |
 |---|---|
@@ -72,7 +72,7 @@ Resumora is a full-stack resume analysis platform that helps job seekers underst
 
 ---
 
-## Architecture
+## Architecture .
 
 ```mermaid
 graph TD

@@ -1,183 +1,434 @@
-# Resumora — AI Resume Analyzer
+﻿<div align="center">
 
-Production-track SaaS app: users upload a resume, pick a target role, get a
-deterministic ATS score plus AI-generated improvement suggestions, and can
-pay to unlock an AI-rewritten, ATS-optimized resume (DOCX/PDF).
+# Resumora
 
-This repo is being built in phases (per the project brief).
+**AI-Powered Resume Analyzer & ATS Score Optimizer**
 
-- **Phase 1** — project setup, folder structure, database schema, auth
-  abstraction, Dashboard UI built to match the approved design spec.
-- **Phase 2** — real resume upload (drag & drop, client validation, live
-  progress bar), persistent storage, PDF/DOCX parsing, the deterministic
-  ATS engine running against 14 seeded job roles, and the My Resumes
-  history page. Upload and analysis are a single request.
-- **Phase 3** — the full Analysis Report page per resume (category
-  breakdown, missing skills, strengths/weaknesses, weak bullet points,
-  formatting issues, AI suggestions), the Job Roles browser (search +
-  side-by-side comparison of up to 4 roles' required/preferred skills),
-  and wiring the dashboard's radar chart and AI suggestion card to real
-  data — both previously rendered with empty defaults despite the data
-  existing.
-- **Phase 3.1 (hardening)** — fixed a real scoring bug (required and
-  preferred skills were weighted identically; required now counts 2x),
-  changed bullet rewrites from automatic-on-every-upload to on-demand
-  (cuts AI calls per upload from 6 to 1), added pagination to the resume
-  list, added rate limiting on upload/reanalyze/rewrite/auth endpoints,
-  added a "Coming soon" state for unbuilt sidebar items instead of dead
-  links, and wired the real Gemini and Supabase SDKs in.
-- **Phase 3.2 (bugfix)** — fixed a hydration mismatch affecting every page
-  (browser extensions inject attributes before React hydrates), and added
-  `backend/check_setup.py`, a diagnostic script for local setup issues.
-- **Phase 3.3 (real auth + theme)** — delivered here. Real credentials are
-  wired into `backend/.env` and `frontend/.env.local`:
-  - **Clerk auth** — replaced the local-JWT-only auth with real Clerk JWT
-    verification (RS256 against Clerk's JWKS) plus JIT user provisioning
-    (a local `users` row is auto-created on a new Clerk user's first
-    request, keyed by `external_auth_id`, so the rest of the app keeps
-    using its own UUIDs). The local-JWT path still exists as a fallback
-    when `CLERK_JWKS_URL` isn't set.
-  - **Custom login/signup pages** (`/sign-in`, `/sign-up`) — 3D-glassmorphism
-    design matching the dashboard's look, with Google and GitHub OAuth via
-    Clerk (`useSignIn`/`useSignUp` + `authenticateWithRedirect`), an
-    email/password fallback, and a working light/dark theme toggle.
-  - **Real dark mode** — the color system was rebuilt on CSS variables
-    (48 tokens, each with a light and dark value) instead of flat hex, so
-    `next-themes`' dark class actually repaints the whole app, not just
-    new components. The `bg-white/opacity` glassmorphism pattern used
-    everywhere was converted to a `surface-glass` token that adapts too.
-  - **Route protection** — `middleware.ts` redirects unauthenticated users
-    away from `/dashboard`, `/resumes`, `/job-roles` to `/sign-in`.
-  - **What's verified vs. not**: the Clerk JWT verification and JIT
-    provisioning logic was tested against a real RSA-signed token and a
-    real local JWKS HTTP server (not just written) — signature validation,
-    tampered-token rejection, and duplicate-user prevention all confirmed
-    against a real Postgres database. What's *not* verified from this
-    environment: an actual OAuth round-trip through Google/GitHub via
-    Clerk's live servers, a connection to your real Supabase Postgres
-    instance, or a real Gemini API call — this sandbox has no network
-    route to any of those domains. Test those yourself once you run it
-    locally with your real `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` in place.
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python)](https://python.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-336791?logo=postgresql)](https://supabase.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript)](https://typescriptlang.org/)
+[![Clerk](https://img.shields.io/badge/Auth-Clerk-6C47FF?logo=clerk)](https://clerk.dev/)
 
-- **Phase 3.4 (bugfixes)** — delivered here.
-  - **Hooks-order crash in UploadModal** — an `if (!open) return null` sat
-    between the component's `useState` calls and its `useCallback`, so
-    React called a different number of hooks depending on whether the
-    modal was open. Since `TopNav` always mounts `<UploadModal
-    open={modalOpen} .../>`, this fired every time the modal was opened
-    from a closed state. Fixed by moving the early return after all hooks.
-    Verified at runtime (not just by review) with `react-test-renderer`:
-    mounted the component closed, then transitioned `open` through
-    `true→false→true` on the same instance — no hooks-order error.
-  - **Unhandled "Failed to fetch" crashes** — `handleReanalyze`,
-    `handleDelete`, and the download buttons across `/resumes`,
-    `/resumes/[id]`, and `RecentAnalyses` had `try { } finally { }` with no
-    `catch`, or no error handling at all, so any network failure crashed
-    to Next.js's unhandled-exception overlay instead of showing an inline
-    message. Fixed everywhere, and `lib/api.ts`'s `request()` now
-    translates a bare `TypeError: Failed to fetch` into an actionable
-    message naming the likely causes (backend not running, wrong port,
-    CORS) instead of leaving callers to guess. Also widened the default
-    `ALLOWED_ORIGINS` to include both `localhost` and `127.0.0.1` on port
-    3000, since browsers treat those as different origins for CORS and
-    that mismatch is a common cause of this exact failure.
+Upload your resume, choose a target job role, and get a deterministic ATS score plus AI-driven improvement suggestions — instantly.
 
-## Plugging in real credentials
+</div>
 
-`backend/.env` and `frontend/.env.local` already have real Supabase,
-Clerk, Gemini, and Razorpay (test mode) credentials wired in. One thing
-is still missing and **required** before the app will build or run:
+---
 
-**`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`** in `frontend/.env.local` — get it
-from Clerk Dashboard → API Keys (same page as the secret key you already
-have), starts with `pk_test_...`. Clerk validates this key's *format* at
-build time, not just runtime — `npm run build` and `npm run dev` will
-both fail immediately without a real one. The placeholder currently in
-`.env.local` is a syntactically-valid-but-fake key (built from your
-instance's JWKS domain) that gets past the format check for local
-testing — swap it for your real one before actually using auth.
+## Overview
 
-Everything else:
+Resumora is a full-stack resume analysis platform that helps job seekers understand how their resume performs against Applicant Tracking Systems (ATS). Users upload a PDF or DOCX resume, optionally select a target role from 15 seeded job profiles, and instantly receive:
 
-**Gemini** (`backend/.env`):
-1. Get a free key at [aistudio.google.com](https://aistudio.google.com) → "Get API key"
-2. Set `AI_PROVIDER=gemini` and `GEMINI_API_KEY=<your key>`
+- A **deterministic ATS score** (0–100) broken down across 8 categories
+- A **skills gap analysis** showing which required skills are missing
+- **AI-generated suggestions** explaining the score and recommending improvements
+- **On-demand bullet-point rewrites** powered by Gemini (or OpenAI/Claude)
+- A **full analysis history** across all uploaded resumes
 
-**Supabase Storage** (`backend/.env`):
-1. Create a project at [supabase.com](https://supabase.com)
-2. Settings → API → copy the **Project URL** and the **service_role** key
-   (not the `anon` key — file operations need the elevated role)
-3. Storage → New bucket → name it exactly `resumes`, set it **Private**
-4. Set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env`
+---
 
-Once those env vars are set, `get_ai_provider()` / `get_storage_provider()`
-switch automatically — no code changes. What's been verified without a
-live key: both SDKs (`google-generativeai`, `supabase`) install cleanly,
-import cleanly, and `GeminiProvider`/`SupabaseStorage`'s calls have been
-checked against the installed SDK's actual method signatures (`genai.configure`,
-`GenerativeModel`, `create_client`, and the storage bucket's
-`upload`/`download`/`remove` signatures) — so the shape is right. What
-hasn't been verified: an actual network round-trip to Google's or
-Supabase's servers, since this sandbox has no route to either. Test that
-part yourself once real keys are in.
+## Features
 
-## Stack
-
-| Layer | Choice |
+| Feature | Status |
 |---|---|
-| Frontend | Next.js 15 (App Router) + TypeScript + Tailwind CSS |
-| Backend | FastAPI (Python) |
-| Database | PostgreSQL via SQLAlchemy (schema in `database/schema.sql`) |
-| Auth | Abstracted behind `lib/auth.ts` (frontend) / `core/security.py` (backend) — swap in Clerk later without touching call sites |
-| AI | Abstracted behind `services/ai/base.py` — Gemini is the default provider, OpenAI/Claude are drop-in |
-| ATS scoring | Deterministic, rule-based — `services/ats/scoring_engine.py`. Never AI-driven. |
-| Storage | Abstracted behind `services/storage/` (Phase 2) — Supabase Storage is the target |
-| Payments | Abstracted behind `services/payments/` (Phase 6) — Razorpay is the target |
+| Resume upload (PDF / DOCX, up to 10 MB) | ✅ Implemented |
+| Deterministic ATS scoring (8-category breakdown) | ✅ Implemented |
+| Skills gap analysis vs. target job role | ✅ Implemented |
+| AI summary and improvement suggestions | ✅ Implemented |
+| On-demand weak bullet-point rewrite | ✅ Implemented |
+| Re-analyze existing resume | ✅ Implemented |
+| Resume download (original file) | ✅ Implemented |
+| Resume delete | ✅ Implemented |
+| Analysis history (paginated list) | ✅ Implemented |
+| Full per-resume analysis report page | ✅ Implemented |
+| 15 seeded job roles with required/preferred skills | ✅ Implemented |
+| Job role browser with search | ✅ Implemented |
+| Side-by-side job role comparison (up to 4 roles) | ✅ Implemented |
+| Dashboard summary (score, match %, stats) | ✅ Implemented |
+| Radar chart score visualization | ✅ Implemented |
+| Clerk authentication (email + Google + GitHub OAuth) | ✅ Implemented |
+| Dark / light theme | ✅ Implemented |
+| Route protection via Next.js middleware | ✅ Implemented |
+| Rate limiting on sensitive endpoints | ✅ Implemented |
+| Local disk storage (default) + Supabase Storage (config) | ✅ Implemented |
+| Mock AI provider (no key required for dev) | ✅ Implemented |
 
-## A note on this environment
+---
 
-This was built inside a sandboxed dev container with outbound access to
-package registries (npm, PyPI) only — not to Clerk, Supabase, Razorpay, or
-Gemini. Every third-party integration is written behind an interface with
-a working **mock/local implementation** so the app runs end-to-end today,
-and swapping in real credentials later is a config change (`.env`), not a
-rewrite. None of those integrations have been validated against the live
-services — do that before shipping.
+## Tech Stack
 
-## Getting started
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 15 (App Router), TypeScript, Tailwind CSS |
+| **UI Components** | Recharts, Framer Motion, Lucide React |
+| **Backend** | FastAPI (Python 3.13), Uvicorn |
+| **Database** | PostgreSQL via SQLAlchemy 2.x (hosted on Supabase) |
+| **Auth** | Clerk (RS256 JWT verification, JIT user provisioning) |
+| **AI** | Gemini (default) — provider-agnostic interface supports OpenAI, Claude, or a built-in mock |
+| **File Storage** | Local disk (dev default) or Supabase Storage (set via env var) |
+| **Rate Limiting** | SlowAPI |
 
-```bash
-# frontend
-cd frontend
-npm install
-npm run dev        # http://localhost:3000
+---
 
-# backend
-cd backend
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-python check_setup.py       # verifies .env, dependencies, and DB connectivity — run this if the frontend says "Backend isn't reachable"
-uvicorn app.main:app --reload   # http://localhost:8000
+## Architecture
+
+```mermaid
+graph TD
+    Browser["Browser (Next.js)"]
+    Clerk["Clerk Auth"]
+    API["FastAPI Backend :8000"]
+    DB["PostgreSQL (Supabase)"]
+    Storage["File Storage<br/>(Local disk / Supabase)"]
+    AI["AI Provider<br/>(Gemini / OpenAI / Claude / Mock)"]
+    ATS["ATS Scoring Engine<br/>(deterministic, no AI)"]
+
+    Browser -->|"Clerk JWT"| API
+    Browser <-->|"OAuth / session"| Clerk
+    API -->|"verify JWT"| Clerk
+    API --> DB
+    API --> Storage
+    API --> ATS
+    API --> AI
+    ATS -->|"score breakdown"| API
+    AI -->|"suggestions only"| API
 ```
 
-Copy `.env.example` to `.env` in both `frontend/` and `backend/` and fill
-in real keys when you have them. The app runs without them using mock
-providers (see `services/ai/mock_provider.py` and `lib/auth.ts`).
+> **Important design principle:** The ATS score is always computed by the deterministic rule-based engine (`services/ats/scoring_engine.py`). AI is used *only* to explain the score and suggest improvements — it never influences the score itself.
 
-Uploaded files land in `backend/storage_data/` by default (local disk
-provider). 14 job roles with required/preferred skills are seeded
-automatically on first backend startup — see `app/db/seed.py`.
+---
 
-## Phases
+## ATS Scoring Breakdown
 
-1. **Project setup, folder structure, DB schema, auth scaffold, Dashboard UI** ← this delivery
-2. Resume upload, parsing (PDF/DOCX), Supabase storage, resume history
-3. ATS scoring engine + job role/skill database
-4. Gemini integration for suggestions, rewriting, skill-gap analysis
-5. Premium resume generator (DOCX/PDF) with before/after
-6. Razorpay payments
-7. Testing, deployment, docs
+Scores are computed deterministically from the parsed resume content. The same resume always produces the same score.
 
-See `docs/ARCHITECTURE.md` for the provider-abstraction pattern used
-throughout, and `database/schema.sql` for the full normalized schema.
+| Category | Max Points | What is evaluated |
+|---|---|---|
+| **Formatting** | 20 | Presence of standard sections (Experience, Education, Skills), email, phone number |
+| **Skills** | 20 | Match against job role's required (2×) and preferred (1×) skills |
+| **Experience** | 15 | Number and quality of experience bullet points |
+| **Projects** | 15 | Number of listed projects |
+| **Grammar** | 10 | Absence of weak verbs (e.g. "responsible for", "worked on", "helped with") |
+| **Readability** | 10 | Average bullet-point length (sweet spot: 12–22 words) |
+| **Education** | 5 | Presence of an education section |
+| **Achievements** | 5 | Number of listed achievements |
+| **Total** | **100** | Sum of above |
+
+Skills scoring uses **weighted matching**: required skills carry 2× the weight of preferred skills, so a missing required skill costs more than a missing preferred one.
+
+---
+
+## Upload & Analysis Workflow
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant FE as Frontend
+    participant BE as Backend
+    participant ATS as ATS Engine
+    participant AI as AI Provider
+    participant DB as Database
+    participant S as Storage
+
+    U->>FE: Upload resume (PDF/DOCX) + select job role
+    FE->>BE: POST /resumes/upload (multipart, Clerk JWT)
+    BE->>S: Save file to storage
+    BE->>ATS: Parse text → deterministic score
+    BE->>AI: Generate summary + suggestions
+    BE->>DB: Persist resume + analysis
+    BE->>FE: Return full AnalysisOut
+    FE->>U: Show score, breakdown, suggestions
+```
+
+---
+
+## Job Roles
+
+15 job roles are seeded automatically on first backend startup. Each role has **required** and **preferred** skills used for ATS scoring.
+
+| Role | Industry |
+|---|---|
+| Software Engineer | Technology |
+| Backend Developer | Technology |
+| Frontend Developer | Technology |
+| AI Engineer | Technology |
+| Machine Learning Engineer | Technology |
+| Data Analyst | Technology |
+| Data Scientist | Technology |
+| Cybersecurity Engineer | Technology |
+| Cloud Engineer | Technology |
+| DevOps Engineer | Technology |
+| UI/UX Designer | Design |
+| Android Developer | Technology |
+| iOS Developer | Technology |
+| Product Manager | Technology |
+| Business Analyst | Business |
+
+You can also browse and compare up to 4 roles side-by-side via the **Job Roles** page or the `/job-roles/compare/by-slugs` API endpoint.
+
+---
+
+## Project Structure
+
+```
+resumora/
+├── frontend/                   # Next.js 15 application
+│   ├── app/
+│   │   ├── dashboard/          # Main dashboard page
+│   │   ├── resumes/            # Resume list + per-resume analysis report
+│   │   │   └── [id]/           # Full analysis report for one resume
+│   │   ├── job-roles/          # Job role browser + comparison
+│   │   ├── sign-in/            # Clerk-powered login page
+│   │   └── sign-up/            # Clerk-powered signup page
+│   ├── components/             # Shared UI components
+│   │   ├── Sidebar.tsx
+│   │   ├── TopNav.tsx
+│   │   ├── UploadModal.tsx
+│   │   ├── AtsScoreChart.tsx
+│   │   ├── ScoreBreakdownRadar.tsx
+│   │   ├── CircularScore.tsx
+│   │   ├── AiSuggestionCard.tsx
+│   │   ├── AnalyticsCards.tsx
+│   │   └── RecentAnalyses.tsx
+│   ├── lib/
+│   │   ├── api.ts              # Typed API client (all fetch calls)
+│   │   └── auth.ts             # Auth abstraction (Clerk)
+│   ├── middleware.ts            # Route protection (redirects unauthenticated users)
+│   └── .env.example
+│
+├── backend/                    # FastAPI application
+│   └── app/
+│       ├── api/routes/
+│       │   ├── resumes.py      # Upload, list, detail, reanalyze, download, delete
+│       │   ├── dashboard.py    # Dashboard summary stats
+│       │   ├── job_roles.py    # List, detail, compare
+│       │   └── auth.py         # JIT user provisioning
+│       ├── core/
+│       │   ├── config.py       # Pydantic settings (reads .env)
+│       │   ├── security.py     # Clerk JWT verification
+│       │   └── limiter.py      # SlowAPI rate limiter
+│       ├── db/
+│       │   ├── database.py     # SQLAlchemy engine + session
+│       │   └── seed.py         # Auto-seeds 15 job roles on startup
+│       ├── models/models.py    # SQLAlchemy ORM models
+│       ├── schemas/schemas.py  # Pydantic request/response schemas
+│       └── services/
+│           ├── ai/             # AI provider abstraction (Gemini/OpenAI/Claude/Mock)
+│           ├── ats/            # Deterministic ATS scoring engine
+│           ├── parsing/        # PDF + DOCX text extraction
+│           └── storage/        # File storage abstraction (local / Supabase)
+│
+├── database/
+│   └── schema.sql              # Full PostgreSQL schema
+│
+└── docs/
+    └── ARCHITECTURE.md         # Provider abstraction pattern details
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** 18+ and npm
+- **Python** 3.11+
+- **PostgreSQL** (or a [Supabase](https://supabase.com) project)
+
+---
+
+### 1. Backend Setup
+
+```bash
+cd backend
+
+# Create and activate a virtual environment (recommended)
+python -m venv .venv
+.venv\Scripts\activate        # Windows
+# source .venv/bin/activate   # macOS/Linux
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Copy and configure environment variables
+cp .env.example .env
+# Edit .env with your credentials (see Environment Variables section below)
+
+# Verify your setup (optional but recommended)
+python check_setup.py
+
+# Start the backend
+uvicorn app.main:app --reload
+# Backend runs at http://localhost:8000
+# API docs at http://localhost:8000/docs
+```
+
+> The backend auto-creates all database tables and seeds 15 job roles on first startup — no migration step needed.
+
+---
+
+### 2. Frontend Setup
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Copy and configure environment variables
+cp .env.example .env.local
+# Edit .env.local with your Clerk keys
+
+# Start the development server
+npm run dev
+# Frontend runs at http://localhost:3000
+```
+
+---
+
+## Environment Variables
+
+### Backend — `backend/.env`
+
+```env
+# PostgreSQL connection string
+DATABASE_URL=postgresql://user:password@host:port/dbname
+
+# Clerk authentication (RS256 JWT verification)
+CLERK_SECRET_KEY=sk_test_...
+CLERK_JWKS_URL=https://<your-clerk-instance>.clerk.accounts.dev/.well-known/jwks.json
+
+# Supabase Storage (optional — leave blank to use local disk storage)
+SUPABASE_URL=https://<project>.supabase.co
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# AI provider: mock | gemini | openai | claude
+# Leave as "mock" during development — no API key needed
+AI_PROVIDER=mock
+GEMINI_API_KEY=
+OPENAI_API_KEY=
+ANTHROPIC_API_KEY=
+
+# App settings
+JWT_SECRET=change-me-in-production
+ENVIRONMENT=development
+ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+```
+
+### Frontend — `frontend/.env.local`
+
+```env
+# Backend API URL
+NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# Clerk (get from Clerk Dashboard → API Keys)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+```
+
+> **Never commit `.env` or `.env.local` files.** Both are in `.gitignore`. Only `.env.example` files are committed.
+
+---
+
+## Authentication
+
+Resumora uses **[Clerk](https://clerk.dev)** for authentication:
+
+- **Sign-in options:** Email/password, Google OAuth, GitHub OAuth
+- **JWT verification:** Backend verifies Clerk RS256 JWTs against Clerk's JWKS endpoint
+- **JIT provisioning:** A local `users` row is auto-created on a new user's first API request, keyed by `external_auth_id` — no separate registration step needed
+- **Route protection:** `middleware.ts` redirects unauthenticated users away from `/dashboard`, `/resumes`, and `/job-roles` to `/sign-in`
+- **Fallback:** If `CLERK_JWKS_URL` is not set, the backend falls back to local JWT verification (useful for testing without a Clerk account)
+
+---
+
+## Database
+
+The schema (`database/schema.sql`) is a normalized PostgreSQL schema with the following core tables:
+
+| Table | Purpose |
+|---|---|
+| `users` | Registered users (keyed by Clerk `external_auth_id`) |
+| `resumes` | Uploaded resume metadata + parsed content (JSONB) |
+| `resume_analyses` | ATS score breakdown + AI output per analysis run |
+| `job_roles` | 15 seeded roles with slug, name, industry, demand level |
+| `skills` | Skill catalog |
+| `job_role_skills` | Many-to-many: which skills belong to which role, with `required`/`preferred` importance |
+
+SQLAlchemy ORM models mirror this schema. Tables are created automatically via `Base.metadata.create_all()` on startup.
+
+---
+
+## API Reference
+
+Interactive API docs are available at **`http://localhost:8000/docs`** (Swagger UI) when the backend is running.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/health` | Health check |
+| `POST` | `/auth/provision` | JIT user provisioning |
+| `POST` | `/resumes/upload` | Upload + analyze a resume |
+| `GET` | `/resumes` | List all resumes (paginated) |
+| `GET` | `/resumes/{id}` | Get resume detail + latest analysis |
+| `POST` | `/resumes/{id}/reanalyze` | Re-run analysis on stored file |
+| `POST` | `/resumes/{id}/rewrite-bullet` | On-demand AI bullet rewrite |
+| `GET` | `/resumes/{id}/download` | Download original file |
+| `DELETE` | `/resumes/{id}` | Delete resume + stored file |
+| `GET` | `/dashboard/summary` | Dashboard stats for current user |
+| `GET` | `/job-roles` | List all job roles (supports `?q=` search) |
+| `GET` | `/job-roles/{slug}` | Job role detail with required/preferred skills |
+| `GET` | `/job-roles/compare/by-slugs` | Compare up to 4 roles (`?slugs=a,b,c,d`) |
+
+---
+
+## Security Notes
+
+- All resume endpoints require a valid Clerk JWT in the `Authorization: Bearer <token>` header
+- Users can only access their own resumes (enforced at the DB query level)
+- File uploads are validated for MIME type (PDF/DOCX only) and capped at **10 MB**
+- Rate limits are applied to upload (10/min), reanalyze (10/min), rewrite-bullet (20/min), and auth endpoints
+- CORS is restricted to configured `ALLOWED_ORIGINS`
+- Secrets never appear in API responses
+
+---
+
+## AI Provider Abstraction
+
+The AI layer is fully swappable via the `AI_PROVIDER` environment variable — no code changes required:
+
+```
+AI_PROVIDER=mock    → uses MockProvider   (offline, no key needed — default)
+AI_PROVIDER=gemini  → uses GeminiProvider (requires GEMINI_API_KEY)
+AI_PROVIDER=openai  → uses OpenAIProvider (requires OPENAI_API_KEY)
+AI_PROVIDER=claude  → uses ClaudeProvider (requires ANTHROPIC_API_KEY)
+```
+
+All providers implement the same `AIProvider` interface (`services/ai/base.py`). The mock provider returns realistic placeholder suggestions so the full UI works during development without any API keys.
+
+---
+
+## Roadmap
+
+- [ ] **AI-powered resume rewriter** — generate an ATS-optimized DOCX/PDF version of the resume
+- [ ] **Cover letter generator** — AI-generated cover letter tailored to the target role
+- [ ] **More job roles** — expand beyond the current 15 technology-focused roles
+- [ ] **Resume scoring history chart** — track score improvement over multiple uploads
+- [ ] **Email notifications** — notify users when analysis is complete
+- [ ] **Deployment** — Docker Compose setup + cloud deployment guide
+
+---
+
+## Local Development Tips
+
+- Run `python check_setup.py` in the backend directory to verify your `.env`, dependencies, and database connectivity before starting the server
+- The frontend shows a "Backend isn't reachable" error if the backend is not running on port 8000 — check `NEXT_PUBLIC_API_URL` in `.env.local`
+- Uploaded files land in `backend/storage_data/` by default (local disk provider). Set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to switch to Supabase Storage automatically
+- Use `AI_PROVIDER=mock` during development to avoid AI API costs
+
+---
+
+<div align="center">
+Built with Next.js · FastAPI · PostgreSQL · Clerk · Gemini
+</div>

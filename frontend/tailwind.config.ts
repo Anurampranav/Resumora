@@ -59,6 +59,14 @@ const config: Config = {
         "on-tertiary-fixed-variant": "rgb(var(--on-tertiary-fixed-variant) / <alpha-value>)",
         "surface-glass": "rgb(var(--surface-glass) / <alpha-value>)",
       },
+      fill: ({ theme }) => ({
+        ...theme("colors"),
+        current: "currentColor",
+      }),
+      stroke: ({ theme }) => ({
+        ...theme("colors"),
+        current: "currentColor",
+      }),
       borderRadius: {
         DEFAULT: "0.25rem",
         lg: "0.5rem",

@@ -7,7 +7,7 @@ import { api, type JobRole } from "@/lib/api";
 import UploadModal from "./UploadModal";
 import ThemeToggle from "./ThemeToggle";
 
-export default function TopNav() {
+export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => void }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [jobRoles, setJobRoles] = useState<JobRole[]>([]);
   const router = useRouter();
@@ -53,7 +53,13 @@ export default function TopNav() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         jobRoles={jobRoles}
-        onSuccess={() => router.refresh()}
+        onSuccess={(result) => {
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new CustomEvent("resumeUploaded", { detail: result }));
+          }
+          onUploadSuccess?.();
+          router.refresh();
+        }}
       />
     </header>
   );

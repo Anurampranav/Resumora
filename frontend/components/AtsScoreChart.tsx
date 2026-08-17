@@ -30,16 +30,20 @@ export default function AtsScoreChart({ data }: { data: ScoreHistoryPoint[] }) {
                   <stop offset="100%" stopColor="#6C63FF" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#c7c4d8" opacity={0.3} vertical={false} />
-              <XAxis dataKey="date" tick={{ fontSize: 11, fill: "#464555" }} axisLine={false} tickLine={false} />
-              <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: "#464555" }} axisLine={false} tickLine={false} />
+              <CartesianGrid stroke="currentColor" className="text-outline-variant" opacity={0.15} vertical={false} />
+              <XAxis dataKey="date" tick={{ fontSize: 11, fill: "currentColor" }} className="text-on-surface-variant" axisLine={false} tickLine={false} />
+              <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: "currentColor" }} className="text-on-surface-variant" axisLine={false} tickLine={false} />
               <Tooltip
                 contentStyle={{
-                  background: "rgba(255,255,255,0.9)",
-                  border: "1px solid rgba(255,255,255,0.5)",
+                  backgroundColor: "rgb(var(--surface-container-high))",
+                  color: "rgb(var(--on-surface))",
+                  border: "1px solid rgb(var(--surface-glass) / 0.5)",
                   borderRadius: 12,
                   fontSize: 12,
+                  boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.3)",
                 }}
+                itemStyle={{ color: "#6C63FF", fontWeight: "bold" }}
+                labelStyle={{ color: "rgb(var(--on-surface-variant))" }}
               />
               <Area type="monotone" dataKey="score" stroke="#6C63FF" strokeWidth={2} fill="url(#scoreFill)" />
             </AreaChart>

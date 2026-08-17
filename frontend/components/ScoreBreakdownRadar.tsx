@@ -30,7 +30,7 @@ export default function ScoreBreakdownRadar({ categories = DEFAULT_CATEGORIES }:
         <div className="w-48 h-48 mb-6">
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart data={chartData} outerRadius="80%">
-              <PolarGrid stroke="#e4e1ee" />
+              <PolarGrid stroke="rgba(148, 143, 163, 0.25)" />
               <PolarAngleAxis dataKey="label" tick={{ fontSize: 0 }} />
               <Radar dataKey="value" stroke="#6C63FF" fill="#6C63FF" fillOpacity={0.35} strokeWidth={1.5} />
             </RadarChart>

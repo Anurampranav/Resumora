@@ -8,7 +8,7 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
     "Upload and analyze a resume to get a personalized AI suggestion based on your ATS score breakdown.";
 
   return (
-    <div className="glass-panel p-6 rounded-[24px] relative overflow-hidden bg-gradient-to-br from-white/60 to-purple-50/40 border border-surface-glass/80">
+    <div className="glass-panel p-6 rounded-[24px] relative overflow-hidden bg-gradient-to-br from-surface-glass/70 to-surface-glass/30 border border-surface-glass/80">
       <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-bl-full blur-[30px]" />
       <h3 className="font-headline-md text-[16px] font-bold text-on-surface mb-4 flex items-center gap-2 relative z-10">
         <Sparkles size={20} className="text-primary" /> AI Suggestion for You

@@ -13,10 +13,10 @@ function formatDate(iso: string) {
 }
 
 const STATUS_STYLES: Record<string, string> = {
-  analyzed: "bg-emerald-100 text-emerald-700",
-  uploaded: "bg-blue-100 text-blue-700",
-  parsing: "bg-amber-100 text-amber-700",
-  failed: "bg-red-100 text-red-700",
+  analyzed: "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20",
+  uploaded: "bg-blue-500/10 text-blue-500 border border-blue-500/20",
+  parsing: "bg-amber-500/10 text-amber-500 border border-amber-500/20",
+  failed: "bg-red-500/10 text-red-500 border border-red-500/20",
 };
 
 export default function MyResumesPage() {
@@ -39,6 +39,9 @@ export default function MyResumesPage() {
 
   useEffect(() => {
     load();
+    const handleUploaded = () => load();
+    window.addEventListener("resumeUploaded", handleUploaded);
+    return () => window.removeEventListener("resumeUploaded", handleUploaded);
   }, []);
 
   async function handleDelete(id: string) {
@@ -80,7 +83,7 @@ export default function MyResumesPage() {
     <>
       <Sidebar />
       <main className="ml-[280px] min-h-screen flex flex-col">
-        <TopNav />
+        <TopNav onUploadSuccess={load} />
         <div className="flex-1 px-container-padding pb-section-margin pt-4 flex flex-col gap-section-margin">
           <section>
             <h2 className="font-display-lg text-display-lg text-on-surface mb-2">My Resumes</h2>
@@ -124,7 +127,7 @@ export default function MyResumesPage() {
                         <div className="flex items-center gap-3 min-w-0">
                           <div
                             className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
-                              r.file_type === "pdf" ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600"
+                              r.file_type === "pdf" ? "bg-red-500/10 text-red-500" : "bg-blue-500/10 text-blue-500"
                             }`}
                           >
                             {r.file_type === "pdf" ? <FileText size={18} /> : <FileType2 size={18} />}

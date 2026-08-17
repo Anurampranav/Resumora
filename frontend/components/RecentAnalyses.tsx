@@ -71,7 +71,7 @@ export default function RecentAnalyses({
               className="glass-panel p-4 rounded-xl flex items-center justify-between hover:bg-surface-glass/50 transition-colors group border border-surface-glass/60"
             >
               <div className="flex items-center gap-4 w-2/5 min-w-0">
-                <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center text-red-600 shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center text-red-500 shrink-0">
                   <FileText size={20} />
                 </div>
                 <div className="min-w-0">

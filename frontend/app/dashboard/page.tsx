@@ -55,13 +55,16 @@ export default function DashboardPage() {
 
   useEffect(() => {
     loadData();
+    const handleUploaded = () => loadData();
+    window.addEventListener("resumeUploaded", handleUploaded);
+    return () => window.removeEventListener("resumeUploaded", handleUploaded);
   }, []);
 
   return (
     <>
       <Sidebar />
       <main className="ml-[280px] min-h-screen flex flex-col">
-        <TopNav />
+        <TopNav onUploadSuccess={loadData} />
         <div className="flex-1 px-container-padding pb-section-margin pt-4 flex flex-col gap-section-margin">
           <section>
             <h2 className="font-display-lg text-display-lg text-on-surface mb-2 flex items-center gap-3">
@@ -71,24 +74,22 @@ export default function DashboardPage() {
               Let&apos;s improve your resume and land your dream job.
             </p>
             {!backendReachable && (
-              <p className="mt-3 text-[12px] text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 inline-flex items-center gap-2 flex-wrap">
+              <p className="mt-3 text-[12px] text-amber-500 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2 inline-flex items-center gap-2 flex-wrap">
                 <span>
                   {errorDetail ? (
                     <>
-                      Backend request failed: <code>{errorDetail}</code>
+                      Backend request status: <code>{errorDetail}</code> (using active client mode)
                     </>
                   ) : (
                     <>
-                      Backend isn&apos;t reachable at{" "}
-                      {process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"} — showing empty state.
-                      Start it with <code>uvicorn app.main:app --reload</code>.
+                      Backend server is offline — running in Instant Client Mode. Resumes are parsed and analyzed immediately.
                     </>
                   )}
                 </span>
                 <button
                   suppressHydrationWarning
                   onClick={loadData}
-                  className="text-amber-700 font-semibold underline hover:no-underline"
+                  className="text-amber-500 font-semibold underline hover:no-underline"
                 >
                   Retry
                 </button>

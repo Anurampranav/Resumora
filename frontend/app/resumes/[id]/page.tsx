@@ -240,7 +240,7 @@ export default function ResumeReportPage() {
                   <section className="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
                     <div className="glass-panel p-6 rounded-[24px]">
                       <h3 className="font-headline-md text-[15px] font-bold text-on-surface mb-3 flex items-center gap-2">
-                        <CheckCircle2 size={18} className="text-emerald-600" /> Strengths
+                        <CheckCircle2 size={18} className="text-emerald-500" /> Strengths
                       </h3>
                       {a.strengths.length === 0 ? (
                         <p className="text-[13px] text-on-surface-variant">None flagged yet.</p>
@@ -256,7 +256,7 @@ export default function ResumeReportPage() {
                     </div>
                     <div className="glass-panel p-6 rounded-[24px]">
                       <h3 className="font-headline-md text-[15px] font-bold text-on-surface mb-3 flex items-center gap-2">
-                        <AlertTriangle size={18} className="text-amber-600" /> Weaknesses
+                        <AlertTriangle size={18} className="text-amber-500" /> Weaknesses
                       </h3>
                       {a.weaknesses.length === 0 ? (
                         <p className="text-[13px] text-on-surface-variant">None flagged.</p>
@@ -279,7 +279,7 @@ export default function ResumeReportPage() {
                           {a.missing_skills.map((s) => (
                             <span
                               key={s}
-                              className="text-[11px] font-semibold bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full capitalize"
+                              className="text-[11px] font-semibold bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2.5 py-1 rounded-full capitalize"
                             >
                               {s}
                             </span>
@@ -304,14 +304,14 @@ export default function ResumeReportPage() {
                           const suggestedText = rewrite?.text || b.suggested;
                           return (
                             <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                              <div className="bg-red-50/60 border border-red-100 rounded-xl p-3">
+                              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3">
                                 <p className="text-[10px] font-bold text-red-500 uppercase tracking-wider mb-1">
                                   Original
                                 </p>
                                 <p className="text-[13px] text-on-surface">{b.original}</p>
                               </div>
-                              <div className="bg-emerald-50/60 border border-emerald-100 rounded-xl p-3 flex flex-col justify-center">
-                                <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-1">
+                              <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 flex flex-col justify-center">
+                                <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider mb-1">
                                   Suggested
                                 </p>
                                 {rewrite?.loading ? (
@@ -323,7 +323,7 @@ export default function ResumeReportPage() {
                                 ) : (
                                   <button suppressHydrationWarning
                                     onClick={() => handleRewrite(i, b.original)}
-                                    className="flex items-center gap-1.5 text-[12px] font-semibold text-emerald-700 hover:text-emerald-800 w-fit"
+                                    className="flex items-center gap-1.5 text-[12px] font-semibold text-emerald-500 hover:text-emerald-400 w-fit"
                                   >
                                     <Wand2 size={14} /> Rewrite with AI
                                   </button>
@@ -353,7 +353,7 @@ export default function ResumeReportPage() {
                   )}
 
                   {/* AI suggestions */}
-                  <section className="glass-panel p-6 rounded-[24px] bg-gradient-to-br from-white/60 to-purple-50/40">
+                  <section className="glass-panel p-6 rounded-[24px] bg-gradient-to-br from-surface-glass/70 to-surface-glass/30">
                     <h3 className="font-headline-md text-[16px] font-bold text-on-surface mb-3 flex items-center gap-2">
                       <Sparkles size={18} className="text-primary" /> AI Suggestions
                     </h3>

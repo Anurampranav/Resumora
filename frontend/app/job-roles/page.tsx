@@ -141,7 +141,7 @@ export default function JobRolesPage() {
                               </span>
                             )}
                             {isPreferred && (
-                              <span className="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">
+                              <span className="text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20 px-2 py-0.5 rounded-full">
                                 Preferred
                               </span>
                             )}
@@ -243,7 +243,7 @@ function RoleCard({
                 {detail.preferred_skills.map((s) => (
                   <span
                     key={s}
-                    className="text-[11px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-medium"
+                    className="text-[11px] bg-blue-500/10 text-blue-500 border border-blue-500/20 px-2 py-0.5 rounded-full font-medium"
                   >
                     {s}
                   </span>

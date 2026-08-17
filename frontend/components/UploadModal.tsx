@@ -102,11 +102,11 @@ export default function UploadModal({ open, onClose, onSuccess, jobRoles }: Uplo
             <select suppressHydrationWarning
               value={roleSlug}
               onChange={(e) => setRoleSlug(e.target.value)}
-              className="w-full mb-4 bg-surface-glass/60 border border-surface-glass/60 rounded-xl py-2.5 px-3 text-[14px] focus:outline-none focus:ring-2 focus:ring-primary/30"
+              className="w-full mb-4 bg-surface-glass/60 border border-surface-glass/60 text-on-surface rounded-xl py-2.5 px-3 text-[14px] focus:outline-none focus:ring-2 focus:ring-primary/30"
             >
-              <option value="">No specific role</option>
+              <option value="" className="bg-surface text-on-surface">No specific role (General ATS scoring)</option>
               {jobRoles.map((r) => (
-                <option key={r.slug} value={r.slug}>
+                <option key={r.slug} value={r.slug} className="bg-surface text-on-surface">
                   {r.name}
                 </option>
               ))}
@@ -203,11 +203,11 @@ export default function UploadModal({ open, onClose, onSuccess, jobRoles }: Uplo
 
         {stage === "error" && (
           <div className="py-4 flex flex-col items-center gap-3 text-center">
-            <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+            <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center text-red-500">
               <AlertCircle size={24} />
             </div>
             <p className="font-semibold text-on-surface">Upload failed</p>
-            <p className="text-[13px] text-on-surface-variant">{error}</p>
+            <p className="text-[13px] text-on-surface-variant max-w-sm">{error}</p>
             <button suppressHydrationWarning
               onClick={reset}
               className="mt-2 btn-gradient text-white px-6 py-2.5 rounded-xl text-[13px] font-semibold"

@@ -134,14 +134,14 @@ export default function DashboardPage() {
               categories={
                 summary.latest_breakdown
                   ? [
-                      { label: "Formatting", value: Math.round((summary.latest_breakdown.formatting / 20) * 100), raw: `${summary.latest_breakdown.formatting}/20`, color: "#6C63FF" },
-                      { label: "Skills", value: Math.round((summary.latest_breakdown.skills / 20) * 100), raw: `${summary.latest_breakdown.skills}/20`, color: "#3b82f6" },
-                      { label: "Experience", value: Math.round((summary.latest_breakdown.experience / 15) * 100), raw: `${summary.latest_breakdown.experience}/15`, color: "#06b6d4" },
-                      { label: "Projects", value: Math.round((summary.latest_breakdown.projects / 15) * 100), raw: `${summary.latest_breakdown.projects}/15`, color: "#f59e0b" },
-                      { label: "Education", value: Math.round((summary.latest_breakdown.education / 5) * 100), raw: `${summary.latest_breakdown.education}/5`, color: "#ec4899" },
-                      { label: "Readability", value: Math.round((summary.latest_breakdown.readability / 10) * 100), raw: `${summary.latest_breakdown.readability}/10`, color: "#10b981" },
-                      { label: "Grammar", value: Math.round((summary.latest_breakdown.grammar / 10) * 100), raw: `${summary.latest_breakdown.grammar}/10`, color: "#ef4444" },
-                      { label: "Achievements", value: Math.round((summary.latest_breakdown.achievements / 5) * 100), raw: `${summary.latest_breakdown.achievements}/5`, color: "#8b5cf6" },
+                      { label: "Formatting", value: Math.round((summary.latest_breakdown.formatting / 20) * 100), raw: `${summary.latest_breakdown.formatting}/20`, color: "#6366F1" },
+                      { label: "Skills", value: Math.round((summary.latest_breakdown.skills / 20) * 100), raw: `${summary.latest_breakdown.skills}/20`, color: "#3B82F6" },
+                      { label: "Experience", value: Math.round((summary.latest_breakdown.experience / 15) * 100), raw: `${summary.latest_breakdown.experience}/15`, color: "#06B6D4" },
+                      { label: "Projects", value: Math.round((summary.latest_breakdown.projects / 15) * 100), raw: `${summary.latest_breakdown.projects}/15`, color: "#10B981" },
+                      { label: "Education", value: Math.round((summary.latest_breakdown.education / 5) * 100), raw: `${summary.latest_breakdown.education}/5`, color: "#F59E0B" },
+                      { label: "Readability", value: Math.round((summary.latest_breakdown.readability / 10) * 100), raw: `${summary.latest_breakdown.readability}/10`, color: "#8B5CF6" },
+                      { label: "Grammar", value: Math.round((summary.latest_breakdown.grammar / 10) * 100), raw: `${summary.latest_breakdown.grammar}/10`, color: "#EC4899" },
+                      { label: "Achievements", value: Math.round((summary.latest_breakdown.achievements / 5) * 100), raw: `${summary.latest_breakdown.achievements}/5`, color: "#14B8A6" },
                     ]
                   : undefined
               }

@@ -20,14 +20,14 @@ import ScoreBreakdownRadar, { type CategoryScore } from "@/components/ScoreBreak
 import { api, type ResumeDetail } from "@/lib/api";
 
 const CATEGORY_META: { key: keyof NonNullable<ResumeDetail["latest_analysis"]>["breakdown"]; label: string; max: number; color: string }[] = [
-  { key: "formatting", label: "Formatting", max: 20, color: "#6C63FF" },
-  { key: "skills", label: "Skills", max: 20, color: "#3b82f6" },
-  { key: "experience", label: "Experience", max: 15, color: "#06b6d4" },
-  { key: "projects", label: "Projects", max: 15, color: "#f59e0b" },
-  { key: "education", label: "Education", max: 5, color: "#ec4899" },
-  { key: "readability", label: "Readability", max: 10, color: "#10b981" },
-  { key: "grammar", label: "Grammar", max: 10, color: "#ef4444" },
-  { key: "achievements", label: "Achievements", max: 5, color: "#8b5cf6" },
+  { key: "formatting", label: "Formatting", max: 20, color: "#6366F1" },
+  { key: "skills", label: "Skills", max: 20, color: "#3B82F6" },
+  { key: "experience", label: "Experience", max: 15, color: "#06B6D4" },
+  { key: "projects", label: "Projects", max: 15, color: "#10B981" },
+  { key: "education", label: "Education", max: 5, color: "#F59E0B" },
+  { key: "readability", label: "Readability", max: 10, color: "#8B5CF6" },
+  { key: "grammar", label: "Grammar", max: 10, color: "#EC4899" },
+  { key: "achievements", label: "Achievements", max: 5, color: "#14B8A6" },
 ];
 
 export default function ResumeReportPage() {

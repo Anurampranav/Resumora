@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSignIn } from "@clerk/nextjs";
+import { useSignIn, useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2, ScrollText, ShieldCheck, Sparkles } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -38,6 +38,7 @@ function GitHubIcon() {
 
 export default function SignInPage() {
   const { isLoaded, signIn, setActive } = useSignIn();
+  const { isSignedIn, isLoaded: isAuthLoaded } = useAuth();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -45,6 +46,12 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState<"email" | "google" | "github" | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isAuthLoaded && isSignedIn) {
+      router.replace("/dashboard");
+    }
+  }, [isAuthLoaded, isSignedIn, router]);
 
   async function handleOAuth(strategy: "oauth_google" | "oauth_github") {
     if (!isLoaded) return;
@@ -56,8 +63,17 @@ export default function SignInPage() {
         redirectUrl: "/sign-in/sso-callback",
         redirectUrlComplete: "/dashboard",
       });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong — try again.");
+    } catch (err: unknown) {
+      const code = err && typeof err === "object" && "errors" in err
+        ? // @ts-expect-error Clerk error shape
+          err.errors?.[0]?.code
+        : "";
+      const msg = err instanceof Error ? err.message : String(err);
+      if (code === "session_already_exists" || msg.toLowerCase().includes("session already exists")) {
+        router.push("/dashboard");
+        return;
+      }
+      setError(msg || "Something went wrong — try again.");
       setLoading(null);
     }
   }
@@ -76,13 +92,17 @@ export default function SignInPage() {
         setError("Additional verification is required — check your email.");
       }
     } catch (err: unknown) {
-      const message =
-        err && typeof err === "object" && "errors" in err
-          ? // @ts-expect-error Clerk error shape
-            err.errors?.[0]?.message
-          : err instanceof Error
-            ? err.message
-            : "Could not sign in — check your credentials.";
+      const firstErr = err && typeof err === "object" && "errors" in err
+        ? // @ts-expect-error Clerk error shape
+          err.errors?.[0]
+        : null;
+      const code = firstErr?.code;
+      const message = firstErr?.message ?? (err instanceof Error ? err.message : "Could not sign in — check your credentials.");
+
+      if (code === "session_already_exists" || message.toLowerCase().includes("session already exists")) {
+        router.push("/dashboard");
+        return;
+      }
       setError(message);
     } finally {
       setLoading(null);
@@ -246,6 +266,9 @@ export default function SignInPage() {
                   </button>
                 </div>
               </div>
+
+              {/* Mount Clerk CAPTCHA / bot protection widget */}
+              <div id="clerk-captcha" />
 
               {error && (
                 <p className="text-[12px] text-error bg-error-container/60 border border-error/20 rounded-lg px-3 py-2">

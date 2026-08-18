@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, Depends
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -9,7 +11,6 @@ from app.schemas.schemas import DashboardSummaryOut, ScoreBreakdownOut
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
-
 @router.get("/summary", response_model=DashboardSummaryOut)
 def get_summary(user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     latest_analysis = (
@@ -20,11 +21,12 @@ def get_summary(user: dict = Depends(get_current_user), db: Session = Depends(ge
         .first()
     )
 
+    start_of_month = datetime.now(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     resumes_this_month = (
         db.query(func.count(Resume.id))
         .filter(
             Resume.user_id == user["id"],
-            func.date_trunc("month", Resume.created_at) == func.date_trunc("month", func.now()),
+            Resume.created_at >= start_of_month,
         )
         .scalar()
         or 0

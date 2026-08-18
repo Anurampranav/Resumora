@@ -12,7 +12,7 @@ against real resumes in Phase 2.
 import io
 import re
 
-import fitz  # PyMuPDF
+import pymupdf as fitz  # PyMuPDF
 from docx import Document
 
 from app.services.ats.scoring_engine import ParsedResume

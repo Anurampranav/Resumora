@@ -44,21 +44,24 @@ class AIProvider(ABC):
         ...
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 def get_ai_provider(provider_name: str) -> AIProvider:
-    """Factory — the only place that branches on provider name."""
-    if provider_name == "gemini":
-        from app.services.ai.gemini_provider import GeminiProvider
-
-        return GeminiProvider()
-    if provider_name == "openai":
-        from app.services.ai.openai_provider import OpenAIProvider
-
-        return OpenAIProvider()
-    if provider_name == "claude":
-        from app.services.ai.claude_provider import ClaudeProvider
-
-        return ClaudeProvider()
+    """Factory — the only place that branches on provider name. Falls back to MockProvider on error."""
+    try:
+        if provider_name == "gemini":
+            from app.services.ai.gemini_provider import GeminiProvider
+            return GeminiProvider()
+        if provider_name == "openai":
+            from app.services.ai.openai_provider import OpenAIProvider
+            return OpenAIProvider()
+        if provider_name == "claude":
+            from app.services.ai.claude_provider import ClaudeProvider
+            return ClaudeProvider()
+    except Exception as exc:
+        logger.warning(f"Failed to initialize AI provider '{provider_name}': {exc}. Falling back to mock provider.")
 
     from app.services.ai.mock_provider import MockProvider
-
     return MockProvider()

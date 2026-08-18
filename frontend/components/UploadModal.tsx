@@ -28,6 +28,38 @@ export default function UploadModal({ open, onClose, onSuccess, jobRoles }: Uplo
   const [roleSlug, setRoleSlug] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const validateFile = useCallback((file: File): string | null => {
+    if (!ACCEPTED_TYPES.has(file.type)) return "Only PDF and DOCX files are accepted.";
+    if (file.size > MAX_SIZE_BYTES) return "File exceeds the 10 MB limit.";
+    return null;
+  }, []);
+
+  const startUpload = useCallback(
+    async (file: File) => {
+      const validationError = validateFile(file);
+      if (validationError) {
+        setError(validationError);
+        setStage("error");
+        return;
+      }
+
+      setStage("uploading");
+      setProgress(0);
+      setError(null);
+
+      try {
+        const analysis = await api.uploadResume(file, roleSlug || undefined, setProgress);
+        setResult(analysis);
+        setStage("success");
+        onSuccess?.(analysis);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Upload failed");
+        setStage("error");
+      }
+    },
+    [roleSlug, onSuccess, validateFile]
+  );
+
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
@@ -35,10 +67,8 @@ export default function UploadModal({ open, onClose, onSuccess, jobRoles }: Uplo
       const file = e.dataTransfer.files?.[0];
       if (file) startUpload(file);
     },
-    [roleSlug]
+    [startUpload]
   );
-
-  if (!open) return null;
 
   function reset() {
     setStage("idle");
@@ -52,34 +82,7 @@ export default function UploadModal({ open, onClose, onSuccess, jobRoles }: Uplo
     onClose();
   }
 
-  function validateFile(file: File): string | null {
-    if (!ACCEPTED_TYPES.has(file.type)) return "Only PDF and DOCX files are accepted.";
-    if (file.size > MAX_SIZE_BYTES) return "File exceeds the 10 MB limit.";
-    return null;
-  }
-
-  async function startUpload(file: File) {
-    const validationError = validateFile(file);
-    if (validationError) {
-      setError(validationError);
-      setStage("error");
-      return;
-    }
-
-    setStage("uploading");
-    setProgress(0);
-    setError(null);
-
-    try {
-      const analysis = await api.uploadResume(file, roleSlug || undefined, setProgress);
-      setResult(analysis);
-      setStage("success");
-      onSuccess?.(analysis);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload failed");
-      setStage("error");
-    }
-  }
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4">

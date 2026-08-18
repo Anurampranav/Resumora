@@ -36,6 +36,23 @@ Respond ONLY with JSON matching this shape, nothing else:
 """
 
 
+import re
+
+def _clean_json_response(raw_text: str) -> dict:
+    cleaned = raw_text.strip()
+    # Strip markdown code blocks like ```json ... ``` or ``` ... ```
+    if cleaned.startswith("```"):
+        cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r"\s*```$", "", cleaned)
+    return json.loads(cleaned)
+
+
+import logging
+from app.services.ai.mock_provider import MockProvider
+
+logger = logging.getLogger(__name__)
+
+
 class GeminiProvider(AIProvider):
     def __init__(self):
         settings = get_settings()
@@ -45,42 +62,51 @@ class GeminiProvider(AIProvider):
                 "or provide a real key to use this provider."
             )
         self._api_key = settings.gemini_api_key
+        self._mock_fallback = MockProvider()
 
     def analyze(self, ctx: ResumeContext) -> AISuggestions:
-        import google.generativeai as genai  # imported lazily so mock mode has no dependency
+        try:
+            import google.generativeai as genai  # imported lazily so mock mode has no dependency
 
-        genai.configure(api_key=self._api_key)
-        model = genai.GenerativeModel("gemini-1.5-pro")
+            genai.configure(api_key=self._api_key)
+            model = genai.GenerativeModel("gemini-1.5-flash")
 
-        prompt = PROMPT_TEMPLATE.format(
-            target_role=ctx.target_role,
-            missing_skills=", ".join(ctx.missing_skills),
-            ats_breakdown=json.dumps(ctx.ats_breakdown),
-            raw_text=ctx.raw_text[:12000],  # keep prompt bounded
-        )
-        response = model.generate_content(prompt)
-        data = json.loads(response.text)
+            prompt = PROMPT_TEMPLATE.format(
+                target_role=ctx.target_role,
+                missing_skills=", ".join(ctx.missing_skills),
+                ats_breakdown=json.dumps(ctx.ats_breakdown),
+                raw_text=ctx.raw_text[:12000],  # keep prompt bounded
+            )
+            response = model.generate_content(prompt)
+            data = _clean_json_response(response.text)
 
-        return AISuggestions(
-            summary=data["summary"],
-            strengths=data["strengths"],
-            weaknesses=data["weaknesses"],
-            suggestions=data["suggestions"],
-            weak_bullet_points=data["weak_bullet_points"],
-            score_explanation=data["score_explanation"],
-        )
+            return AISuggestions(
+                summary=data.get("summary", f"Analysis completed for target role: {ctx.target_role}."),
+                strengths=data.get("strengths", []),
+                weaknesses=data.get("weaknesses", []),
+                suggestions=data.get("suggestions", []),
+                weak_bullet_points=data.get("weak_bullet_points", []),
+                score_explanation=data.get("score_explanation", ""),
+            )
+        except Exception as exc:
+            logger.warning(f"Gemini API analysis failed: {exc}. Falling back to mock response.")
+            return self._mock_fallback.analyze(ctx)
 
     def rewrite_bullet(self, original: str, target_role: str) -> str:
-        import google.generativeai as genai
+        try:
+            import google.generativeai as genai
 
-        genai.configure(api_key=self._api_key)
-        model = genai.GenerativeModel("gemini-1.5-pro")
-        prompt = (
-            f"Rewrite this resume bullet for a {target_role} role. Make it "
-            f"stronger with an action verb and structure for impact, but do "
-            f"NOT invent any numbers, tools, or outcomes not implied by the "
-            f"original. Return only the rewritten bullet, nothing else.\n\n"
-            f"Original: {original}"
-        )
-        response = model.generate_content(prompt)
-        return response.text.strip()
+            genai.configure(api_key=self._api_key)
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            prompt = (
+                f"Rewrite this resume bullet for a {target_role} role. Make it "
+                f"stronger with an action verb and structure for impact, but do "
+                f"NOT invent any numbers, tools, or outcomes not implied by the "
+                f"original. Return only the rewritten bullet, nothing else.\n\n"
+                f"Original: {original}"
+            )
+            response = model.generate_content(prompt)
+            return response.text.strip()
+        except Exception as exc:
+            logger.warning(f"Gemini API bullet rewrite failed: {exc}. Falling back to mock rewrite.")
+            return self._mock_fallback.rewrite_bullet(original, target_role)

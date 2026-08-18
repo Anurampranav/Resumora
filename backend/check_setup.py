@@ -24,7 +24,7 @@ else:
 
 # 2. Required packages import
 missing = []
-for pkg in ["fastapi", "uvicorn", "sqlalchemy", "psycopg2", "pydantic_settings", "jose", "docx", "fitz", "pdfplumber", "slowapi"]:
+for pkg in ["fastapi", "uvicorn", "sqlalchemy", "psycopg2", "pydantic_settings", "jose", "docx", "pymupdf", "pdfplumber", "slowapi"]:
     try:
         __import__(pkg)
     except ImportError:

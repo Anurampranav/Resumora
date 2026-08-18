@@ -43,3 +43,6 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+backend/storage_data/
+frontend/tsconfig.tsbuildinfo

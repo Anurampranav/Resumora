@@ -8,12 +8,11 @@ import {
   Users2,
   PenSquare,
   Download,
-  CreditCard,
   Settings,
   HelpCircle,
   ChevronsUpDown,
   Crown,
-  ScrollText,
+  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -24,13 +23,12 @@ import clsx from "clsx";
 const NAV_ITEMS = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
   { label: "My Resumes", icon: FileText, href: "/resumes" },
-  { label: "AI Analysis", icon: BrainCircuit, href: "#", comingSoon: true },
-  { label: "ATS Reports", icon: BarChart3, href: "#", comingSoon: true },
-  { label: "Job Roles", icon: Users2, href: "/job-roles" },
-  { label: "Resume Builder", icon: PenSquare, href: "#", badge: "Premium", comingSoon: true },
-  { label: "Downloads", icon: Download, href: "#", comingSoon: true },
-  { label: "Payments", icon: CreditCard, href: "#", comingSoon: true },
-  { label: "Settings", icon: Settings, href: "#", comingSoon: true },
+  { label: "AI Analysis", icon: BrainCircuit, href: "/resumes" },
+  { label: "Job Match", icon: Users2, href: "/job-roles" },
+  { label: "ATS Reports", icon: BarChart3, href: "/resumes" },
+  { label: "Resume Builder", icon: PenSquare, href: "/resumes", badge: "PREMIUM" },
+  { label: "Downloads", icon: Download, href: "/resumes" },
+  { label: "Settings", icon: Settings, href: "/resumes" },
 ];
 
 export default function Sidebar() {
@@ -39,120 +37,116 @@ export default function Sidebar() {
   const { user } = useUser();
   const { signOut } = useClerk();
 
-  const displayName = user?.fullName || user?.primaryEmailAddress?.emailAddress?.split("@")[0] || "Account";
-  const displayEmail = user?.primaryEmailAddress?.emailAddress || "";
+  const displayName = user?.fullName || user?.primaryEmailAddress?.emailAddress?.split("@")[0] || "Anuram Pranav";
+  const displayEmail = user?.primaryEmailAddress?.emailAddress || "anurampranav07@gmail.com";
   const initial = displayName.charAt(0).toUpperCase();
 
   return (
-    <nav className="fixed left-0 top-0 h-full w-[280px] bg-surface-glass/20 backdrop-blur-[40px] border-r border-surface-glass/20 shadow-sm z-50 flex flex-col p-6 gap-stack-md">
-      <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white shadow-lg">
-          <ScrollText size={22} />
+    <nav className="fixed left-0 top-0 h-full w-[260px] bg-[#0b0c16]/90 backdrop-blur-xl border-r border-violet-900/20 shadow-2xl z-50 flex flex-col p-5 text-gray-300">
+      {/* Brand Header */}
+      <div className="flex items-center gap-3 mb-8 px-2">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 via-indigo-600 to-purple-700 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 border border-violet-400/30">
+          <Sparkles size={22} className="text-white" />
         </div>
         <div>
-          <h1 className="font-headline-md text-headline-md font-bold text-on-surface leading-tight">Resumora</h1>
-          <p className="font-body-md text-label-md text-on-surface-variant">AI Resume Analyzer</p>
+          <h1 className="font-bold text-lg text-white tracking-tight leading-none">Resumora</h1>
+          <p className="text-[11px] text-violet-300/70 font-medium tracking-wide">AI Resume Analyzer</p>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-2 space-y-2">
-        {NAV_ITEMS.map(({ label, icon: Icon, href, badge, comingSoon }) => {
-          const active = href !== "#" && pathname?.startsWith(href);
-
-          const inner = (
-            <>
-              <div className="flex items-center gap-3">
-                <Icon size={20} />
-                <span className="font-body-md text-body-md">{label}</span>
-              </div>
-              {badge && (
-                <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                  {badge}
-                </span>
-              )}
-              {comingSoon && !badge && (
-                <span className="text-on-surface-variant/50 text-[10px] font-semibold uppercase tracking-wider">
-                  Soon
-                </span>
-              )}
-            </>
-          );
-
-          if (comingSoon) {
-            return (
-              <div
-                key={label}
-                title="Coming soon"
-                className="flex items-center gap-3 px-4 py-3 rounded-xl justify-between text-on-surface-variant/40 cursor-not-allowed select-none"
-              >
-                {inner}
-              </div>
-            );
-          }
+      {/* Navigation Items */}
+      <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 scrollbar-none">
+        {NAV_ITEMS.map(({ label, icon: Icon, href, badge }) => {
+          const active = pathname === href || (href !== "/dashboard" && pathname?.startsWith(href));
 
           return (
             <Link
               key={label}
               href={href}
               className={clsx(
-                "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 justify-between",
+                "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group",
                 active
-                  ? "bg-surface-glass/30 text-primary font-bold"
-                  : "text-on-surface-variant hover:text-primary hover:bg-surface-glass/10"
+                  ? "bg-violet-600/20 text-violet-300 border border-violet-500/30 shadow-sm"
+                  : "text-gray-400 hover:text-white hover:bg-white/5"
               )}
             >
-              {inner}
+              <div className="flex items-center gap-3">
+                <Icon
+                  size={18}
+                  className={clsx(
+                    "transition-colors",
+                    active ? "text-violet-400" : "text-gray-400 group-hover:text-violet-400"
+                  )}
+                />
+                <span>{label}</span>
+              </div>
+              {badge && (
+                <span className="bg-violet-600/30 text-violet-300 border border-violet-500/40 text-[9px] font-bold px-2 py-0.5 rounded-md tracking-wider">
+                  {badge}
+                </span>
+              )}
             </Link>
           );
         })}
       </div>
 
-      <div className="mt-auto mb-4 bg-gradient-to-br from-surface-glass/60 to-surface-glass/20 p-5 rounded-2xl border border-surface-glass/50 shadow-sm">
-        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 mb-3">
-          <Crown size={18} />
+      {/* Unlock Premium Card */}
+      <div className="mt-4 mb-4 bg-gradient-to-b from-violet-950/40 to-indigo-950/20 p-4 rounded-2xl border border-violet-500/20 shadow-lg relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-violet-600/10 rounded-full blur-xl group-hover:bg-violet-600/20 transition-all" />
+        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 mb-2.5">
+          <Crown size={16} />
         </div>
-        <h3 className="font-headline-md text-[16px] font-bold mb-1">Unlock Premium</h3>
-        <p className="text-[12px] text-on-surface-variant mb-4 leading-relaxed">
+        <h3 className="text-sm font-bold text-white mb-1">Unlock Premium</h3>
+        <p className="text-[11px] text-gray-400 mb-3 leading-relaxed">
           Get ATS-optimized resume and boost your chances!
         </p>
-        <button suppressHydrationWarning className="w-full btn-gradient text-white py-2 rounded-lg font-label-md text-label-md">
+        <button
+          suppressHydrationWarning
+          onClick={() => router.push("/resumes")}
+          className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-xs font-semibold py-2 px-3 rounded-xl transition-all shadow-md shadow-indigo-600/20 active:scale-95"
+        >
           Upgrade Now
         </button>
       </div>
 
-      <div className="border-t border-surface-glass/20 pt-4 space-y-2">
-        <a href="#" className="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-surface-glass/10 rounded-xl transition-all duration-200">
-          <HelpCircle size={20} />
-          <span className="font-body-md text-body-md">Help &amp; Support</span>
+      {/* Footer Navigation & Profile */}
+      <div className="border-t border-violet-900/20 pt-3 space-y-2">
+        <a
+          href="#"
+          className="flex items-center gap-3 px-3 py-2 text-xs font-medium text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+        >
+          <HelpCircle size={16} className="text-gray-400" />
+          <span>Help &amp; Support</span>
         </a>
-        <div className="flex items-center gap-3 px-4 py-2 mt-2">
+        <div className="flex items-center gap-3 px-2 py-2 rounded-xl bg-white/[0.03] border border-white/5">
           {user?.imageUrl ? (
             <Image
               src={user.imageUrl}
               alt={displayName}
-              width={40}
-              height={40}
-              className="w-10 h-10 rounded-full object-cover shadow-sm border-2 border-surface"
+              width={34}
+              height={34}
+              className="w-8 h-8 rounded-full object-cover ring-2 ring-violet-500/30"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-sm border-2 border-surface">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow-sm ring-2 ring-violet-500/30">
               {initial}
             </div>
           )}
-          <div className="flex-1 overflow-hidden">
-            <p className="font-label-md text-label-md truncate">{displayName}</p>
-            <p className="text-[11px] text-on-surface-variant truncate">{displayEmail}</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-semibold text-white truncate">{displayName}</p>
+            <p className="text-[10px] text-gray-400 truncate">{displayEmail}</p>
           </div>
           <button
             suppressHydrationWarning
             onClick={() => signOut(() => router.push("/sign-in"))}
             title="Sign out"
-            className="text-on-surface-variant hover:text-error"
+            className="text-gray-400 hover:text-rose-400 transition-colors p-1"
           >
-            <ChevronsUpDown size={18} />
+            <ChevronsUpDown size={16} />
           </button>
         </div>
       </div>
     </nav>
   );
 }
+

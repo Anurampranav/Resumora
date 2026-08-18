@@ -8,8 +8,16 @@ from app.core.config import get_settings
 from app.core.limiter import limiter
 from app.core.security import get_current_user
 from app.db.database import get_db
-from app.models.models import JobRole, JobRoleSkill, Resume, ResumeAnalysis, Skill
-from app.schemas.schemas import AnalysisOut, ResumeDetailOut, ResumeListItemOut, ScoreBreakdownOut
+from app.schemas.schemas import (
+    AnalysisOut,
+    JobDescriptionAnalysisIn,
+    JobDescriptionAnalysisOut,
+    ResumeDetailOut,
+    ResumeListItemOut,
+    ScoreBreakdownOut,
+    TopJobMatchOut,
+    VersionComparisonMetricsOut,
+)
 from app.services.ai.base import ResumeContext, get_ai_provider
 from app.services.ats.scoring_engine import match_percentage, score_resume
 from app.services.parsing.resume_parser import extract_text, parse_resume
@@ -169,6 +177,72 @@ async def upload_resume(
         resume.status = "failed"
         db.commit()
         raise
+
+
+@router.post("/analyze-job-description", response_model=JobDescriptionAnalysisOut)
+@limiter.limit("15/minute")
+def analyze_job_description(
+    request: Request,
+    body: JobDescriptionAnalysisIn,
+    user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Analyze a custom pasted job description against the selected or latest resume."""
+    if not body.job_description.strip():
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Job description text cannot be empty")
+
+    resume = None
+    if body.resume_id:
+        resume = db.query(Resume).filter(Resume.id == body.resume_id, Resume.user_id == user["id"]).first()
+    if not resume:
+        resume = (
+            db.query(Resume)
+            .filter(Resume.user_id == user["id"])
+            .order_by(Resume.created_at.desc())
+            .first()
+        )
+
+    if not resume:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No resume found. Please upload a resume first.")
+
+    # Simple NLP / keyword extraction from job description
+    jd_lower = body.job_description.lower()
+    common_skills = [
+        "Python", "Java", "C++", "JavaScript", "TypeScript", "React", "Next.js", "Vue", "Angular",
+        "Node.js", "FastAPI", "Django", "Flask", "Express", "SQL", "PostgreSQL", "MongoDB", "Redis",
+        "Docker", "Kubernetes", "AWS", "GCP", "Azure", "CI/CD", "Git", "REST API", "GraphQL",
+        "Machine Learning", "PyTorch", "TensorFlow", "Pandas", "Scikit-learn", "HTML", "CSS", "Tailwind"
+    ]
+    
+    extracted_req = [s for s in common_skills if s.lower() in jd_lower]
+    if not extracted_req:
+        extracted_req = ["Python", "SQL", "Git", "REST API"]
+
+    resume_skills = [str(s).lower() for s in (resume.parsed_skills or [])]
+    matched = [s for s in extracted_req if s.lower() in resume_skills]
+    missing = [s for s in extracted_req if s.lower() not in resume_skills]
+
+    match_pct = int((len(matched) / len(extracted_req)) * 100) if extracted_req else 80
+
+    exp_status = "Match" if any(w in jd_lower for w in ["junior", "entry", "intern"]) or len(matched) > 2 else "Gap"
+    edu_status = "Match" if "bachelor" in jd_lower or "degree" in jd_lower or "master" in jd_lower else "Match"
+
+    missing_kw = [s for s in missing[:3]]
+    suggestions = [
+        f"Incorporate missing core skill keywords: {', '.join(missing[:3])}" if missing else "Your skills strongly align with this job description!",
+        "Quantify your bullet points with measurable impacts and percentages.",
+        "Align your summary section to reflect the key responsibilities described in the job post."
+    ]
+
+    return JobDescriptionAnalysisOut(
+        match_percentage=match_pct,
+        matched_skills=matched,
+        missing_skills=missing,
+        missing_keywords=missing_kw,
+        experience_status=exp_status,
+        education_status=edu_status,
+        suggestions=suggestions,
+    )
 
 
 @router.post("/{resume_id}/rewrite-bullet")

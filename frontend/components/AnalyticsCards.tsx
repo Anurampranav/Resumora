@@ -46,13 +46,13 @@ export default function AnalyticsCards({ summary }: { summary: DashboardSummary 
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <CircularScore value={summary.resume_match_percent} color="#10b981" suffix="%" />
+          <CircularScore value={summary.resume_match_percent ?? 0} color="#10b981" suffix="%" />
           <div>
             <p className="font-label-md text-[13px] text-on-surface mb-1">
-              {summary.resume_match_percent >= 70 ? "Good Match" : "Needs Work"}
+              {(summary.resume_match_percent ?? 0) >= 70 ? "Good Match" : "Needs Work"}
             </p>
             <p className="text-[11px] text-on-surface-variant leading-snug">
-              You match {summary.resume_match_percent}% of the skills for this role.
+              You match {summary.resume_match_percent ?? 0}% of the skills for this role.
             </p>
           </div>
         </div>

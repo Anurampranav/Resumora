@@ -153,15 +153,25 @@ export default function UploadModal({ open, onClose, onSuccess, jobRoles }: Uplo
 
         {stage === "uploading" && (
           <div className="py-8 flex flex-col items-center gap-4">
-            <Loader2 className="animate-spin text-primary" size={32} />
+            <Loader2 className="animate-spin text-violet-400" size={36} />
             <div className="w-full">
-              <div className="flex justify-between text-[12px] text-on-surface-variant mb-1.5">
-                <span>Uploading & analyzing…</span>
-                <span>{progress}%</span>
+              <div className="flex justify-between text-xs text-gray-300 mb-1.5 font-medium">
+                <span>
+                  {progress < 25
+                    ? "Uploading resume file..."
+                    : progress < 50
+                    ? "Parsing text & layout structure..."
+                    : progress < 75
+                    ? "Extracting skills, experience & education..."
+                    : progress < 95
+                    ? "Running deterministic ATS scoring engine..."
+                    : "Generating AI suggestions & insights..."}
+                </span>
+                <span className="font-mono font-bold text-violet-400">{progress}%</span>
               </div>
-              <div className="w-full h-2 rounded-full bg-surface-glass/50 overflow-hidden">
+              <div className="w-full h-2.5 rounded-full bg-white/5 overflow-hidden border border-white/10">
                 <div
-                  className="h-full bg-gradient-to-r from-primary to-purple-500 transition-all duration-200"
+                  className="h-full bg-gradient-to-r from-violet-600 via-indigo-500 to-purple-500 transition-all duration-300 rounded-full"
                   style={{ width: `${progress}%` }}
                 />
               </div>

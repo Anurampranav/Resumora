@@ -77,11 +77,75 @@ class ResumeDetailOut(BaseModel):
     latest_analysis: AnalysisOut | None
 
 
+class JobDescriptionAnalysisIn(BaseModel):
+    job_description: str
+    resume_id: str | None = None
+
+
+class JobDescriptionAnalysisOut(BaseModel):
+    match_percentage: int
+    matched_skills: list[str]
+    missing_skills: list[str]
+    missing_keywords: list[str]
+    experience_status: str
+    education_status: str
+    suggestions: list[str]
+
+
+class TopJobMatchOut(BaseModel):
+    name: str
+    slug: str
+    match_percentage: int
+    color: str = "#6366F1"
+
+
+class SkillCategoryBreakdownOut(BaseModel):
+    name: str
+    category: str  # "critical" | "recommended" | "optional"
+
+
+class SkillGapAnalysisOut(BaseModel):
+    skill_coverage_percent: int
+    strong_skills: list[str]
+    missing_skills: list[SkillCategoryBreakdownOut]
+
+
+class VersionComparisonMetricsOut(BaseModel):
+    oldest_resume_name: str
+    latest_resume_name: str
+    ats_score_old: int
+    ats_score_new: int
+    ats_score_diff: int
+    skills_matched_old: str
+    skills_matched_new: str
+    skills_matched_diff: int
+    keywords_found_old: str
+    keywords_found_new: str
+    keywords_found_diff: int
+    readability_old: int
+    readability_new: int
+    readability_diff: int
+    formatting_old: int
+    formatting_new: int
+    formatting_diff: int
+    impact_old: int
+    impact_new: int
+    impact_diff: int
+
+
 class DashboardSummaryOut(BaseModel):
     overall_ats_score: int
-    resume_match_percent: int
+    resume_match_percent: int | None
+    target_role_name: str | None
+    has_target_job: bool
     missing_skills_count: int
+    critical_missing_count: int
     resumes_analyzed_this_month: int
     latest_resume_id: str | None
     latest_breakdown: ScoreBreakdownOut | None
     latest_ai_summary: str | None
+    skill_gap: SkillGapAnalysisOut | None
+    top_job_matches: list[TopJobMatchOut]
+    version_comparison: VersionComparisonMetricsOut | None
+
+

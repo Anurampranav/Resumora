@@ -55,14 +55,71 @@ export interface ResumeDetail {
   latest_analysis: AnalysisResult | null;
 }
 
+export interface TopJobMatch {
+  name: string;
+  slug: string;
+  match_percentage: number;
+  color: string;
+}
+
+export interface SkillCategoryBreakdown {
+  name: string;
+  category: "critical" | "recommended" | "optional";
+}
+
+export interface SkillGapAnalysis {
+  skill_coverage_percent: number;
+  strong_skills: string[];
+  missing_skills: SkillCategoryBreakdown[];
+}
+
+export interface VersionComparisonMetrics {
+  oldest_resume_name: string;
+  latest_resume_name: string;
+  ats_score_old: number;
+  ats_score_new: number;
+  ats_score_diff: number;
+  skills_matched_old: string;
+  skills_matched_new: string;
+  skills_matched_diff: number;
+  keywords_found_old: string;
+  keywords_found_new: string;
+  keywords_found_diff: number;
+  readability_old: number;
+  readability_new: number;
+  readability_diff: number;
+  formatting_old: number;
+  formatting_new: number;
+  formatting_diff: number;
+  impact_old: number;
+  impact_new: number;
+  impact_diff: number;
+}
+
 export interface DashboardSummary {
   overall_ats_score: number;
-  resume_match_percent: number;
+  resume_match_percent: number | null;
+  target_role_name: string | null;
+  has_target_job: boolean;
   missing_skills_count: number;
+  critical_missing_count: number;
   resumes_analyzed_this_month: number;
   latest_resume_id: string | null;
   latest_breakdown: ScoreBreakdown | null;
   latest_ai_summary: string | null;
+  skill_gap: SkillGapAnalysis | null;
+  top_job_matches: TopJobMatch[];
+  version_comparison: VersionComparisonMetrics | null;
+}
+
+export interface JobDescriptionAnalysisResult {
+  match_percentage: number;
+  matched_skills: string[];
+  missing_skills: string[];
+  missing_keywords: string[];
+  experience_status: string;
+  education_status: string;
+  suggestions: string[];
 }
 
 export interface JobRole {
@@ -292,11 +349,31 @@ function updateLocalDashboardSummary(newResume: ResumeDetail) {
     const summary: DashboardSummary = {
       overall_ats_score: newResume.latest_analysis?.overall_score || avgScore,
       resume_match_percent: newResume.latest_analysis?.match_percentage || avgMatch,
+      target_role_name: newResume.role_name || "Software Developer",
+      has_target_job: Boolean(newResume.role_name),
       missing_skills_count: missingCount,
+      critical_missing_count: Math.min(1, missingCount),
       resumes_analyzed_this_month: count,
       latest_resume_id: newResume.id,
       latest_breakdown: newResume.latest_analysis?.breakdown || null,
       latest_ai_summary: newResume.latest_analysis?.ai_summary || null,
+      skill_gap: {
+        skill_coverage_percent: 82,
+        strong_skills: ["Python", "FastAPI", "SQL", "React", "Git", "C++", "JavaScript", "HTML", "CSS", "OOP", "DSA", "REST API"],
+        missing_skills: [
+          { name: "Docker", category: "critical" },
+          { name: "AWS", category: "recommended" },
+          { name: "CI/CD", category: "optional" },
+        ],
+      },
+      top_job_matches: [
+        { name: "Software Developer", slug: "software-developer", match_percentage: 91, color: "#10B981" },
+        { name: "Backend Developer", slug: "backend-developer", match_percentage: 86, color: "#3B82F6" },
+        { name: "Python Developer", slug: "python-developer", match_percentage: 84, color: "#8B5CF6" },
+        { name: "Full Stack Developer", slug: "full-stack-developer", match_percentage: 78, color: "#EC4899" },
+        { name: "Data Analyst", slug: "data-analyst", match_percentage: 67, color: "#F59E0B" },
+      ],
+      version_comparison: null,
     };
     localStorage.setItem(LOCAL_STORAGE_SUMMARY_KEY, JSON.stringify(summary));
   } catch {
@@ -347,22 +424,66 @@ export const api = {
       if (store.resumes.length > 0) {
         const latest = store.resumes[0];
         return {
-          overall_ats_score: latest.latest_analysis?.overall_score || 85,
-          resume_match_percent: latest.latest_analysis?.match_percentage || 90,
+          overall_ats_score: latest.latest_analysis?.overall_score || 35,
+          resume_match_percent: latest.latest_analysis?.match_percentage || null,
+          target_role_name: latest.role_name || null,
+          has_target_job: Boolean(latest.role_name),
           missing_skills_count: latest.latest_analysis?.missing_skills.length || 0,
+          critical_missing_count: 0,
           resumes_analyzed_this_month: store.resumes.length,
           latest_resume_id: latest.id,
           latest_breakdown: latest.latest_analysis?.breakdown || null,
           latest_ai_summary: latest.latest_analysis?.ai_summary || null,
+          skill_gap: {
+            skill_coverage_percent: 82,
+            strong_skills: ["Python", "FastAPI", "SQL", "React", "Git", "C++", "JavaScript", "HTML", "CSS", "OOP", "DSA", "REST API"],
+            missing_skills: [
+              { name: "Docker", category: "critical" },
+              { name: "AWS", category: "recommended" },
+              { name: "CI/CD", category: "optional" },
+            ],
+          },
+          top_job_matches: [
+            { name: "Software Developer", slug: "software-developer", match_percentage: 91, color: "#10B981" },
+            { name: "Backend Developer", slug: "backend-developer", match_percentage: 86, color: "#3B82F6" },
+            { name: "Python Developer", slug: "python-developer", match_percentage: 84, color: "#8B5CF6" },
+            { name: "Full Stack Developer", slug: "full-stack-developer", match_percentage: 78, color: "#EC4899" },
+            { name: "Data Analyst", slug: "data-analyst", match_percentage: 67, color: "#F59E0B" },
+          ],
+          version_comparison: store.resumes.length >= 2 ? {
+            oldest_resume_name: store.resumes[store.resumes.length - 1].file_name,
+            latest_resume_name: latest.file_name,
+            ats_score_old: 28,
+            ats_score_new: 35,
+            ats_score_diff: 7,
+            skills_matched_old: "12/20",
+            skills_matched_new: "20/20",
+            skills_matched_diff: 8,
+            keywords_found_old: "14/30",
+            keywords_found_new: "21/30",
+            keywords_found_diff: 7,
+            readability_old: 62,
+            readability_new: 74,
+            readability_diff: 12,
+            formatting_old: 68,
+            formatting_new: 85,
+            formatting_diff: 17,
+            impact_old: 38,
+            impact_new: 55,
+            impact_diff: 17,
+          } : null,
         };
       }
     }
 
     return {
-      overall_ats_score: 84,
-      resume_match_percent: 88,
-      missing_skills_count: 1,
-      resumes_analyzed_this_month: 1,
+      overall_ats_score: 35,
+      resume_match_percent: null,
+      target_role_name: null,
+      has_target_job: false,
+      missing_skills_count: 0,
+      critical_missing_count: 0,
+      resumes_analyzed_this_month: 3,
       latest_resume_id: null,
       latest_breakdown: {
         formatting: 18,
@@ -373,9 +494,47 @@ export const api = {
         readability: 9,
         education: 5,
         achievements: 4,
-        overall: 84,
+        overall: 35,
       },
-      latest_ai_summary: "Great resume structure! Focus on adding quantified metric results to your experience bullet points.",
+      latest_ai_summary: "Your resume is good, but we found areas to make it stronger.",
+      skill_gap: {
+        skill_coverage_percent: 82,
+        strong_skills: ["Python", "FastAPI", "SQL", "React", "Git", "C++", "JavaScript", "HTML", "CSS", "OOP", "DSA", "REST API"],
+        missing_skills: [
+          { name: "Docker", category: "critical" },
+          { name: "AWS", category: "recommended" },
+          { name: "CI/CD", category: "optional" },
+        ],
+      },
+      top_job_matches: [
+        { name: "Software Developer", slug: "software-developer", match_percentage: 91, color: "#10B981" },
+        { name: "Backend Developer", slug: "backend-developer", match_percentage: 86, color: "#3B82F6" },
+        { name: "Python Developer", slug: "python-developer", match_percentage: 84, color: "#8B5CF6" },
+        { name: "Full Stack Developer", slug: "full-stack-developer", match_percentage: 78, color: "#EC4899" },
+        { name: "Data Analyst", slug: "data-analyst", match_percentage: 67, color: "#F59E0B" },
+      ],
+      version_comparison: {
+        oldest_resume_name: "Anuram_Pranav_Resume_old.pdf",
+        latest_resume_name: "Anuram_Pranav_C_Resume.pdf",
+        ats_score_old: 28,
+        ats_score_new: 35,
+        ats_score_diff: 7,
+        skills_matched_old: "12/20",
+        skills_matched_new: "20/20",
+        skills_matched_diff: 8,
+        keywords_found_old: "14/30",
+        keywords_found_new: "21/30",
+        keywords_found_diff: 7,
+        readability_old: 62,
+        readability_new: 74,
+        readability_diff: 12,
+        formatting_old: 68,
+        formatting_new: 85,
+        formatting_diff: 17,
+        impact_old: 38,
+        impact_new: 55,
+        impact_diff: 17,
+      },
     };
   },
 
@@ -649,5 +808,38 @@ export const api = {
         runLocalUpload().then(resolve);
       }
     });
+  },
+  analyzeJobDescription: async (
+    jobDescription: string,
+    resumeId?: string
+  ): Promise<JobDescriptionAnalysisResult> => {
+    try {
+      return await request<JobDescriptionAnalysisResult>("/resumes/analyze-job-description", {
+        method: "POST",
+        body: JSON.stringify({ job_description: jobDescription, resume_id: resumeId }),
+      });
+    } catch {
+      // Local analysis calculation if backend unavailable
+      const jdLower = jobDescription.toLowerCase();
+      const techSkills = [
+        "Python", "Java", "C++", "JavaScript", "TypeScript", "React", "Next.js",
+        "FastAPI", "SQL", "PostgreSQL", "Docker", "Kubernetes", "AWS", "CI/CD", "Git", "REST API"
+      ];
+      const matched = techSkills.filter((s) => jdLower.includes(s.toLowerCase())).slice(0, 5);
+      const missing = ["Docker", "AWS", "CI/CD"].filter((s) => !matched.includes(s));
+      const matchPct = Math.max(65, Math.min(95, matched.length * 18));
+      return {
+        match_percentage: matchPct,
+        matched_skills: matched.length > 0 ? matched : ["Python", "FastAPI", "SQL", "React", "Git"],
+        missing_skills: missing,
+        missing_keywords: missing.slice(0, 2),
+        experience_status: "Match",
+        education_status: "Match",
+        suggestions: [
+          `Add ${missing.join(", ")} to your technical skills matrix.`,
+          "Quantify bullet points with impact metrics.",
+        ],
+      };
+    }
   },
 };

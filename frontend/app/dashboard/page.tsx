@@ -4,28 +4,39 @@ import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import Sidebar from "@/components/Sidebar";
 import TopNav from "@/components/TopNav";
-import AnalyticsCards from "@/components/AnalyticsCards";
-import AtsScoreChart, { ScoreHistoryPoint } from "@/components/AtsScoreChart";
-import ScoreBreakdownRadar from "@/components/ScoreBreakdownRadar";
-import RecentAnalyses from "@/components/RecentAnalyses";
+import OverallAtsCard from "@/components/OverallAtsCard";
+import JobMatchScoreCard from "@/components/JobMatchScoreCard";
+import MissingSkillsCard from "@/components/MissingSkillsCard";
+import ResumesAnalyzedCard from "@/components/ResumesAnalyzedCard";
+import ResumeImprovement from "@/components/ResumeImprovement";
+import SkillGapAnalysis from "@/components/SkillGapAnalysis";
+import TopJobMatches from "@/components/TopJobMatches";
+import JobDescriptionAnalyzer from "@/components/JobDescriptionAnalyzer";
 import AiSuggestionCard from "@/components/AiSuggestionCard";
+import RecentAnalyses from "@/components/RecentAnalyses";
+import BottomPromoBanner from "@/components/BottomPromoBanner";
 import { api, DashboardSummary, ResumeListItem } from "@/lib/api";
 
 const EMPTY_SUMMARY: DashboardSummary = {
-  overall_ats_score: 0,
-  resume_match_percent: 0,
+  overall_ats_score: 35,
+  resume_match_percent: null,
+  target_role_name: null,
+  has_target_job: false,
   missing_skills_count: 0,
-  resumes_analyzed_this_month: 0,
+  critical_missing_count: 0,
+  resumes_analyzed_this_month: 3,
   latest_resume_id: null,
   latest_breakdown: null,
   latest_ai_summary: null,
+  skill_gap: null,
+  top_job_matches: [],
+  version_comparison: null,
 };
 
 export default function DashboardPage() {
   const { user } = useUser();
   const [summary, setSummary] = useState<DashboardSummary>(EMPTY_SUMMARY);
   const [resumes, setResumes] = useState<ResumeListItem[]>([]);
-  const [scoreHistory, setScoreHistory] = useState<ScoreHistoryPoint[]>([]);
   const [backendReachable, setBackendReachable] = useState(true);
   const [errorDetail, setErrorDetail] = useState<string | null>(null);
 
@@ -34,45 +45,18 @@ export default function DashboardPage() {
     user?.fullName ||
     user?.firstName ||
     (user?.primaryEmailAddress?.emailAddress ? user.primaryEmailAddress.emailAddress.split("@")[0] : "") ||
-    "there";
+    "Anuram Pranav";
 
   async function loadData() {
     try {
-      const [summaryData, resumeData] = await Promise.all([api.getDashboardSummary(), api.listResumes()]);
+      const [summaryData, resumeData] = await Promise.all([
+        api.getDashboardSummary(),
+        api.listResumes(),
+      ]);
       setSummary(summaryData);
       setResumes(resumeData);
       setBackendReachable(true);
       setErrorDetail(null);
-
-      // Build real score history from analyzed resumes
-      const validPoints: ScoreHistoryPoint[] = resumeData
-        .filter((r) => r.overall_score !== null && r.overall_score !== undefined)
-        .reverse()
-        .map((r, idx) => {
-          const d = new Date(r.created_at);
-          const dateLabel = isNaN(d.getTime())
-            ? `Scan ${idx + 1}`
-            : d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-          return { date: dateLabel, score: r.overall_score as number };
-        });
-
-      if (validPoints.length > 1) {
-        setScoreHistory(validPoints);
-      } else if (validPoints.length === 1) {
-        // Provide baseline start point so AreaChart renders a smooth continuous gradient
-        const curScore = validPoints[0].score;
-        setScoreHistory([
-          { date: "Initial", score: Math.max(0, curScore - 15) },
-          { date: validPoints[0].date, score: curScore },
-        ]);
-      } else if (summaryData.overall_ats_score > 0) {
-        setScoreHistory([
-          { date: "Initial", score: Math.max(0, summaryData.overall_ats_score - 10) },
-          { date: "Latest", score: summaryData.overall_ats_score },
-        ]);
-      } else {
-        setScoreHistory([]);
-      }
     } catch (err) {
       const isNetworkFailure = err instanceof TypeError;
       const detail = err instanceof Error ? err.message : String(err);
@@ -90,35 +74,32 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen bg-[#070814] text-gray-100 font-sans selection:bg-violet-500/30 selection:text-white">
       <Sidebar />
-      <main className="ml-[280px] min-h-screen flex flex-col">
+      <main className="ml-[260px] min-h-screen flex flex-col">
         <TopNav onUploadSuccess={loadData} />
-        <div className="flex-1 px-container-padding pb-section-margin pt-4 flex flex-col gap-section-margin">
+        <div className="flex-1 px-8 pb-12 pt-2 flex flex-col gap-6 max-w-7xl w-full mx-auto">
+          {/* Welcome Header */}
           <section>
-            <h2 className="font-display-lg text-display-lg text-on-surface mb-2 flex items-center gap-3">
-              Welcome back, {displayName}! <span className="text-3xl">👋</span>
+            <h2 className="text-2xl lg:text-3xl font-extrabold text-white mb-1 tracking-tight flex items-center gap-2.5">
+              Welcome back, <span className="bg-gradient-to-r from-violet-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">{displayName}</span>! 👋
             </h2>
-            <p className="font-body-lg text-body-lg text-on-surface-variant">
+            <p className="text-xs lg:text-sm text-gray-400 font-medium">
               Let&apos;s improve your resume and land your dream job.
             </p>
             {!backendReachable && (
-              <p className="mt-3 text-[12px] text-amber-500 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2 inline-flex items-center gap-2 flex-wrap">
+              <p className="mt-3 text-[11px] text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-2 inline-flex items-center gap-2 flex-wrap">
                 <span>
                   {errorDetail ? (
-                    <>
-                      Backend request status: <code>{errorDetail}</code> (using active client mode)
-                    </>
+                    <>Backend status: <code>{errorDetail}</code> (using active client mode)</>
                   ) : (
-                    <>
-                      Backend server is offline — running in Instant Client Mode. Resumes are parsed and analyzed immediately.
-                    </>
+                    <>Backend offline — running in Instant Client Mode. Resumes parse &amp; analyze immediately.</>
                   )}
                 </span>
                 <button
                   suppressHydrationWarning
                   onClick={loadData}
-                  className="text-amber-500 font-semibold underline hover:no-underline"
+                  className="text-amber-400 font-bold underline hover:no-underline"
                 >
                   Retry
                 </button>
@@ -126,34 +107,50 @@ export default function DashboardPage() {
             )}
           </section>
 
-          <AnalyticsCards summary={summary} />
-
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
-            <AtsScoreChart data={scoreHistory} />
-            <ScoreBreakdownRadar
-              categories={
-                summary.latest_breakdown
-                  ? [
-                      { label: "Formatting", value: Math.round((summary.latest_breakdown.formatting / 20) * 100), raw: `${summary.latest_breakdown.formatting}/20`, color: "#6366F1" },
-                      { label: "Skills", value: Math.round((summary.latest_breakdown.skills / 20) * 100), raw: `${summary.latest_breakdown.skills}/20`, color: "#3B82F6" },
-                      { label: "Experience", value: Math.round((summary.latest_breakdown.experience / 15) * 100), raw: `${summary.latest_breakdown.experience}/15`, color: "#06B6D4" },
-                      { label: "Projects", value: Math.round((summary.latest_breakdown.projects / 15) * 100), raw: `${summary.latest_breakdown.projects}/15`, color: "#10B981" },
-                      { label: "Education", value: Math.round((summary.latest_breakdown.education / 5) * 100), raw: `${summary.latest_breakdown.education}/5`, color: "#F59E0B" },
-                      { label: "Readability", value: Math.round((summary.latest_breakdown.readability / 10) * 100), raw: `${summary.latest_breakdown.readability}/10`, color: "#8B5CF6" },
-                      { label: "Grammar", value: Math.round((summary.latest_breakdown.grammar / 10) * 100), raw: `${summary.latest_breakdown.grammar}/10`, color: "#EC4899" },
-                      { label: "Achievements", value: Math.round((summary.latest_breakdown.achievements / 5) * 100), raw: `${summary.latest_breakdown.achievements}/5`, color: "#14B8A6" },
-                    ]
-                  : undefined
-              }
+          {/* Top Summary Cards (4 Columns) */}
+          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <OverallAtsCard
+              score={summary.overall_ats_score}
+              latestResumeId={summary.latest_resume_id}
+            />
+            <JobMatchScoreCard
+              matchPercent={summary.resume_match_percent}
+              targetRoleName={summary.target_role_name}
+              hasTargetJob={summary.has_target_job}
+            />
+            <MissingSkillsCard
+              missingCount={summary.missing_skills_count}
+              criticalCount={summary.critical_missing_count}
+            />
+            <ResumesAnalyzedCard
+              count={summary.resumes_analyzed_this_month}
             />
           </section>
 
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
-            <RecentAnalyses resumes={resumes} onDeleted={loadData} />
+          {/* Main Feature Row (3 Columns) */}
+          <section className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <ResumeImprovement
+              comparison={summary.version_comparison}
+              resumeCount={resumes.length}
+            />
+            <SkillGapAnalysis skillGap={summary.skill_gap} />
+            <TopJobMatches matches={summary.top_job_matches} />
+          </section>
+
+          {/* Secondary Feature Row (3 Columns) */}
+          <section className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <JobDescriptionAnalyzer latestResumeId={summary.latest_resume_id} />
             <AiSuggestionCard summary={summary.latest_ai_summary ?? undefined} />
+            <RecentAnalyses resumes={resumes} onDeleted={loadData} />
+          </section>
+
+          {/* Bottom Banner */}
+          <section>
+            <BottomPromoBanner />
           </section>
         </div>
       </main>
-    </>
+    </div>
   );
 }
+

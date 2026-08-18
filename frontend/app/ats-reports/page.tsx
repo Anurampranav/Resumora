@@ -71,13 +71,13 @@ export default function AtsReportsPage() {
   }
 
   return (
-    <div className="flex h-screen bg-[#070814] text-gray-100 overflow-hidden font-sans">
+    <div className="bg-[#070814] min-h-screen text-gray-100 font-sans">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <main className="ml-[280px] min-h-screen flex flex-col">
         <TopNav />
 
-        <main className="flex-1 overflow-y-auto p-6 lg:p-10 space-y-8 scrollbar-thin scrollbar-thumb-violet-600/30">
+        <div className="flex-1 p-6 lg:p-10 space-y-8">
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-violet-500/20 pb-6">
             <div>
@@ -212,8 +212,8 @@ export default function AtsReportsPage() {
               })}
             </div>
           )}
-        </main>
-      </div>
+        </div>
+      </main>
 
       {/* Web Preview Modal */}
       <AtsReportPreviewModal

@@ -17,7 +17,8 @@ import Sidebar from "@/components/Sidebar";
 import TopNav from "@/components/TopNav";
 import CircularScore from "@/components/CircularScore";
 import ScoreBreakdownRadar, { type CategoryScore } from "@/components/ScoreBreakdownRadar";
-import { api, type ResumeDetail } from "@/lib/api";
+import AtsReportPreviewModal from "@/components/AtsReportPreviewModal";
+import { api, type ResumeDetail, type AtsReportDetail } from "@/lib/api";
 
 const CATEGORY_META: { key: keyof NonNullable<ResumeDetail["latest_analysis"]>["breakdown"]; label: string; max: number; color: string }[] = [
   { key: "formatting", label: "Formatting", max: 20, color: "#6366F1" },
@@ -38,7 +39,22 @@ export default function ResumeReportPage() {
   const [error, setError] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [reportDetail, setReportDetail] = useState<AtsReportDetail | null>(null);
   const [rewrites, setRewrites] = useState<Record<number, { text: string; loading: boolean }>>({});
+
+  async function handleOpenFullReport() {
+    setBusy(true);
+    try {
+      const report = await api.getAtsReportDetail(id);
+      setReportDetail(report);
+      setReportModalOpen(true);
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : "Failed to load report modal");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function handleRewrite(index: number, original: string) {
     setRewrites((prev) => ({ ...prev, [index]: { text: "", loading: true } }));
@@ -91,12 +107,12 @@ export default function ResumeReportPage() {
     }
   }
 
-  async function handleDownload() {
+  async function handleDownloadPdf() {
     try {
-      await api.downloadResume(resume!.id, resume!.file_name);
+      await api.downloadPdfReport(resume!.id, resume!.file_name);
       setActionError(null);
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : "Failed to download resume");
+      setActionError(err instanceof Error ? err.message : "Failed to download PDF report");
     }
   }
 
@@ -137,7 +153,20 @@ export default function ResumeReportPage() {
                     {resume.role_name ? `Analyzed against ${resume.role_name}` : "General analysis (no target role set)"}
                   </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
+                  <button suppressHydrationWarning
+                    onClick={handleOpenFullReport}
+                    disabled={busy}
+                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white px-4 py-2.5 rounded-xl text-[13px] font-semibold shadow-lg shadow-violet-600/20 transition-all disabled:opacity-50"
+                  >
+                    <Sparkles size={16} /> View Full Report
+                  </button>
+                  <button suppressHydrationWarning
+                    onClick={handleDownloadPdf}
+                    className="flex items-center gap-2 bg-surface-glass/60 border border-surface-glass/60 px-4 py-2.5 rounded-xl text-[13px] font-semibold text-on-surface hover:bg-surface-glass/90 transition-colors"
+                  >
+                    <Download size={16} /> Download PDF Report
+                  </button>
                   <button suppressHydrationWarning
                     onClick={handleReanalyze}
                     disabled={busy}
@@ -145,12 +174,6 @@ export default function ResumeReportPage() {
                   >
                     {busy ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
                     Re-analyze
-                  </button>
-                  <button suppressHydrationWarning
-                    onClick={handleDownload}
-                    className="flex items-center gap-2 bg-surface-glass/60 border border-surface-glass/60 px-4 py-2.5 rounded-xl text-[13px] font-semibold text-on-surface hover:bg-surface-glass/90 transition-colors"
-                  >
-                    <Download size={16} /> Download
                   </button>
                   <button suppressHydrationWarning
                     onClick={handleDelete}
@@ -371,6 +394,12 @@ export default function ResumeReportPage() {
             </>
           )}
         </div>
+
+        <AtsReportPreviewModal
+          report={reportDetail}
+          open={reportModalOpen}
+          onClose={() => setReportModalOpen(false)}
+        />
       </main>
     </>
   );

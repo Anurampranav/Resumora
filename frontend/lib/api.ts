@@ -122,6 +122,26 @@ export interface JobDescriptionAnalysisResult {
   suggestions: string[];
 }
 
+export interface AtsReportDetail {
+  report_id: string;
+  resume_id: string;
+  resume_filename: string;
+  candidate_name: string;
+  analysis_date: string;
+  target_role: string | null;
+  overall_score: number;
+  status: string;
+  executive_summary: string;
+  breakdown: ScoreBreakdown;
+  missing_skills: string[];
+  strengths: string[];
+  weaknesses: string[];
+  formatting_issues: string[];
+  weak_bullet_points: WeakBullet[];
+  ai_suggestions: string[];
+  download_url: string;
+}
+
 export interface JobRole {
   id: string;
   slug: string;
@@ -840,6 +860,87 @@ export const api = {
           "Quantify bullet points with impact metrics.",
         ],
       };
+    }
+  },
+
+  getAtsReportDetail: async (resumeId: string): Promise<AtsReportDetail> => {
+    try {
+      return await request<AtsReportDetail>(`/resumes/${resumeId}/full-report`);
+    } catch {
+      const store = getLocalStore();
+      const found = store.resumes.find((r) => r.id === resumeId) || store.resumes[0];
+      const filename = found ? found.file_name : "Resume.pdf";
+      const score = found?.latest_analysis?.overall_score || 84;
+      return {
+        report_id: `RPT-DEMO-${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
+        resume_id: resumeId,
+        resume_filename: filename,
+        candidate_name: "Anuram Pranav",
+        analysis_date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        target_role: found?.role_name || "Software Developer",
+        overall_score: score,
+        status: score >= 80 ? "EXCELLENT" : score >= 60 ? "GOOD" : "NEEDS IMPROVEMENT",
+        executive_summary: `Your resume for ${filename} demonstrates solid technical capabilities. Focus on adding quantifiable impact metrics and key cloud containerization keywords to maximize ATS callbacks.`,
+        breakdown: found?.latest_analysis?.breakdown || {
+          formatting: 18,
+          skills: 17,
+          projects: 13,
+          experience: 13,
+          grammar: 9,
+          readability: 9,
+          education: 5,
+          achievements: 4,
+          overall: score,
+        },
+        missing_skills: found?.latest_analysis?.missing_skills || ["Docker", "AWS", "CI/CD"],
+        strengths: found?.latest_analysis?.strengths || ["Clean single-column layout", "Strong technical skill coverage"],
+        weaknesses: found?.latest_analysis?.weaknesses || ["Missing Docker & AWS keywords", "Experience bullets need metric outcomes"],
+        formatting_issues: found?.latest_analysis?.formatting_issues || ["Ensure consistent margin sizing"],
+        weak_bullet_points: found?.latest_analysis?.weak_bullet_points || [
+          {
+            original: "Worked on python backend microservices and database features.",
+            suggested: "Engineered scalable FastAPI microservices and optimized PostgreSQL queries, improving API throughput by 38%.",
+          },
+        ],
+        ai_suggestions: found?.latest_analysis?.ai_suggestions || [
+          "Incorporate missing core skills: Docker, AWS, CI/CD to boost ATS match rate.",
+          "Quantify bullet points with exact percentage improvements and user scale metrics.",
+        ],
+        download_url: `/resumes/${resumeId}/pdf-report`,
+      };
+    }
+  },
+
+  downloadPdfReport: async (resumeId: string, fileName: string) => {
+    const token = await getToken();
+    try {
+      const res = await fetch(`${API_BASE}/resumes/${resumeId}/pdf-report`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!res.ok) throw new Error(`PDF download failed: ${res.status}`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const cleanName = fileName.split(".")[0];
+      a.download = `Resumora_ATS_Report_${cleanName}_${new Date().toISOString().slice(0, 10).replace(/-/g, "")}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      // Local fallback text/PDF generator trigger
+      const report = await api.getAtsReportDetail(resumeId);
+      const content = `RESUMORA ATS RESUME AUDIT REPORT\nCandidate: ${report.candidate_name}\nResume: ${report.resume_filename}\nOverall ATS Score: ${report.overall_score}/100\nStatus: ${report.status}\n\nEXECUTIVE SUMMARY:\n${report.executive_summary}\n\nMISSING SKILLS:\n${report.missing_skills.join(", ")}\n\nAI RECOMMENDATIONS:\n${report.ai_suggestions.join("\n")}`;
+      const blob = new Blob([content], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Resumora_ATS_Report_${fileName.split(".")[0]}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
     }
   },
 };

@@ -8,8 +8,10 @@ from app.core.config import get_settings
 from app.core.limiter import limiter
 from app.core.security import get_current_user
 from app.db.database import get_db
+from app.models.models import JobRole, JobRoleSkill, Resume, ResumeAnalysis, Skill
 from app.schemas.schemas import (
     AnalysisOut,
+    AtsReportDetailOut,
     JobDescriptionAnalysisIn,
     JobDescriptionAnalysisOut,
     ResumeDetailOut,
@@ -17,10 +19,12 @@ from app.schemas.schemas import (
     ScoreBreakdownOut,
     TopJobMatchOut,
     VersionComparisonMetricsOut,
+    WeakBulletOut,
 )
 from app.services.ai.base import ResumeContext, get_ai_provider
 from app.services.ats.scoring_engine import match_percentage, score_resume
 from app.services.parsing.resume_parser import extract_text, parse_resume
+from app.services.pdf.report_generator import generate_ats_report_pdf
 from app.services.storage.base import get_storage_provider
 
 router = APIRouter(prefix="/resumes", tags=["resumes"])
@@ -304,6 +308,115 @@ def download_resume(resume_id: str, user: dict = Depends(get_current_user), db: 
         content=contents,
         media_type=CONTENT_TYPE_BY_EXT[resume.file_type],
         headers={"Content-Disposition": f'attachment; filename="{resume.file_name}"'},
+    )
+
+
+@router.get("/{resume_id}/pdf-report")
+def get_pdf_report(resume_id: str, user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Generate and stream a vector PDF ATS Audit Report for the requested resume."""
+    resume = db.query(Resume).filter(Resume.id == resume_id, Resume.user_id == user["id"]).first()
+    if not resume:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Resume not found")
+
+    latest = (
+        db.query(ResumeAnalysis)
+        .filter(ResumeAnalysis.resume_id == resume.id)
+        .order_by(ResumeAnalysis.created_at.desc())
+        .first()
+    )
+    if not latest:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No analysis found for this resume")
+
+    role = db.query(JobRole).filter(JobRole.id == resume.job_role_id).first() if resume.job_role_id else None
+    role_name = role.name if role else None
+
+    candidate_name = user.get("full_name") or user.get("email", "").split("@")[0] or "Candidate"
+    analysis_date_str = latest.created_at.strftime("%B %d, %Y")
+
+    pdf_bytes = generate_ats_report_pdf(
+        candidate_name=candidate_name,
+        resume_filename=resume.file_name,
+        analysis_date=analysis_date_str,
+        target_role=role_name,
+        overall_score=latest.overall_score,
+        breakdown_data={
+            "formatting": latest.score_formatting or 18,
+            "skills": latest.score_skills or 17,
+            "projects": latest.score_projects or 13,
+            "experience": latest.score_experience or 13,
+            "grammar": latest.score_grammar or 9,
+            "readability": latest.score_readability or 9,
+            "education": latest.score_education or 5,
+            "achievements": latest.score_achievements or 4,
+        },
+        missing_skills=latest.missing_skills or [],
+        strengths=latest.strengths or [],
+        weaknesses=latest.weaknesses or [],
+        formatting_issues=latest.formatting_issues or [],
+        weak_bullets=latest.weak_bullet_points or [],
+        ai_summary=latest.ai_summary or "",
+        ai_suggestions=latest.ai_suggestions or [],
+    )
+
+    clean_name = resume.file_name.rsplit(".", 1)[0].replace(" ", "_")
+    download_filename = f"Resumora_ATS_Report_{clean_name}_{latest.created_at.strftime('%Y%m%d')}.pdf"
+
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{download_filename}"'},
+    )
+
+
+@router.get("/{resume_id}/full-report", response_model=AtsReportDetailOut)
+def get_full_report(resume_id: str, user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Return full structured ATS Audit Report data for in-app web preview."""
+    resume = db.query(Resume).filter(Resume.id == resume_id, Resume.user_id == user["id"]).first()
+    if not resume:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Resume not found")
+
+    latest = (
+        db.query(ResumeAnalysis)
+        .filter(ResumeAnalysis.resume_id == resume.id)
+        .order_by(ResumeAnalysis.created_at.desc())
+        .first()
+    )
+    if not latest:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No analysis found for this resume")
+
+    role = db.query(JobRole).filter(JobRole.id == resume.job_role_id).first() if resume.job_role_id else None
+    candidate_name = user.get("full_name") or user.get("email", "").split("@")[0] or "Candidate"
+
+    status_str = "EXCELLENT" if latest.overall_score >= 80 else "GOOD" if latest.overall_score >= 60 else "NEEDS IMPROVEMENT"
+
+    return AtsReportDetailOut(
+        report_id=f"RPT-{str(latest.id)[:8].upper()}",
+        resume_id=str(resume.id),
+        resume_filename=resume.file_name,
+        candidate_name=candidate_name,
+        analysis_date=latest.created_at.strftime("%B %d, %Y • %I:%M %p"),
+        target_role=role.name if role else None,
+        overall_score=latest.overall_score,
+        status=status_str,
+        executive_summary=latest.ai_summary or "Your resume demonstrates strong technical capabilities with good formatting layout.",
+        breakdown=ScoreBreakdownOut(
+            formatting=latest.score_formatting or 0,
+            skills=latest.score_skills or 0,
+            projects=latest.score_projects or 0,
+            experience=latest.score_experience or 0,
+            grammar=latest.score_grammar or 0,
+            readability=latest.score_readability or 0,
+            education=latest.score_education or 0,
+            achievements=latest.score_achievements or 0,
+            overall=latest.overall_score,
+        ),
+        missing_skills=latest.missing_skills or [],
+        strengths=latest.strengths or ["Clean layout", "Strong technical skills"],
+        weaknesses=latest.weaknesses or ["Add quantifiable impact metrics to bullets"],
+        formatting_issues=latest.formatting_issues or [],
+        weak_bullet_points=[WeakBulletOut(**wb) for wb in (latest.weak_bullet_points or [])],
+        ai_suggestions=latest.ai_suggestions or [],
+        download_url=f"/resumes/{resume.id}/pdf-report",
     )
 
 

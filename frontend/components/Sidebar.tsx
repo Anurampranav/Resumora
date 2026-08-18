@@ -25,9 +25,9 @@ const NAV_ITEMS = [
   { label: "My Resumes", icon: FileText, href: "/resumes" },
   { label: "AI Analysis", icon: BrainCircuit, href: "/resumes" },
   { label: "Job Match", icon: Users2, href: "/job-roles" },
-  { label: "ATS Reports", icon: BarChart3, href: "/resumes" },
+  { label: "ATS Reports", icon: BarChart3, href: "/ats-reports" },
   { label: "Resume Builder", icon: PenSquare, href: "/resumes", badge: "PREMIUM" },
-  { label: "Downloads", icon: Download, href: "/resumes" },
+  { label: "Downloads", icon: Download, href: "/ats-reports" },
   { label: "Settings", icon: Settings, href: "/resumes" },
 ];
 

@@ -147,5 +147,21 @@ class DashboardSummaryOut(BaseModel):
     skill_gap: SkillGapAnalysisOut | None
     top_job_matches: list[TopJobMatchOut]
     version_comparison: VersionComparisonMetricsOut | None
-
-
+class AtsReportDetailOut(BaseModel):
+    report_id: str
+    resume_id: str
+    resume_filename: str
+    candidate_name: str
+    analysis_date: str
+    target_role: str | None
+    overall_score: int
+    status: str
+    executive_summary: str
+    breakdown: ScoreBreakdownOut
+    missing_skills: list[str]
+    strengths: list[str]
+    weaknesses: list[str]
+    formatting_issues: list[str]
+    weak_bullet_points: list[WeakBulletOut]
+    ai_suggestions: list[str]
+    download_url: str

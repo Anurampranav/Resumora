@@ -72,7 +72,7 @@ Resumora is a full-stack resume analysis platform that helps job seekers underst
 
 ---
 
-## Architecture .
+## Architecture 
 
 ```mermaid
 graph TD

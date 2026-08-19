@@ -21,10 +21,10 @@ export default function OverallAtsCard({ score, latestResumeId }: OverallAtsCard
   const status = getStatusText(displayScore);
 
   return (
-    <div className="bg-[#121324]/80 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group hover:border-violet-500/40 transition-all duration-300">
+    <div className="glass-card glass-card-hover rounded-2xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-gray-300">Overall ATS Score</h3>
-        <div className="w-7 h-7 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400">
+        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Overall ATS Score</h3>
+        <div className="w-7 h-7 rounded-lg glass-pill flex items-center justify-center text-violet-600 dark:text-violet-400">
           <TrendingUp size={15} />
         </div>
       </div>
@@ -39,7 +39,7 @@ export default function OverallAtsCard({ score, latestResumeId }: OverallAtsCard
               r="34"
               stroke="currentColor"
               strokeWidth="7"
-              className="text-violet-950/60"
+              className="text-violet-200/50 dark:text-violet-950/60"
               fill="transparent"
             />
             <circle
@@ -62,26 +62,26 @@ export default function OverallAtsCard({ score, latestResumeId }: OverallAtsCard
             </defs>
           </svg>
           <div className="absolute flex flex-col items-center justify-center">
-            <span className="text-xl font-extrabold text-white leading-none">{displayScore}</span>
-            <span className="text-[10px] text-gray-400 font-medium font-mono mt-0.5">/ 100</span>
+            <span className="text-xl font-extrabold text-gray-900 dark:text-white leading-none">{displayScore}</span>
+            <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium font-mono mt-0.5">/ 100</span>
           </div>
         </div>
 
         {/* Text Details */}
         <div>
-          <h4 className="text-xs font-bold text-white mb-1 flex items-center gap-1.5">
+          <h4 className="text-xs font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-1.5">
             {status.title}
           </h4>
-          <p className="text-[11px] text-gray-400 leading-relaxed pr-2">
+          <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed pr-2">
             {status.desc}
           </p>
         </div>
       </div>
 
-      <div className="mt-3 pt-3 border-t border-white/5">
+      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-white/10">
         <Link
           href={latestResumeId ? `/resumes/${latestResumeId}` : "/resumes"}
-          className="text-xs font-semibold text-violet-400 hover:text-violet-300 flex items-center gap-1.5 transition-colors group/link"
+          className="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-500 dark:hover:text-violet-300 flex items-center gap-1.5 transition-colors group/link"
         >
           <span>View Full Report</span>
           <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />

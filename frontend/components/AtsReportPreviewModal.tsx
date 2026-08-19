@@ -47,10 +47,10 @@ export default function AtsReportPreviewModal({
   const isGood = report.overall_score >= 60;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 lg:p-8">
-      <div className="bg-[#0b0c16] border border-violet-500/30 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 text-gray-200">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-lg z-50 flex items-center justify-center p-4 lg:p-8">
+      <div className="glass-panel border border-white/40 dark:border-white/10 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 text-gray-800 dark:text-gray-200">
         {/* Top Sticky Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-violet-500/20 bg-[#121324]/90 backdrop-blur-xl">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-violet-500/20 glass-card">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-violet-400">
               <FileText size={18} />

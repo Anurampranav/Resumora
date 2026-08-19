@@ -85,8 +85,8 @@ export default function UploadModal({ open, onClose, onSuccess, jobRoles }: Uplo
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4">
-      <div className="glass-panel w-full max-w-lg rounded-[24px] p-6 relative bg-surface-glass/90">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+      <div className="glass-panel w-full max-w-lg rounded-[24px] p-6 relative shadow-2xl border border-white/40 dark:border-white/10">
         <button suppressHydrationWarning
           onClick={handleCloseClick}
           className="absolute top-4 right-4 text-on-surface-variant hover:text-on-surface p-1 rounded-full hover:bg-black/5"

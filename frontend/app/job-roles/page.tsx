@@ -195,7 +195,7 @@ function RoleCard({
 
   return (
     <div
-      className={`glass-panel p-5 rounded-[20px] flex flex-col gap-3 transition-all ${
+      className={`glass-panel glass-card-hover p-5 rounded-[20px] flex flex-col gap-3 transition-all ${
         selected ? "ring-2 ring-primary" : ""
       }`}
     >

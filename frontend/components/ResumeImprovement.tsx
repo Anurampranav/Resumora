@@ -38,16 +38,16 @@ export default function ResumeImprovement({ comparison, resumeCount }: ResumeImp
   };
 
   return (
-    <div className="bg-[#121324]/80 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-6 shadow-xl flex flex-col justify-between hover:border-violet-500/40 transition-all duration-300">
+    <div className="glass-card glass-card-hover rounded-2xl p-6 shadow-xl flex flex-col justify-between relative overflow-hidden group">
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
-          <TrendingUp size={18} className="text-violet-400" />
-          <h3 className="text-base font-bold text-white">Resume Improvement</h3>
+          <TrendingUp size={18} className="text-violet-600 dark:text-violet-400" />
+          <h3 className="text-base font-bold text-gray-900 dark:text-white">Resume Improvement</h3>
         </div>
         <select
           suppressHydrationWarning
-          className="bg-white/5 border border-white/10 rounded-lg px-2.5 py-1 text-xs text-gray-300 focus:outline-none focus:border-violet-500"
+          className="glass-input rounded-lg px-2.5 py-1 text-xs text-gray-800 dark:text-gray-200 focus:outline-none"
         >
           <option value="all">Compare: All Resumes</option>
           <option value="latest">Latest 2 Resumes</option>

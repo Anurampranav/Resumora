@@ -43,12 +43,12 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
   ];
 
   return (
-    <header className="flex justify-between items-center w-full px-8 py-4 bg-transparent z-40 sticky top-0 backdrop-blur-md">
+    <header className="flex justify-between items-center w-full px-8 py-4 bg-white/40 dark:bg-[#070814]/50 backdrop-blur-xl border-b border-white/30 dark:border-white/10 z-40 sticky top-0 shadow-sm">
       {/* Global Search Bar Trigger */}
       <div className="relative w-80 md:w-96 group">
         <Search
           size={18}
-          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-violet-400 transition-colors"
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-violet-500 transition-colors"
         />
         <input
           suppressHydrationWarning
@@ -56,11 +56,11 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
           readOnly
           onClick={() => setSearchOpen(true)}
           placeholder="Search anything..."
-          className="w-full bg-[#121324]/80 border border-violet-500/20 rounded-xl py-2 pl-10 pr-12 text-xs font-medium text-gray-200 placeholder:text-gray-500 cursor-pointer hover:border-violet-500/40 transition-all shadow-sm"
+          className="w-full glass-input rounded-xl py-2 pl-10 pr-12 text-xs font-medium text-gray-900 dark:text-gray-100 placeholder:text-gray-400 cursor-pointer shadow-sm"
         />
         <div
           onClick={() => setSearchOpen(true)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 bg-white/5 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-400 border border-white/10 shadow-sm cursor-pointer"
+          className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 glass-pill px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-500 dark:text-gray-400 shadow-sm cursor-pointer"
         >
           <span>⌘</span>
           <span>K</span>
@@ -75,20 +75,20 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
           <button
             suppressHydrationWarning
             onClick={() => setNotifOpen(!notifOpen)}
-            className="relative p-2 text-gray-400 hover:text-white transition-colors hover:bg-white/5 rounded-full"
+            className="relative p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors hover:bg-white/60 dark:hover:bg-white/10 rounded-full"
             title="Notifications"
           >
             <Bell size={20} />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-violet-500 rounded-full ring-2 ring-[#070814]" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-violet-500 rounded-full ring-2 ring-white dark:ring-[#070814]" />
           </button>
 
           {notifOpen && (
-            <div className="absolute right-0 mt-2 w-80 bg-[#121324] border border-violet-500/30 rounded-2xl p-4 shadow-2xl z-50 space-y-3">
-              <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                <h4 className="text-xs font-bold text-white">Notifications</h4>
+            <div className="absolute right-0 mt-2 w-80 glass-panel rounded-2xl p-4 shadow-2xl z-50 space-y-3">
+              <div className="flex items-center justify-between border-b border-gray-200 dark:border-white/10 pb-2">
+                <h4 className="text-xs font-bold text-gray-900 dark:text-white">Notifications</h4>
                 <button
                   onClick={() => setNotifOpen(false)}
-                  className="text-gray-400 hover:text-white p-0.5"
+                  className="text-gray-400 hover:text-gray-900 dark:hover:text-white p-0.5"
                 >
                   <X size={14} />
                 </button>
@@ -98,12 +98,12 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
                 {notifications.map((n) => (
                   <div
                     key={n.id}
-                    className="flex items-start gap-2.5 p-2 rounded-xl bg-white/[0.02] border border-white/5 text-xs text-gray-200"
+                    className="flex items-start gap-2.5 p-2 rounded-xl glass-card text-xs text-gray-800 dark:text-gray-200"
                   >
-                    <CheckCircle2 size={15} className="text-emerald-400 shrink-0 mt-0.5" />
+                    <CheckCircle2 size={15} className="text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-200 leading-tight">{n.title}</p>
-                      <span className="text-[10px] text-gray-500">{n.time}</span>
+                      <p className="font-medium leading-tight">{n.title}</p>
+                      <span className="text-[10px] text-gray-500 dark:text-gray-400">{n.time}</span>
                     </div>
                   </div>
                 ))}

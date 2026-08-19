@@ -45,13 +45,13 @@ export default function RecentAnalyses({
   const recent = resumes.slice(0, 4);
 
   return (
-    <div className="bg-[#121324]/80 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-6 shadow-xl flex flex-col justify-between hover:border-violet-500/40 transition-all duration-300">
+    <div className="glass-card glass-card-hover rounded-2xl p-6 shadow-xl flex flex-col justify-between relative overflow-hidden group">
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-base font-bold text-white">Recent Analyses</h3>
+          <h3 className="text-base font-bold text-gray-900 dark:text-white">Recent Analyses</h3>
           <Link
             href="/resumes"
-            className="text-xs font-semibold text-violet-400 hover:text-violet-300 flex items-center gap-1 transition-colors"
+            className="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-500 dark:hover:text-violet-300 flex items-center gap-1 transition-colors"
           >
             <span>View All</span>
             <ArrowRight size={13} />

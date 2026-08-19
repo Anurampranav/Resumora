@@ -72,15 +72,12 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
   const [selectedSuggestion, setSelectedSuggestion] = useState<SuggestionItem | null>(null);
 
   return (
-    <div
-      id="ai-suggestions-card"
-      className="bg-[#121324]/80 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-6 shadow-xl flex flex-col justify-between hover:border-violet-500/40 transition-all duration-300 relative overflow-hidden"
-    >
+    <div className="glass-card glass-card-hover rounded-2xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group">
       <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <h3 className="text-base font-bold text-white">AI Resume Suggestions</h3>
-            <span className="bg-violet-600/30 text-violet-300 border border-violet-500/40 text-[10px] font-bold px-2 py-0.5 rounded-md">
+            <h3 className="text-base font-bold text-gray-900 dark:text-white">AI Resume Suggestions</h3>
+            <span className="glass-pill text-violet-700 dark:text-violet-300 border border-violet-500/40 text-[10px] font-bold px-2 py-0.5 rounded-md">
               AI
             </span>
           </div>
@@ -94,27 +91,27 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
                 key={item.id}
                 suppressHydrationWarning
                 onClick={() => setSelectedSuggestion(item)}
-                className="w-full bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 hover:border-violet-500/30 p-3 rounded-xl flex items-center justify-between text-left transition-all duration-200 group"
+                className="w-full glass-card hover:border-violet-500/40 p-3 rounded-xl flex items-center justify-between text-left transition-all duration-200 group"
               >
                 <div className="flex items-center gap-3 pr-2">
                   <div className={`w-7 h-7 rounded-lg border flex items-center justify-center shrink-0 ${item.color}`}>
                     <Icon size={14} />
                   </div>
-                  <span className="text-xs font-medium text-gray-200 group-hover:text-white transition-colors">
+                  <span className="text-xs font-medium text-gray-800 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
                     {item.title}
                   </span>
                 </div>
-                <ChevronRight size={16} className="text-gray-500 group-hover:text-violet-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+                <ChevronRight size={16} className="text-gray-400 group-hover:text-violet-500 dark:group-hover:text-violet-400 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
             );
           })}
         </div>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-white/5">
+      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-white/10">
         <Link
           href="/resumes"
-          className="text-xs font-semibold text-violet-400 hover:text-violet-300 flex items-center gap-1.5 transition-colors group/link"
+          className="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-500 dark:hover:text-violet-300 flex items-center gap-1.5 transition-colors group/link"
         >
           <span>View All Suggestions</span>
           <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
@@ -123,12 +120,12 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
 
       {/* Suggestion Detail Modal */}
       {selectedSuggestion && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="bg-[#121324] border border-violet-500/30 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="glass-panel rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-200">
             <button
               suppressHydrationWarning
               onClick={() => setSelectedSuggestion(null)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/10"
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 dark:hover:text-white p-1 rounded-lg hover:bg-white/10"
             >
               <X size={18} />
             </button>
@@ -137,7 +134,7 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
               <div className={`w-8 h-8 rounded-xl border flex items-center justify-center ${selectedSuggestion.color}`}>
                 <Sparkles size={16} />
               </div>
-              <h3 className="text-base font-bold text-white pr-6">{selectedSuggestion.title}</h3>
+              <h3 className="text-base font-bold text-gray-900 dark:text-white pr-6">{selectedSuggestion.title}</h3>
             </div>
 
             <div className="space-y-3 text-xs text-gray-300">

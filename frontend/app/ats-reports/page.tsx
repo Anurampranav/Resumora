@@ -71,7 +71,7 @@ export default function AtsReportsPage() {
   }
 
   return (
-    <div className="bg-[#070814] min-h-screen text-gray-100 font-sans">
+    <div className="bg-background min-h-screen text-on-surface font-sans transition-colors duration-300">
       <Sidebar />
 
       <main className="ml-[280px] min-h-screen flex flex-col">
@@ -81,11 +81,11 @@ export default function AtsReportsPage() {
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-violet-500/20 pb-6">
             <div>
-              <h1 className="text-2xl lg:text-3xl font-extrabold text-white flex items-center gap-3">
-                <FileText className="text-violet-400" size={28} />
+              <h1 className="text-2xl lg:text-3xl font-extrabold text-on-surface flex items-center gap-3">
+                <FileText className="text-violet-600 dark:text-violet-400" size={28} />
                 ATS RESUME REPORTS
               </h1>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-on-surface-variant mt-1">
                 Official AI Resume Audit Documents &amp; Vector PDF Downloads
               </p>
             </div>

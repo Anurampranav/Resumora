@@ -8,7 +8,7 @@ import type { DashboardSummary } from "@/lib/api";
 export default function AnalyticsCards({ summary }: { summary: DashboardSummary }) {
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-      <div className="glass-panel p-6 rounded-[24px] flex flex-col justify-between">
+      <div className="glass-panel glass-card-hover p-6 rounded-[24px] flex flex-col justify-between">
         <div className="flex justify-between items-start mb-4">
           <h3 className="font-body-lg text-body-lg font-semibold text-on-surface">Overall ATS Score</h3>
           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
@@ -38,7 +38,7 @@ export default function AnalyticsCards({ summary }: { summary: DashboardSummary 
         )}
       </div>
 
-      <div className="glass-panel p-6 rounded-[24px] flex flex-col justify-between">
+      <div className="glass-panel glass-card-hover p-6 rounded-[24px] flex flex-col justify-between">
         <div className="flex justify-between items-start mb-4">
           <h3 className="font-body-lg text-body-lg font-semibold text-on-surface">Resume Match</h3>
           <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600">
@@ -58,7 +58,7 @@ export default function AnalyticsCards({ summary }: { summary: DashboardSummary 
         </div>
       </div>
 
-      <div className="glass-panel p-6 rounded-[24px] flex flex-col justify-between relative overflow-hidden">
+      <div className="glass-panel glass-card-hover p-6 rounded-[24px] flex flex-col justify-between relative overflow-hidden">
         <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-amber-500/10 rounded-full blur-[20px]" />
         <div className="flex justify-between items-start mb-2 relative z-10">
           <h3 className="font-body-lg text-body-lg font-semibold text-on-surface">Missing Skills</h3>
@@ -82,7 +82,7 @@ export default function AnalyticsCards({ summary }: { summary: DashboardSummary 
         )}
       </div>
 
-      <div className="glass-panel p-6 rounded-[24px] flex flex-col justify-between relative overflow-hidden">
+      <div className="glass-panel glass-card-hover p-6 rounded-[24px] flex flex-col justify-between relative overflow-hidden">
         <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/10 rounded-full blur-[20px]" />
         <div className="flex justify-between items-start mb-2 relative z-10">
           <h3 className="font-body-lg text-body-lg font-semibold text-on-surface">Resumes Analyzed</h3>

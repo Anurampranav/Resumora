@@ -5,147 +5,123 @@
 @tailwind utilities;
 
 :root {
-  --background: 252 248 255;
-  --on-background: 27 27 36;
-  --surface: 252 248 255;
-  --on-surface: 27 27 36;
-  --surface-variant: 228 225 238;
-  --on-surface-variant: 70 69 85;
-  --surface-container: 240 236 249;
-  --surface-container-high: 234 230 243;
-  --surface-container-highest: 228 225 238;
-  --surface-container-low: 246 242 255;
-  --surface-container-lowest: 255 255 255;
-  --surface-bright: 252 248 255;
-  --surface-dim: 220 216 229;
-  --outline: 119 117 135;
-  --outline-variant: 199 196 216;
-  --primary: 77 65 223;
-  --on-primary: 255 255 255;
-  --primary-container: 103 93 249;
-  --on-primary-container: 255 251 255;
-  --secondary: 0 102 138;
-  --on-secondary: 255 255 255;
-  --secondary-container: 64 194 253;
-  --on-secondary-container: 0 77 106;
-  --tertiary: 161 46 112;
+  --background: 5 5 5;
+  --on-background: 245 243 236;
+  --surface: 10 10 9;
+  --on-surface: 245 243 236;
+  --surface-variant: 24 24 22;
+  --on-surface-variant: 189 184 172;
+  --surface-container: 16 16 14;
+  --surface-container-high: 22 22 19;
+  --surface-container-highest: 28 28 25;
+  --surface-container-low: 12 12 11;
+  --surface-container-lowest: 5 5 5;
+  --surface-bright: 36 35 31;
+  --surface-dim: 5 5 5;
+  --outline: 189 184 172;
+  --outline-variant: 50 48 44;
+  --primary: 245 243 236;
+  --on-primary: 5 5 5;
+  --primary-container: 232 227 215;
+  --on-primary-container: 5 5 5;
+  --secondary: 232 227 215;
+  --on-secondary: 5 5 5;
+  --secondary-container: 36 35 31;
+  --on-secondary-container: 245 243 236;
+  --tertiary: 217 119 6;
   --on-tertiary: 255 255 255;
-  --tertiary-container: 192 72 138;
-  --on-tertiary-container: 255 251 255;
-  --error: 186 26 26;
-  --on-error: 255 255 255;
-  --error-container: 255 218 214;
-  --on-error-container: 147 0 10;
-  --inverse-surface: 48 47 57;
-  --inverse-on-surface: 243 239 252;
-  --inverse-primary: 196 192 255;
-  --surface-tint: 79 68 226;
-  --primary-fixed: 227 223 255;
-  --primary-fixed-dim: 196 192 255;
-  --on-primary-fixed: 16 0 105;
-  --on-primary-fixed-variant: 54 34 202;
-  --secondary-fixed: 196 231 255;
-  --secondary-fixed-dim: 123 208 255;
-  --on-secondary-fixed: 0 30 44;
-  --on-secondary-fixed-variant: 0 76 105;
-  --tertiary-fixed: 255 216 231;
-  --tertiary-fixed-dim: 255 175 211;
-  --on-tertiary-fixed: 61 0 38;
-  --on-tertiary-fixed-variant: 133 20 90;
-  --surface-glass: 255 255 255;
+  --tertiary-container: 180 83 9;
+  --on-tertiary-container: 254 243 199;
+  --error: 248 113 113;
+  --on-error: 0 0 0;
+  --error-container: 153 27 27;
+  --on-error-container: 254 226 226;
+  --inverse-surface: 245 243 236;
+  --inverse-on-surface: 10 10 9;
+  --inverse-primary: 5 5 5;
+  --surface-tint: 245 243 236;
+  --surface-glass: 16 16 14;
 }
 
 .dark {
-  --background: 17 16 23;
-  --on-background: 231 227 240;
-  --surface: 17 16 23;
-  --on-surface: 231 227 240;
-  --surface-variant: 42 39 53;
-  --on-surface-variant: 199 195 214;
-  --surface-container: 28 26 36;
-  --surface-container-high: 36 33 48;
-  --surface-container-highest: 45 42 58;
-  --surface-container-low: 23 21 31;
-  --surface-container-lowest: 11 10 15;
-  --surface-bright: 56 53 74;
-  --surface-dim: 17 16 23;
-  --outline: 148 143 163;
-  --outline-variant: 69 65 82;
-  --primary: 184 176 255;
-  --on-primary: 32 22 79;
-  --primary-container: 70 54 181;
-  --on-primary-container: 228 223 255;
-  --secondary: 125 212 255;
-  --on-secondary: 0 52 74;
-  --secondary-container: 0 80 110;
-  --on-secondary-container: 195 233 255;
-  --tertiary: 255 171 214;
-  --on-tertiary: 92 15 60;
-  --tertiary-container: 131 36 87;
-  --on-tertiary-container: 255 216 233;
-  --error: 255 180 169;
-  --on-error: 104 0 3;
-  --error-container: 147 0 6;
-  --on-error-container: 255 218 212;
-  --inverse-surface: 231 227 240;
-  --inverse-on-surface: 48 47 57;
-  --inverse-primary: 77 65 223;
-  --surface-tint: 184 176 255;
-  --primary-fixed: 227 223 255;
-  --primary-fixed-dim: 196 192 255;
-  --on-primary-fixed: 16 0 105;
-  --on-primary-fixed-variant: 54 34 202;
-  --secondary-fixed: 196 231 255;
-  --secondary-fixed-dim: 123 208 255;
-  --on-secondary-fixed: 0 30 44;
-  --on-secondary-fixed-variant: 0 76 105;
-  --tertiary-fixed: 255 216 231;
-  --tertiary-fixed-dim: 255 175 211;
-  --on-tertiary-fixed: 61 0 38;
-  --on-tertiary-fixed-variant: 133 20 90;
-  --surface-glass: 33 31 43;
+  --background: 5 5 5;
+  --on-background: 245 243 236;
+  --surface: 10 10 9;
+  --on-surface: 245 243 236;
+  --surface-variant: 24 24 22;
+  --on-surface-variant: 189 184 172;
+  --surface-container: 16 16 14;
+  --surface-container-high: 22 22 19;
+  --surface-container-highest: 28 28 25;
+  --surface-container-low: 12 12 11;
+  --surface-container-lowest: 5 5 5;
+  --surface-bright: 36 35 31;
+  --surface-dim: 5 5 5;
+  --outline: 189 184 172;
+  --outline-variant: 50 48 44;
+  --primary: 245 243 236;
+  --on-primary: 5 5 5;
+  --primary-container: 232 227 215;
+  --on-primary-container: 5 5 5;
+  --secondary: 232 227 215;
+  --on-secondary: 5 5 5;
+  --secondary-container: 36 35 31;
+  --on-secondary-container: 245 243 236;
+  --tertiary: 217 119 6;
+  --on-tertiary: 255 255 255;
+  --tertiary-container: 180 83 9;
+  --on-tertiary-container: 254 243 199;
+  --error: 248 113 113;
+  --on-error: 0 0 0;
+  --error-container: 153 27 27;
+  --on-error-container: 254 226 226;
+  --inverse-surface: 245 243 236;
+  --inverse-on-surface: 10 10 9;
+  --inverse-primary: 5 5 5;
+  --surface-tint: 245 243 236;
+  --surface-glass: 16 16 14;
 }
 
 html,
 body {
-  background: rgb(var(--background));
-  color: rgb(var(--on-surface));
+  background: #050505;
+  color: #F5F3EC;
 }
 
-/* Glassmorphism Design System Tokens & Utility Classes */
+/* Translucent Dark Smoked Glassmorphism Tokens & Utility Classes */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(16, 16, 14, 0.65);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  border-top: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(245, 243, 236, 0.12);
+  border-top: 1px solid rgba(245, 243, 236, 0.20);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(245, 243, 236, 0.10);
 }
 .dark .glass-panel {
-  background: rgba(15, 16, 32, 0.65);
+  background: rgba(16, 16, 14, 0.65);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(245, 243, 236, 0.12);
+  border-top: 1px solid rgba(245, 243, 236, 0.20);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(245, 243, 236, 0.10);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(18, 18, 16, 0.60);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-top: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 10px 30px -5px rgba(124, 58, 237, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(245, 243, 236, 0.10);
+  border-top: 1px solid rgba(245, 243, 236, 0.18);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(245, 243, 236, 0.08);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .dark .glass-card {
-  background: rgba(18, 19, 36, 0.6);
+  background: rgba(18, 18, 16, 0.60);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(245, 243, 236, 0.10);
+  border-top: 1px solid rgba(245, 243, 236, 0.18);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(245, 243, 236, 0.08);
 }
 
 .glass-card-hover {
@@ -153,77 +129,82 @@ body {
 }
 .glass-card-hover:hover {
   transform: translateY(-3px);
-  background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(124, 58, 237, 0.3);
-  box-shadow: 0 20px 40px -10px rgba(124, 58, 237, 0.12), 0 0 15px rgba(124, 58, 237, 0.1);
+  background: rgba(26, 26, 23, 0.75);
+  border-color: rgba(245, 243, 236, 0.25);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 243, 236, 0.08);
 }
 .dark .glass-card-hover:hover {
-  background: rgba(24, 26, 48, 0.75);
-  border-color: rgba(139, 92, 246, 0.35);
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px rgba(139, 92, 246, 0.2);
+  background: rgba(26, 26, 23, 0.75);
+  border-color: rgba(245, 243, 236, 0.25);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 243, 236, 0.08);
 }
 
 .glass-input {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(20, 20, 18, 0.60);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(245, 243, 236, 0.12);
   transition: all 0.2s ease;
+  color: #F5F3EC;
 }
 .glass-input:focus {
-  background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(124, 58, 237, 0.5);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  background: rgba(28, 28, 24, 0.85);
+  border-color: rgba(245, 243, 236, 0.35);
+  box-shadow: 0 0 0 3px rgba(245, 243, 236, 0.10);
 }
 .dark .glass-input {
-  background: rgba(15, 16, 32, 0.5);
+  background: rgba(20, 20, 18, 0.60);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(245, 243, 236, 0.12);
+  color: #F5F3EC;
 }
 .dark .glass-input:focus {
-  background: rgba(20, 22, 42, 0.8);
-  border-color: rgba(139, 92, 246, 0.5);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+  background: rgba(28, 28, 24, 0.85);
+  border-color: rgba(245, 243, 236, 0.35);
+  box-shadow: 0 0 0 3px rgba(245, 243, 236, 0.10);
 }
 
 .glass-pill {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(245, 243, 236, 0.06);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(245, 243, 236, 0.12);
 }
 .dark .glass-pill {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(245, 243, 236, 0.06);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(245, 243, 236, 0.12);
 }
 
 .gradient-mesh {
   background-image: 
-    radial-gradient(at 10% 10%, rgba(124, 58, 237, 0.08) 0px, transparent 40%),
-    radial-gradient(at 90% 20%, rgba(79, 70, 229, 0.08) 0px, transparent 45%),
-    radial-gradient(at 50% 80%, rgba(219, 39, 119, 0.05) 0px, transparent 50%),
-    radial-gradient(at 80% 90%, rgba(6, 182, 212, 0.06) 0px, transparent 40%);
+    radial-gradient(at 10% 10%, rgba(245, 243, 236, 0.03) 0px, transparent 40%),
+    radial-gradient(at 90% 20%, rgba(232, 227, 215, 0.03) 0px, transparent 45%),
+    radial-gradient(at 50% 80%, rgba(189, 184, 172, 0.02) 0px, transparent 50%),
+    radial-gradient(at 80% 90%, rgba(245, 243, 236, 0.02) 0px, transparent 40%);
   background-attachment: fixed;
 }
 .dark .gradient-mesh {
   background-image: 
-    radial-gradient(at 5% 5%, rgba(139, 92, 246, 0.18) 0px, transparent 40%),
-    radial-gradient(at 95% 15%, rgba(99, 102, 241, 0.16) 0px, transparent 45%),
-    radial-gradient(at 50% 80%, rgba(236, 72, 153, 0.12) 0px, transparent 50%),
-    radial-gradient(at 85% 85%, rgba(14, 165, 233, 0.14) 0px, transparent 40%);
+    radial-gradient(at 10% 10%, rgba(245, 243, 236, 0.03) 0px, transparent 40%),
+    radial-gradient(at 90% 20%, rgba(232, 227, 215, 0.03) 0px, transparent 45%),
+    radial-gradient(at 50% 80%, rgba(189, 184, 172, 0.02) 0px, transparent 50%),
+    radial-gradient(at 80% 90%, rgba(245, 243, 236, 0.02) 0px, transparent 40%);
   background-attachment: fixed;
 }
 
 .btn-gradient {
-  background: linear-gradient(135deg, #6c63ff 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #E8E3D7 0%, #F5F3EC 100%);
+  color: #050505;
+  font-weight: 700;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(108, 99, 255, 0.35);
+  box-shadow: 0 4px 14px rgba(245, 243, 236, 0.15);
 }
 .btn-gradient:hover {
-  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.5);
+  box-shadow: 0 6px 20px rgba(245, 243, 236, 0.25);
   transform: translateY(-1px);
 }
+
 

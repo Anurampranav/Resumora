@@ -23,8 +23,8 @@ export default function OverallAtsCard({ score, latestResumeId }: OverallAtsCard
   return (
     <div className="glass-card glass-card-hover rounded-2xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Overall ATS Score</h3>
-        <div className="w-7 h-7 rounded-lg glass-pill flex items-center justify-center text-violet-600 dark:text-violet-400">
+        <h3 className="text-sm font-semibold text-[#BDB8AC]">Overall ATS Score</h3>
+        <div className="w-7 h-7 rounded-lg glass-pill flex items-center justify-center text-[#F5F3EC]">
           <TrendingUp size={15} />
         </div>
       </div>
@@ -39,7 +39,7 @@ export default function OverallAtsCard({ score, latestResumeId }: OverallAtsCard
               r="34"
               stroke="currentColor"
               strokeWidth="7"
-              className="text-violet-200/50 dark:text-violet-950/60"
+              className="text-[#F5F3EC]/10"
               fill="transparent"
             />
             <circle
@@ -56,32 +56,32 @@ export default function OverallAtsCard({ score, latestResumeId }: OverallAtsCard
             />
             <defs>
               <linearGradient id="atsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#8B5CF6" />
-                <stop offset="100%" stopColor="#6366F1" />
+                <stop offset="0%" stopColor="#F5F3EC" />
+                <stop offset="100%" stopColor="#BDB8AC" />
               </linearGradient>
             </defs>
           </svg>
           <div className="absolute flex flex-col items-center justify-center">
-            <span className="text-xl font-extrabold text-gray-900 dark:text-white leading-none">{displayScore}</span>
-            <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium font-mono mt-0.5">/ 100</span>
+            <span className="text-xl font-extrabold text-[#F5F3EC] leading-none">{displayScore}</span>
+            <span className="text-[10px] text-[#BDB8AC] font-medium font-mono mt-0.5">/ 100</span>
           </div>
         </div>
 
         {/* Text Details */}
         <div>
-          <h4 className="text-xs font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-1.5">
+          <h4 className="text-xs font-bold text-[#F5F3EC] mb-1 flex items-center gap-1.5">
             {status.title}
           </h4>
-          <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed pr-2">
+          <p className="text-[11px] text-[#BDB8AC] leading-relaxed pr-2">
             {status.desc}
           </p>
         </div>
       </div>
 
-      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-white/10">
+      <div className="mt-3 pt-3 border-t border-[#F5F3EC]/10">
         <Link
           href={latestResumeId ? `/resumes/${latestResumeId}` : "/resumes"}
-          className="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-500 dark:hover:text-violet-300 flex items-center gap-1.5 transition-colors group/link"
+          className="text-xs font-semibold text-[#F5F3EC] hover:text-[#E8E3D7] flex items-center gap-1.5 transition-colors group/link"
         >
           <span>View Full Report</span>
           <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />

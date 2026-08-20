@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import ThemeProvider from "@/components/ThemeProvider";
+import AnimatedAsciiBackground from "@/components/AnimatedAsciiBackground";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,12 +17,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       signInFallbackRedirectUrl="/dashboard"
       signUpFallbackRedirectUrl="/dashboard"
     >
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning className="dark">
         <body
           suppressHydrationWarning
-          className="bg-background gradient-mesh min-h-screen text-on-surface font-body-md overflow-x-hidden antialiased transition-colors duration-300"
+          className="bg-[#050505] text-[#F5F3EC] font-body-md overflow-x-hidden antialiased min-h-screen relative"
         >
-          <ThemeProvider>{children}</ThemeProvider>
+          <AnimatedAsciiBackground />
+          <div className="relative z-10">
+            <ThemeProvider>{children}</ThemeProvider>
+          </div>
         </body>
       </html>
     </ClerkProvider>

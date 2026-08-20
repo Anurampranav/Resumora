@@ -305,7 +305,7 @@ export default function AiAnalysisPage() {
                     </span>
                   </div>
                   <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">
-                    Your personal resume coach powered by Google Gemini API &amp; your actual uploaded resume.
+                    Your personal resume coach
                   </p>
                 </div>
               </div>

@@ -245,6 +245,7 @@ export default function BuilderPage() {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
               <button
+                suppressHydrationWarning
                 onClick={handleUndo}
                 disabled={historyIndex === 0}
                 title="Undo"
@@ -253,6 +254,7 @@ export default function BuilderPage() {
                 <RotateCcw size={16} />
               </button>
               <button
+                suppressHydrationWarning
                 onClick={handleRedo}
                 disabled={historyIndex === history.length - 1}
                 title="Redo"
@@ -266,6 +268,7 @@ export default function BuilderPage() {
 
             <div className="flex items-center gap-1 bg-gray-100 dark:bg-white/5 p-1 rounded-xl border border-gray-200 dark:border-white/10">
               <button
+                suppressHydrationWarning
                 onClick={() => setActiveTab("editor")}
                 className={clsx(
                   "px-3 py-1 text-xs font-semibold rounded-lg transition-all",
@@ -277,6 +280,7 @@ export default function BuilderPage() {
                 Questionnaire &amp; Editor
               </button>
               <button
+                suppressHydrationWarning
                 onClick={() => setActiveTab("templates")}
                 className={clsx(
                   "px-3 py-1 text-xs font-semibold rounded-lg transition-all",
@@ -288,6 +292,7 @@ export default function BuilderPage() {
                 Templates
               </button>
               <button
+                suppressHydrationWarning
                 onClick={() => setActiveTab("reorder")}
                 className={clsx(
                   "px-3 py-1 text-xs font-semibold rounded-lg transition-all",
@@ -310,6 +315,7 @@ export default function BuilderPage() {
           {/* Right Action Buttons */}
           <div className="flex items-center gap-2">
             <button
+              suppressHydrationWarning
               onClick={handleCheckAts}
               disabled={isCheckingAts}
               className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-violet-700 dark:text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/30 rounded-xl transition-all"
@@ -319,6 +325,7 @@ export default function BuilderPage() {
             </button>
 
             <button
+              suppressHydrationWarning
               onClick={handleDownloadPdf}
               disabled={isDownloading}
               className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white btn-gradient rounded-xl shadow-md active:scale-95 transition-all disabled:opacity-50"

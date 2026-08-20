@@ -8,7 +8,6 @@ import {
   Plus,
   Trash2,
   CheckCircle2,
-  HelpCircle,
   Wand2,
   FileText,
   Clock,
@@ -23,9 +22,21 @@ import {
   Heart,
   FileCheck2,
   AlertCircle,
-  ExternalLink,
+  Building2,
+  BookOpen,
 } from "lucide-react";
-import { ResumeData, EducationItem, ExperienceItem, InternshipItem, ProjectItem, CertificationItem, AchievementItem, ExtracurricularItem, LeadershipItem, LanguageItem } from "../../types/builder";
+import {
+  ResumeData,
+  EducationItem,
+  ExperienceItem,
+  InternshipItem,
+  ProjectItem,
+  CertificationItem,
+  AchievementItem,
+  ExtracurricularItem,
+  LeadershipItem,
+  LanguageItem,
+} from "../../types/builder";
 import { generateSummaryApi, transformBulletsApi, organizeSkillsApi } from "../../lib/builderApi";
 import clsx from "clsx";
 
@@ -38,7 +49,7 @@ interface WizardStepsProps {
   onNavigateToUpload: () => void;
 }
 
-const TOTAL_STEPS = 18;
+const TOTAL_STEPS = 18; // Steps 0 through 17
 
 const ROLE_OPTIONS = [
   "Software Developer",
@@ -173,7 +184,6 @@ export default function WizardSteps({
           </p>
         </div>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-4 max-w-md mx-auto py-2">
           <div className="p-4 rounded-2xl glass-card text-left border border-white/40 dark:border-white/10">
             <div className="flex items-center gap-2 text-violet-600 dark:text-violet-400 mb-1">
@@ -192,9 +202,9 @@ export default function WizardSteps({
           </div>
         </div>
 
-        {/* Primary Action Button */}
         <div className="space-y-3 pt-4 max-w-md mx-auto">
           <button
+            suppressHydrationWarning
             onClick={() => setStep(1)}
             className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl text-white font-bold text-base btn-gradient shadow-lg shadow-violet-500/25 active:scale-95 transition-all"
           >
@@ -203,6 +213,7 @@ export default function WizardSteps({
           </button>
 
           <button
+            suppressHydrationWarning
             onClick={onNavigateToUpload}
             className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/5 rounded-xl transition-all"
           >
@@ -214,12 +225,37 @@ export default function WizardSteps({
     );
   }
 
+  const getStepTitle = (step: number) => {
+    switch (step) {
+      case 1: return "Personal Information";
+      case 2: return "Career Goal";
+      case 3: return "Professional Summary";
+      case 4: return "Education";
+      case 5: return "Work Experience";
+      case 6: return "Internships";
+      case 7: return "Projects";
+      case 8: return "Technical & Soft Skills";
+      case 9: return "Certifications";
+      case 10: return "Achievements & Honors";
+      case 11: return "Extracurricular Activities";
+      case 12: return "Leadership & Coordination";
+      case 13: return "Languages";
+      case 14: return "Hobbies & Interests";
+      case 15: return "Additional Information";
+      case 16: return "Target Job Mode";
+      case 17: return "Review & Finalize";
+      default: return "";
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Wizard Progress Header */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 font-medium">
-          <span>Step {currentStep} of {TOTAL_STEPS - 1}</span>
+          <span className="font-semibold text-gray-700 dark:text-gray-300">
+            Step {currentStep} of {TOTAL_STEPS - 1}: {getStepTitle(currentStep)}
+          </span>
           <span className="font-bold text-violet-600 dark:text-violet-400">
             {Math.round((currentStep / (TOTAL_STEPS - 1)) * 100)}% Completed
           </span>
@@ -405,6 +441,7 @@ export default function WizardSteps({
                   <button
                     key={c}
                     type="button"
+                    suppressHydrationWarning
                     onClick={() => updateCareerGoal("target_company_type", c)}
                     className={clsx(
                       "px-3 py-1.5 rounded-xl text-xs font-medium border transition-all",
@@ -428,6 +465,7 @@ export default function WizardSteps({
                   <button
                     key={mode}
                     type="button"
+                    suppressHydrationWarning
                     onClick={() => updateCareerGoal("work_mode", mode)}
                     className={clsx(
                       "flex-1 py-2 rounded-xl text-xs font-medium border text-center transition-all",
@@ -480,6 +518,7 @@ export default function WizardSteps({
                     <button
                       key={q}
                       type="button"
+                      suppressHydrationWarning
                       onClick={() => {
                         const next = selected
                           ? data.summary.qualities.filter((item) => item !== q)
@@ -514,6 +553,7 @@ export default function WizardSteps({
             </div>
 
             <button
+              suppressHydrationWarning
               onClick={handleGenerateSummary}
               disabled={loadingAi}
               className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-violet-600 to-purple-600 hover:opacity-90 transition-all shadow-md active:scale-95 disabled:opacity-50"
@@ -527,6 +567,7 @@ export default function WizardSteps({
                 <div className="flex items-center justify-between text-xs font-bold text-violet-700 dark:text-violet-300">
                   <span>AI GENERATED SUMMARY</span>
                   <button
+                    suppressHydrationWarning
                     onClick={() => onOpenAiImprove("Summary", data.summary.generated_summary)}
                     className="text-[11px] underline hover:text-violet-500"
                   >
@@ -556,6 +597,7 @@ export default function WizardSteps({
               </p>
             </div>
             <button
+              suppressHydrationWarning
               onClick={() => {
                 const newItem: EducationItem = {
                   id: String(Date.now()),
@@ -584,6 +626,7 @@ export default function WizardSteps({
               <GraduationCap size={32} className="mx-auto text-gray-400" />
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">No education added yet</p>
               <button
+                suppressHydrationWarning
                 onClick={() => {
                   const newItem: EducationItem = {
                     id: String(Date.now()),
@@ -608,12 +651,13 @@ export default function WizardSteps({
           ) : (
             <div className="space-y-4">
               {data.education.map((edu, index) => (
-                <div key={edu.id || index} className="p-4 rounded-2xl glass-card border border-white/40 dark:border-white/10 space-y-3 relative">
+                <div key={edu.id || index} className="p-4 rounded-2xl glass-card border border-white/40 dark:border-white/10 space-y-3">
                   <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-white/10">
                     <span className="text-xs font-bold text-violet-600 dark:text-violet-400">
                       Education #{index + 1}
                     </span>
                     <button
+                      suppressHydrationWarning
                       onClick={() => {
                         const next = data.education.filter((_, i) => i !== index);
                         onChange({ ...data, education: next });
@@ -764,6 +808,7 @@ export default function WizardSteps({
 
           <div className="flex gap-3">
             <button
+              suppressHydrationWarning
               onClick={() => onChange({ ...data, has_experience: true })}
               className={clsx(
                 "flex-1 py-3 rounded-2xl font-bold text-sm border transition-all flex items-center justify-center gap-2",
@@ -775,6 +820,7 @@ export default function WizardSteps({
               <span>YES</span>
             </button>
             <button
+              suppressHydrationWarning
               onClick={() => onChange({ ...data, has_experience: false, experience: [] })}
               className={clsx(
                 "flex-1 py-3 rounded-2xl font-bold text-sm border transition-all flex items-center justify-center gap-2",
@@ -800,6 +846,7 @@ export default function WizardSteps({
                       Work Experience #{index + 1}
                     </span>
                     <button
+                      suppressHydrationWarning
                       onClick={() => {
                         const next = data.experience.filter((_, i) => i !== index);
                         onChange({ ...data, experience: next });
@@ -891,6 +938,7 @@ export default function WizardSteps({
                   </div>
 
                   <button
+                    suppressHydrationWarning
                     onClick={async () => {
                       if (!exp.responsibilities) return;
                       setLoadingAi(true);
@@ -924,6 +972,7 @@ export default function WizardSteps({
                         <div key={bIdx} className="flex items-start justify-between gap-2 text-xs text-gray-800 dark:text-gray-200">
                           <p>• {b}</p>
                           <button
+                            suppressHydrationWarning
                             onClick={() => onOpenAiImprove("Work Experience Bullet", b)}
                             className="text-[10px] font-semibold text-violet-600 dark:text-violet-400 hover:underline shrink-0"
                           >
@@ -937,6 +986,7 @@ export default function WizardSteps({
               ))}
 
               <button
+                suppressHydrationWarning
                 onClick={() => {
                   const newItem: ExperienceItem = {
                     id: String(Date.now()),
@@ -962,6 +1012,196 @@ export default function WizardSteps({
         </div>
       )}
 
+      {/* STEP 6: INTERNSHIPS */}
+      {currentStep === 6 && (
+        <div className="space-y-4 animate-fade-in">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Internships</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Have you completed or are you currently doing an internship?
+            </p>
+          </div>
+
+          <div className="flex gap-3 mb-2">
+            <button
+              suppressHydrationWarning
+              onClick={() => onChange({ ...data, has_internships: true })}
+              className={clsx(
+                "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
+                data.has_internships
+                  ? "bg-violet-600 text-white border-violet-600 shadow-md"
+                  : "glass-pill text-gray-700 dark:text-gray-300"
+              )}
+            >
+              YES (I HAVE INTERNSHIPS)
+            </button>
+            <button
+              suppressHydrationWarning
+              onClick={() => onChange({ ...data, has_internships: false, internships: [] })}
+              className={clsx(
+                "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
+                !data.has_internships
+                  ? "bg-gray-800 text-white border-gray-800 dark:bg-white/20"
+                  : "glass-pill text-gray-700 dark:text-gray-300"
+              )}
+            >
+              NO (SKIP)
+            </button>
+          </div>
+
+          {data.has_internships && (
+            <div className="space-y-4">
+              {data.internships.map((intern, index) => (
+                <div key={intern.id || index} className="p-4 rounded-2xl glass-card border border-white/40 dark:border-white/10 space-y-3">
+                  <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-white/10">
+                    <span className="text-xs font-bold text-violet-600 dark:text-violet-400">
+                      Internship #{index + 1}
+                    </span>
+                    <button
+                      suppressHydrationWarning
+                      onClick={() => {
+                        const next = data.internships.filter((_, i) => i !== index);
+                        onChange({ ...data, internships: next });
+                      }}
+                      className="text-rose-500 p-1"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 block mb-1">Company / Organization *</label>
+                      <input
+                        type="text"
+                        value={intern.company}
+                        onChange={(e) => {
+                          const list = [...data.internships];
+                          list[index].company = e.target.value;
+                          onChange({ ...data, internships: list });
+                        }}
+                        placeholder="e.g. TechCorp Labs"
+                        className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 block mb-1">Role *</label>
+                      <input
+                        type="text"
+                        value={intern.role}
+                        onChange={(e) => {
+                          const list = [...data.internships];
+                          list[index].role = e.target.value;
+                          onChange({ ...data, internships: list });
+                        }}
+                        placeholder="e.g. Web Development Intern"
+                        className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 block mb-1">Duration</label>
+                      <input
+                        type="text"
+                        value={intern.duration}
+                        onChange={(e) => {
+                          const list = [...data.internships];
+                          list[index].duration = e.target.value;
+                          onChange({ ...data, internships: list });
+                        }}
+                        placeholder="e.g. Jun 2024 – Aug 2024"
+                        className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 block mb-1">Technologies Used</label>
+                      <input
+                        type="text"
+                        value={intern.technologies}
+                        onChange={(e) => {
+                          const list = [...data.internships];
+                          list[index].technologies = e.target.value;
+                          onChange({ ...data, internships: list });
+                        }}
+                        placeholder="e.g. React, Node.js, SQL"
+                        className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 block mb-1">
+                      What were your main responsibilities &amp; contributions?
+                    </label>
+                    <textarea
+                      value={intern.responsibilities}
+                      onChange={(e) => {
+                        const list = [...data.internships];
+                        list[index].responsibilities = e.target.value;
+                        onChange({ ...data, internships: list });
+                      }}
+                      rows={3}
+                      placeholder="e.g. Developed dashboard UI components in React and optimized REST API endpoints."
+                      className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white placeholder-gray-400"
+                    />
+                  </div>
+
+                  <button
+                    suppressHydrationWarning
+                    onClick={async () => {
+                      if (!intern.responsibilities) return;
+                      setLoadingAi(true);
+                      try {
+                        const bullets = await transformBulletsApi({
+                          raw_input: intern.responsibilities,
+                          role_title: intern.role || "Internship",
+                          section_type: "Internship",
+                          target_role: data.career_goal.target_role,
+                        });
+                        const list = [...data.internships];
+                        list[index].bullets = bullets;
+                        onChange({ ...data, internships: list });
+                      } catch (err: any) {
+                        setAiError(err.message);
+                      } finally {
+                        setLoadingAi(false);
+                      }
+                    }}
+                    disabled={loadingAi || !intern.responsibilities}
+                    className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold text-violet-700 dark:text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/30 transition-all disabled:opacity-50"
+                  >
+                    <Wand2 size={14} />
+                    <span>✨ Transform Internship Notes to Bullets</span>
+                  </button>
+                </div>
+              ))}
+
+              <button
+                suppressHydrationWarning
+                onClick={() => {
+                  const newItem: InternshipItem = {
+                    id: String(Date.now()),
+                    company: "",
+                    role: "",
+                    duration: "",
+                    responsibilities: "",
+                    technologies: "",
+                    achievements: "",
+                    bullets: [],
+                  };
+                  onChange({ ...data, internships: [...data.internships, newItem] });
+                }}
+                className="w-full py-2.5 rounded-xl border border-dashed border-violet-500/40 text-xs font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-500/10 transition-all"
+              >
+                + Add Another Internship
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* STEP 7: PROJECTS */}
       {currentStep === 7 && (
         <div className="space-y-4 animate-fade-in">
@@ -974,6 +1214,7 @@ export default function WizardSteps({
 
           <div className="flex gap-3 mb-2">
             <button
+              suppressHydrationWarning
               onClick={() => onChange({ ...data, has_projects: true })}
               className={clsx(
                 "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
@@ -985,6 +1226,7 @@ export default function WizardSteps({
               YES (I HAVE PROJECTS)
             </button>
             <button
+              suppressHydrationWarning
               onClick={() => onChange({ ...data, has_projects: false, projects: [] })}
               className={clsx(
                 "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
@@ -1006,6 +1248,7 @@ export default function WizardSteps({
                       Project #{index + 1}
                     </span>
                     <button
+                      suppressHydrationWarning
                       onClick={() => {
                         const next = data.projects.filter((_, i) => i !== index);
                         onChange({ ...data, projects: next });
@@ -1096,6 +1339,7 @@ export default function WizardSteps({
                   </div>
 
                   <button
+                    suppressHydrationWarning
                     onClick={async () => {
                       if (!proj.what_built) return;
                       setLoadingAi(true);
@@ -1129,6 +1373,7 @@ export default function WizardSteps({
                         <div key={bIdx} className="flex items-start justify-between gap-2 text-xs text-gray-800 dark:text-gray-200">
                           <p>• {b}</p>
                           <button
+                            suppressHydrationWarning
                             onClick={() => onOpenAiImprove("Project Bullet", b)}
                             className="text-[10px] font-semibold text-violet-600 dark:text-violet-400 hover:underline shrink-0"
                           >
@@ -1142,6 +1387,7 @@ export default function WizardSteps({
               ))}
 
               <button
+                suppressHydrationWarning
                 onClick={() => {
                   const newItem: ProjectItem = {
                     id: String(Date.now()),
@@ -1193,6 +1439,7 @@ export default function WizardSteps({
             </div>
 
             <button
+              suppressHydrationWarning
               onClick={handleOrganizeSkills}
               disabled={loadingAi || !data.raw_skills_input.trim()}
               className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:opacity-90 transition-all shadow-md disabled:opacity-50"
@@ -1201,7 +1448,6 @@ export default function WizardSteps({
               <span>{loadingAi ? "Organizing Skills..." : "✨ Organize Skills into Categories with Gemini"}</span>
             </button>
 
-            {/* Categorized Skills Breakdown */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <div className="p-3 rounded-xl glass-card border border-white/40 dark:border-white/10">
                 <span className="text-[10px] font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider block mb-1">
@@ -1243,109 +1489,624 @@ export default function WizardSteps({
         </div>
       )}
 
-      {/* OTHER QUICK STEPS (Certifications, Achievements, Languages, Target Job, etc.) */}
-      {currentStep > 8 && currentStep < 17 && (
+      {/* STEP 9: CERTIFICATIONS */}
+      {currentStep === 9 && (
         <div className="space-y-4 animate-fade-in">
-          {currentStep === 9 && (
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Certifications</h2>
-              <p className="text-xs text-gray-500 mb-3">Add any professional certifications (e.g. AWS, Coursera, Meta).</p>
-              <textarea
-                value={data.certifications.map((c) => c.name).join(", ")}
-                onChange={(e) => {
-                  const names = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
-                  const list: CertificationItem[] = names.map((n, i) => ({
-                    id: String(i),
-                    name: n,
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Certifications</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Do you have professional certifications (e.g. AWS, Coursera, Meta)?
+            </p>
+          </div>
+
+          <div className="flex gap-3 mb-2">
+            <button
+              suppressHydrationWarning
+              onClick={() => onChange({ ...data, has_certifications: true })}
+              className={clsx(
+                "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
+                data.has_certifications ? "bg-violet-600 text-white border-violet-600" : "glass-pill text-gray-700 dark:text-gray-300"
+              )}
+            >
+              YES (I HAVE CERTIFICATIONS)
+            </button>
+            <button
+              suppressHydrationWarning
+              onClick={() => onChange({ ...data, has_certifications: false, certifications: [] })}
+              className={clsx(
+                "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
+                !data.has_certifications ? "bg-gray-800 text-white border-gray-800 dark:bg-white/20" : "glass-pill text-gray-700 dark:text-gray-300"
+              )}
+            >
+              NO (SKIP)
+            </button>
+          </div>
+
+          {data.has_certifications && (
+            <div className="space-y-3">
+              {data.certifications.map((cert, index) => (
+                <div key={cert.id || index} className="p-3.5 rounded-xl glass-card border border-white/40 dark:border-white/10 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-violet-600 dark:text-violet-400">Certification #{index + 1}</span>
+                    <button
+                      suppressHydrationWarning
+                      onClick={() => {
+                        const list = data.certifications.filter((_, i) => i !== index);
+                        onChange({ ...data, certifications: list });
+                      }}
+                      className="text-rose-500 p-1"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={cert.name}
+                      onChange={(e) => {
+                        const list = [...data.certifications];
+                        list[index].name = e.target.value;
+                        onChange({ ...data, certifications: list });
+                      }}
+                      placeholder="Certification Name (e.g. AWS Cloud Practitioner)"
+                      className="p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                    />
+                    <input
+                      type="text"
+                      value={cert.issuer}
+                      onChange={(e) => {
+                        const list = [...data.certifications];
+                        list[index].issuer = e.target.value;
+                        onChange({ ...data, certifications: list });
+                      }}
+                      placeholder="Issuing Organization (e.g. Amazon Web Services)"
+                      className="p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                    />
+                    <input
+                      type="text"
+                      value={cert.issue_date}
+                      onChange={(e) => {
+                        const list = [...data.certifications];
+                        list[index].issue_date = e.target.value;
+                        onChange({ ...data, certifications: list });
+                      }}
+                      placeholder="Issue Date (e.g. 2024)"
+                      className="p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                    />
+                    <input
+                      type="text"
+                      value={cert.credential_url}
+                      onChange={(e) => {
+                        const list = [...data.certifications];
+                        list[index].credential_url = e.target.value;
+                        onChange({ ...data, certifications: list });
+                      }}
+                      placeholder="Credential URL (Optional)"
+                      className="p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                </div>
+              ))}
+              <button
+                suppressHydrationWarning
+                onClick={() => {
+                  const newItem: CertificationItem = {
+                    id: String(Date.now()),
+                    name: "",
                     issuer: "",
                     issue_date: "",
                     credential_id: "",
                     credential_url: "",
-                  }));
-                  onChange({ ...data, has_certifications: names.length > 0, certifications: list });
+                  };
+                  onChange({ ...data, certifications: [...data.certifications, newItem] });
                 }}
-                rows={3}
-                placeholder="AWS Certified Cloud Practitioner, Meta Front-End Developer"
-                className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white placeholder-gray-400"
-              />
+                className="w-full py-2 rounded-xl border border-dashed border-violet-500/40 text-xs font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-500/10"
+              >
+                + Add Certification
+              </button>
             </div>
           )}
+        </div>
+      )}
 
-          {currentStep === 10 && (
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Achievements &amp; Honors</h2>
-              <p className="text-xs text-gray-500 mb-3">Hackathons, awards, scholarships, or publications.</p>
-              <textarea
-                value={data.achievements.map((a) => a.title).join("\n")}
-                onChange={(e) => {
-                  const lines = e.target.value.split("\n").map((s) => s.trim()).filter(Boolean);
-                  const list: AchievementItem[] = lines.map((l, i) => ({
-                    id: String(i),
-                    title: l,
+      {/* STEP 10: ACHIEVEMENTS */}
+      {currentStep === 10 && (
+        <div className="space-y-4 animate-fade-in">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Achievements &amp; Honors</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Highlight awards, hackathon wins, scholarships, or publications.
+            </p>
+          </div>
+
+          <div className="flex gap-3 mb-2">
+            <button
+              suppressHydrationWarning
+              onClick={() => onChange({ ...data, has_achievements: true })}
+              className={clsx(
+                "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
+                data.has_achievements ? "bg-violet-600 text-white border-violet-600" : "glass-pill text-gray-700 dark:text-gray-300"
+              )}
+            >
+              YES (I HAVE ACHIEVEMENTS)
+            </button>
+            <button
+              suppressHydrationWarning
+              onClick={() => onChange({ ...data, has_achievements: false, achievements: [] })}
+              className={clsx(
+                "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
+                !data.has_achievements ? "bg-gray-800 text-white border-gray-800 dark:bg-white/20" : "glass-pill text-gray-700 dark:text-gray-300"
+              )}
+            >
+              NO (SKIP)
+            </button>
+          </div>
+
+          {data.has_achievements && (
+            <div className="space-y-3">
+              {data.achievements.map((ach, index) => (
+                <div key={ach.id || index} className="p-3.5 rounded-xl glass-card border border-white/40 dark:border-white/10 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-violet-600 dark:text-violet-400">Achievement #{index + 1}</span>
+                    <button
+                      suppressHydrationWarning
+                      onClick={() => {
+                        const list = data.achievements.filter((_, i) => i !== index);
+                        onChange({ ...data, achievements: list });
+                      }}
+                      className="text-rose-500 p-1"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={ach.title}
+                      onChange={(e) => {
+                        const list = [...data.achievements];
+                        list[index].title = e.target.value;
+                        onChange({ ...data, achievements: list });
+                      }}
+                      placeholder="Title (e.g. 1st Place - Smart India Hackathon)"
+                      className="p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                    />
+                    <input
+                      type="text"
+                      value={ach.date}
+                      onChange={(e) => {
+                        const list = [...data.achievements];
+                        list[index].date = e.target.value;
+                        onChange({ ...data, achievements: list });
+                      }}
+                      placeholder="Year / Date (e.g. 2024)"
+                      className="p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    value={ach.description}
+                    onChange={(e) => {
+                      const list = [...data.achievements];
+                      list[index].description = e.target.value;
+                      onChange({ ...data, achievements: list });
+                    }}
+                    placeholder="Short description / details"
+                    className="w-full p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                  />
+                </div>
+              ))}
+              <button
+                suppressHydrationWarning
+                onClick={() => {
+                  const newItem: AchievementItem = {
+                    id: String(Date.now()),
+                    title: "",
                     description: "",
                     date: "",
                     category: "other",
-                  }));
-                  onChange({ ...data, has_achievements: lines.length > 0, achievements: list });
+                  };
+                  onChange({ ...data, achievements: [...data.achievements, newItem] });
                 }}
-                rows={3}
-                placeholder="Winner of National Hackathon 2024&#10;Dean's Honor List 2023"
-                className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white placeholder-gray-400"
-              />
+                className="w-full py-2 rounded-xl border border-dashed border-violet-500/40 text-xs font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-500/10"
+              >
+                + Add Achievement
+              </button>
             </div>
           )}
+        </div>
+      )}
 
-          {currentStep === 13 && (
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Languages</h2>
-              <p className="text-xs text-gray-500 mb-3">Languages you speak fluently or professionally.</p>
-              <textarea
-                value={data.languages.map((l) => `${l.language} - ${l.proficiency}`).join(", ")}
-                onChange={(e) => {
-                  const items = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
-                  const list: LanguageItem[] = items.map((item) => {
-                    const [lang, prof] = item.split("-").map((x) => x.trim());
-                    return { language: lang || item, proficiency: prof || "Native" };
-                  });
-                  onChange({ ...data, languages: list });
+      {/* STEP 11: EXTRACURRICULAR ACTIVITIES */}
+      {currentStep === 11 && (
+        <div className="space-y-4 animate-fade-in">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Extracurricular Activities</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Clubs, volunteer work, coding communities, or student organizations.
+            </p>
+          </div>
+
+          <div className="flex gap-3 mb-2">
+            <button
+              suppressHydrationWarning
+              onClick={() => onChange({ ...data, has_extracurriculars: true })}
+              className={clsx(
+                "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
+                data.has_extracurriculars ? "bg-violet-600 text-white border-violet-600" : "glass-pill text-gray-700 dark:text-gray-300"
+              )}
+            >
+              YES (I HAVE ACTIVITIES)
+            </button>
+            <button
+              suppressHydrationWarning
+              onClick={() => onChange({ ...data, has_extracurriculars: false, extracurriculars: [] })}
+              className={clsx(
+                "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
+                !data.has_extracurriculars ? "bg-gray-800 text-white border-gray-800 dark:bg-white/20" : "glass-pill text-gray-700 dark:text-gray-300"
+              )}
+            >
+              NO (SKIP)
+            </button>
+          </div>
+
+          {data.has_extracurriculars && (
+            <div className="space-y-3">
+              {data.extracurriculars.map((extra, index) => (
+                <div key={extra.id || index} className="p-3.5 rounded-xl glass-card border border-white/40 dark:border-white/10 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-violet-600 dark:text-violet-400">Activity #{index + 1}</span>
+                    <button
+                      suppressHydrationWarning
+                      onClick={() => {
+                        const list = data.extracurriculars.filter((_, i) => i !== index);
+                        onChange({ ...data, extracurriculars: list });
+                      }}
+                      className="text-rose-500 p-1"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={extra.organization}
+                      onChange={(e) => {
+                        const list = [...data.extracurriculars];
+                        list[index].organization = e.target.value;
+                        onChange({ ...data, extracurriculars: list });
+                      }}
+                      placeholder="Organization / Club (e.g. Developer Student Club)"
+                      className="p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                    />
+                    <input
+                      type="text"
+                      value={extra.role}
+                      onChange={(e) => {
+                        const list = [...data.extracurriculars];
+                        list[index].role = e.target.value;
+                        onChange({ ...data, extracurriculars: list });
+                      }}
+                      placeholder="Your Role / Contribution"
+                      className="p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <textarea
+                    value={extra.description}
+                    onChange={(e) => {
+                      const list = [...data.extracurriculars];
+                      list[index].description = e.target.value;
+                      onChange({ ...data, extracurriculars: list });
+                    }}
+                    rows={2}
+                    placeholder="Brief description of what you did"
+                    className="w-full p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                  />
+                </div>
+              ))}
+              <button
+                suppressHydrationWarning
+                onClick={() => {
+                  const newItem: ExtracurricularItem = {
+                    id: String(Date.now()),
+                    organization: "",
+                    role: "",
+                    description: "",
+                  };
+                  onChange({ ...data, extracurriculars: [...data.extracurriculars, newItem] });
                 }}
-                rows={2}
-                placeholder="English - Professional, Kannada - Native"
-                className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white placeholder-gray-400"
-              />
+                className="w-full py-2 rounded-xl border border-dashed border-violet-500/40 text-xs font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-500/10"
+              >
+                + Add Activity
+              </button>
             </div>
           )}
+        </div>
+      )}
 
-          {currentStep === 16 && (
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Target Job Description (Optional)</h2>
-              <p className="text-xs text-gray-500 mb-3">
-                Paste a specific job description to analyze keyword coverage without hallucinating skills.
-              </p>
-              <textarea
-                value={data.target_job.job_description}
-                onChange={(e) =>
-                  onChange({
-                    ...data,
-                    target_job: {
-                      ...data.target_job,
-                      has_target_job: Boolean(e.target.value),
-                      job_description: e.target.value,
-                    },
-                  })
-                }
-                rows={5}
-                placeholder="Paste Job Description here..."
-                className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white placeholder-gray-400 font-mono"
-              />
+      {/* STEP 12: LEADERSHIP */}
+      {currentStep === 12 && (
+        <div className="space-y-4 animate-fade-in">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Leadership Roles</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Positions of responsibility, event management, or team leadership.
+            </p>
+          </div>
+
+          <div className="flex gap-3 mb-2">
+            <button
+              suppressHydrationWarning
+              onClick={() => onChange({ ...data, has_leadership: true })}
+              className={clsx(
+                "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
+                data.has_leadership ? "bg-violet-600 text-white border-violet-600" : "glass-pill text-gray-700 dark:text-gray-300"
+              )}
+            >
+              YES (I HAVE LEADERSHIP ROLES)
+            </button>
+            <button
+              suppressHydrationWarning
+              onClick={() => onChange({ ...data, has_leadership: false, leadership: [] })}
+              className={clsx(
+                "flex-1 py-2.5 rounded-xl font-bold text-xs border transition-all",
+                !data.has_leadership ? "bg-gray-800 text-white border-gray-800 dark:bg-white/20" : "glass-pill text-gray-700 dark:text-gray-300"
+              )}
+            >
+              NO (SKIP)
+            </button>
+          </div>
+
+          {data.has_leadership && (
+            <div className="space-y-3">
+              {data.leadership.map((lead, index) => (
+                <div key={lead.id || index} className="p-3.5 rounded-xl glass-card border border-white/40 dark:border-white/10 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-violet-600 dark:text-violet-400">Leadership #{index + 1}</span>
+                    <button
+                      suppressHydrationWarning
+                      onClick={() => {
+                        const list = data.leadership.filter((_, i) => i !== index);
+                        onChange({ ...data, leadership: list });
+                      }}
+                      className="text-rose-500 p-1"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={lead.position}
+                      onChange={(e) => {
+                        const list = [...data.leadership];
+                        list[index].position = e.target.value;
+                        onChange({ ...data, leadership: list });
+                      }}
+                      placeholder="Position Title (e.g. Lead Coordinator)"
+                      className="p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                    />
+                    <input
+                      type="text"
+                      value={lead.organization}
+                      onChange={(e) => {
+                        const list = [...data.leadership];
+                        list[index].organization = e.target.value;
+                        onChange({ ...data, leadership: list });
+                      }}
+                      placeholder="Organization (e.g. Tech Fest 2024)"
+                      className="p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    value={lead.duration}
+                    onChange={(e) => {
+                      const list = [...data.leadership];
+                      list[index].duration = e.target.value;
+                      onChange({ ...data, leadership: list });
+                    }}
+                    placeholder="Duration (e.g. 2023 – 2024)"
+                    className="w-full p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                  />
+                  <textarea
+                    value={lead.description}
+                    onChange={(e) => {
+                      const list = [...data.leadership];
+                      list[index].description = e.target.value;
+                      onChange({ ...data, leadership: list });
+                    }}
+                    rows={2}
+                    placeholder="Responsibilities & accomplishments"
+                    className="w-full p-2 rounded-lg glass-input text-xs text-gray-900 dark:text-white"
+                  />
+                </div>
+              ))}
+              <button
+                suppressHydrationWarning
+                onClick={() => {
+                  const newItem: LeadershipItem = {
+                    id: String(Date.now()),
+                    organization: "",
+                    position: "",
+                    duration: "",
+                    description: "",
+                  };
+                  onChange({ ...data, leadership: [...data.leadership, newItem] });
+                }}
+                className="w-full py-2 rounded-xl border border-dashed border-violet-500/40 text-xs font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-500/10"
+              >
+                + Add Leadership Role
+              </button>
             </div>
           )}
+        </div>
+      )}
+
+      {/* STEP 13: LANGUAGES */}
+      {currentStep === 13 && (
+        <div className="space-y-4 animate-fade-in">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Languages</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Languages you speak fluently or professionally.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {data.languages.map((lang, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={lang.language}
+                  onChange={(e) => {
+                    const list = [...data.languages];
+                    list[index].language = e.target.value;
+                    onChange({ ...data, languages: list });
+                  }}
+                  placeholder="Language (e.g. English)"
+                  className="flex-1 p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white"
+                />
+                <select
+                  value={lang.proficiency}
+                  onChange={(e) => {
+                    const list = [...data.languages];
+                    list[index].proficiency = e.target.value;
+                    onChange({ ...data, languages: list });
+                  }}
+                  className="w-40 p-2.5 rounded-xl glass-input text-xs text-gray-900 dark:text-white"
+                >
+                  <option value="Native">Native</option>
+                  <option value="Professional">Professional</option>
+                  <option value="Conversational">Conversational</option>
+                  <option value="Basic">Basic</option>
+                </select>
+                <button
+                  suppressHydrationWarning
+                  onClick={() => {
+                    const list = data.languages.filter((_, i) => i !== index);
+                    onChange({ ...data, languages: list });
+                  }}
+                  className="text-rose-500 p-2"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
+
+            <button
+              suppressHydrationWarning
+              onClick={() => {
+                const newItem: LanguageItem = { language: "", proficiency: "Professional" };
+                onChange({ ...data, languages: [...data.languages, newItem] });
+              }}
+              className="w-full py-2.5 rounded-xl border border-dashed border-violet-500/40 text-xs font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-500/10"
+            >
+              + Add Language
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* STEP 14: HOBBIES & INTERESTS */}
+      {currentStep === 14 && (
+        <div className="space-y-4 animate-fade-in">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Hobbies &amp; Interests</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Would you like to include your interests or hobbies?
+            </p>
+          </div>
+
+          <div>
+            <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 block mb-1">
+              Enter your hobbies (comma separated)
+            </label>
+            <input
+              type="text"
+              value={Array.isArray(data.interests) ? data.interests.join(", ") : data.interests || ""}
+              onChange={(e) => {
+                const val = e.target.value;
+                const items = val.split(",").map((s) => s.trim());
+                onChange({ ...data, interests: items });
+              }}
+              placeholder="e.g. Photography, Competitive Coding, Open Source, Gaming"
+              className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white placeholder-gray-400"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* STEP 15: ADDITIONAL INFORMATION */}
+      {currentStep === 15 && (
+        <div className="space-y-4 animate-fade-in">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Additional Information</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Is there anything else you'd like recruiters to know about you?
+            </p>
+          </div>
+
+          <div>
+            <textarea
+              value={data.additional_info}
+              onChange={(e) => onChange({ ...data, additional_info: e.target.value })}
+              rows={5}
+              placeholder="Any custom notes, security clearance, availability to join, relocate, etc."
+              className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white placeholder-gray-400"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* STEP 16: TARGET JOB MODE */}
+      {currentStep === 16 && (
+        <div className="space-y-4 animate-fade-in">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Target Job Mode (Optional)</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Paste a target job description so Gemini can analyze keyword coverage for your resume without fabricating facts.
+            </p>
+          </div>
+
+          <div>
+            <textarea
+              value={data.target_job.job_description}
+              onChange={(e) =>
+                onChange({
+                  ...data,
+                  target_job: {
+                    ...data.target_job,
+                    has_target_job: Boolean(e.target.value),
+                    job_description: e.target.value,
+                  },
+                })
+              }
+              rows={6}
+              placeholder="Paste Job Description here..."
+              className="w-full p-2.5 rounded-xl glass-input text-sm text-gray-900 dark:text-white placeholder-gray-400 font-mono"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* STEP 17: REVIEW & FINALIZE */}
+      {currentStep === 17 && (
+        <div className="space-y-4 text-center py-4 animate-fade-in">
+          <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center mx-auto mb-2">
+            <CheckCircle2 size={28} />
+          </div>
+          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">Your Resume is Ready!</h2>
+          <p className="text-xs text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+            Resumora has structured and formatted your resume into a high-impact, ATS-friendly document.
+          </p>
         </div>
       )}
 
       {/* NAVIGATION CONTROLS */}
       <div className="flex items-center justify-between pt-6 border-t border-gray-200 dark:border-white/10">
         <button
+          suppressHydrationWarning
           onClick={() => setStep(Math.max(0, currentStep - 1))}
           disabled={currentStep === 0}
           className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 rounded-xl transition-all disabled:opacity-30"
@@ -1357,6 +2118,7 @@ export default function WizardSteps({
         <div className="flex items-center gap-2">
           {currentStep > 0 && currentStep < TOTAL_STEPS - 1 && (
             <button
+              suppressHydrationWarning
               onClick={() => setStep(currentStep + 1)}
               className="px-3 py-2 text-xs font-semibold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
             >
@@ -1365,6 +2127,7 @@ export default function WizardSteps({
           )}
 
           <button
+            suppressHydrationWarning
             onClick={() => setStep(Math.min(TOTAL_STEPS - 1, currentStep + 1))}
             className="flex items-center gap-1.5 px-5 py-2.5 text-xs font-bold text-white btn-gradient rounded-xl shadow-md active:scale-95 transition-all"
           >

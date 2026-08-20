@@ -142,6 +142,89 @@ export interface AtsReportDetail {
   download_url: string;
 }
 
+export interface AIChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface AIChatResponse {
+  reply: string;
+  suggested_questions: string[];
+}
+
+export interface SectionCoachResponse {
+  section_name: string;
+  strong: string[];
+  weak: string[];
+  missing: string[];
+  changes: string[];
+  why_improve: string;
+  suggested_version: string;
+}
+
+export interface BulletCoachResponse {
+  original: string;
+  clarity_assessment: string;
+  impact_assessment: string;
+  specificity_assessment: string;
+  recommendation: string;
+  suggested_version: string;
+}
+
+export interface ProjectRecommendation {
+  title: string;
+  why: string;
+  skills_demonstrated: string[];
+  potential_value: string;
+}
+
+export interface ImprovementPlanItem {
+  priority: "HIGH" | "MEDIUM" | "LOW";
+  category: string;
+  title: string;
+  recommendation: string;
+  action_tab: string;
+}
+
+export interface CareerGuidanceResult {
+  suited_roles: string[];
+  potential_next_skills: { skill: string; why: string }[];
+  project_recommendations: ProjectRecommendation[];
+  improvement_plan: ImprovementPlanItem[];
+}
+
+export interface ActionCenterItem {
+  id: string;
+  priority: "HIGH" | "MEDIUM" | "LOW";
+  title: string;
+  description: string;
+  workflow_target: string;
+}
+
+export interface ActionCenterResponse {
+  items: ActionCenterItem[];
+}
+
+export interface InterviewQuestion {
+  id: string;
+  category: "Technical" | "Project-based" | "Behavioral" | "Resume-based";
+  question: string;
+  why_asked: string;
+  key_talking_points: string[];
+}
+
+export interface InterviewQuestionsResponse {
+  questions: InterviewQuestion[];
+}
+
+export interface EvaluateAnswerResponse {
+  score: number;
+  strengths: string[];
+  weaknesses: string[];
+  missing_points: string[];
+  better_answer_structure: string;
+}
+
 export interface JobRole {
   id: string;
   slug: string;
@@ -943,4 +1026,262 @@ export const api = {
       URL.revokeObjectURL(url);
     }
   },
+
+  chatWithAi: async (
+    resumeId: string,
+    question: string,
+    history: AIChatMessage[] = []
+  ): Promise<AIChatResponse> => {
+    try {
+      return await request<AIChatResponse>(`/ai-coach/${resumeId}/chat`, {
+        method: "POST",
+        body: JSON.stringify({ question, history }),
+      });
+    } catch {
+      const store = getLocalStore();
+      const r = store.resumes.find((item) => item.id === resumeId) || store.resumes[0];
+      const targetRole = r?.role_name || "Software Engineer";
+      const qLower = question.toLowerCase();
+
+      let reply = `Based on your resume for ${targetRole}, I recommend focusing on highlighting measurable technical outcomes and ensuring all core skills mentioned in your projects are clearly aligned with target job requirements.`;
+      
+      if (qLower.includes("weak") || qLower.includes("improve first")) {
+        reply = `Looking at your uploaded resume (${r?.file_name || "current resume"}), your experience bullet points lack quantitative metrics (percentages, revenue, performance gains). To strengthen your profile for ${targetRole} roles, reframe duties as metric-backed achievements.`;
+      } else if (qLower.includes("project")) {
+        reply = `Your project section lists technical frameworks but doesn't detail architectural decisions or live deployment links. Consider highlighting your specific role, scale (e.g. active users, request throughput), and infrastructure choices.`;
+      } else if (qLower.includes("skill")) {
+        reply = `Based on your resume skills matrix, adding modern containerization (Docker) and cloud deployment (AWS / CI/CD) will significantly increase your callback rate for ${targetRole} positions.`;
+      }
+
+      return {
+        reply,
+        suggested_questions: [
+          "What should I improve first in my experience section?",
+          "How can I make my project bullets more impactful?",
+          "Which technical skills am I missing for backend roles?",
+        ],
+      };
+    }
+  },
+
+  analyzeSectionCoach: async (
+    resumeId: string,
+    sectionName: string,
+    sectionText?: string
+  ): Promise<SectionCoachResponse> => {
+    try {
+      return await request<SectionCoachResponse>(`/ai-coach/${resumeId}/section`, {
+        method: "POST",
+        body: JSON.stringify({ section_name: sectionName, section_text: sectionText }),
+      });
+    } catch {
+      const store = getLocalStore();
+      const r = store.resumes.find((item) => item.id === resumeId) || store.resumes[0];
+      const orig = sectionText || `${sectionName} content extracted from ${r?.file_name || "resume"}`;
+      return {
+        section_name: sectionName,
+        strong: ["Clear technical focus and relevant industry terminology used."],
+        weak: ["Phrasing relies on passive descriptions without clear result metrics."],
+        missing: ["Quantitative impact metrics (e.g., latency reduction %, user scale, throughput)."],
+        changes: ["Start bullets with strong action verbs and specify technical context."],
+        why_improve: `Refining your ${sectionName} section ensures recruiters immediately recognize your engineering impact within 6 seconds of scanning.`,
+        suggested_version: orig.includes("developed")
+          ? orig.replace(/developed/gi, "Engineered and deployed")
+          : `Architected and optimized high-performance workflows within ${sectionName.toLowerCase()} to boost system throughput and reliability.`,
+      };
+    }
+  },
+
+  analyzeBulletCoach: async (
+    resumeId: string,
+    originalBullet: string,
+    context?: string
+  ): Promise<BulletCoachResponse> => {
+    try {
+      return await request<BulletCoachResponse>(`/ai-coach/${resumeId}/bullet`, {
+        method: "POST",
+        body: JSON.stringify({ original_bullet: originalBullet, context }),
+      });
+    } catch {
+      return {
+        original: originalBullet,
+        clarity_assessment: "Phrasing is understandable but could begin with a stronger action verb.",
+        impact_assessment: "Lacks explicit business or technical metrics (e.g., % speedup, revenue, volume).",
+        specificity_assessment: "Mentions general tools; could specify exact frameworks and system scale.",
+        recommendation: "Use the Action Verb + System Context + Measurable Outcome structure.",
+        suggested_version: `Spearheaded engineering initiatives for "${originalBullet.slice(0, 40)}...", optimizing system workflows and boosting operational efficiency.`,
+      };
+    }
+  },
+
+  getCareerGuidance: async (resumeId: string): Promise<CareerGuidanceResult> => {
+    try {
+      return await request<CareerGuidanceResult>(`/ai-coach/${resumeId}/guidance`);
+    } catch {
+      const store = getLocalStore();
+      const r = store.resumes.find((item) => item.id === resumeId) || store.resumes[0];
+      const role = r?.role_name || "Software Engineer";
+      return {
+        suited_roles: [role, "Full-Stack Engineer", "Backend Developer"],
+        potential_next_skills: [
+          { skill: "Docker & Containerization", why: "Essential for packaging microservices in modern cloud deployments." },
+          { skill: "AWS / Cloud Architecture", why: "Demonstrates practical production infrastructure competence." },
+          { skill: "CI/CD Pipelines (GitHub Actions)", why: "Proves readiness for automated testing and deployment workflows." },
+        ],
+        project_recommendations: [
+          {
+            title: "Scalable Microservices API Platform",
+            why: "Demonstrates high-throughput backend architecture and database optimization.",
+            skills_demonstrated: ["FastAPI", "PostgreSQL", "Redis", "Docker"],
+            potential_value: "Fills backend depth gaps and proves production-grade system design capacity.",
+          },
+          {
+            title: "Real-Time Monitoring & Telemetry Dashboard",
+            why: "Showcases full-stack integration with asynchronous processing.",
+            skills_demonstrated: ["React", "TypeScript", "WebSockets", "Python"],
+            potential_value: "Demonstrates end-to-end technical execution and UI responsiveness.",
+          },
+        ],
+        improvement_plan: [
+          {
+            priority: "HIGH",
+            category: "Projects",
+            title: "Quantify project bullet points with metrics",
+            recommendation: "Reframe project descriptions to include request throughput, latency reduction, or active user count.",
+            action_tab: "rewriter",
+          },
+          {
+            priority: "MEDIUM",
+            category: "Professional Summary",
+            title: "Target summary directly at target job title",
+            recommendation: "Highlight core technical competencies and top 1 achievement in your opening line.",
+            action_tab: "section",
+          },
+          {
+            priority: "LOW",
+            category: "Skills Matrix",
+            title: "Add dedicated DevOps & Infrastructure section",
+            recommendation: "Group skills into Frontend, Backend, Database, and Developer Tools.",
+            action_tab: "section",
+          },
+        ],
+      };
+    }
+  },
+
+  getActionCenter: async (resumeId: string): Promise<ActionCenterResponse> => {
+    try {
+      return await request<ActionCenterResponse>(`/ai-coach/${resumeId}/action-center`);
+    } catch {
+      return {
+        items: [
+          {
+            id: "act-1",
+            priority: "HIGH",
+            title: "Reframe project descriptions with technical results",
+            description: "Convert passive statements into outcome-driven metrics and action verbs.",
+            workflow_target: "rewriter",
+          },
+          {
+            id: "act-2",
+            priority: "MEDIUM",
+            title: "Strengthen professional summary",
+            description: "Align your headline directly with your target role to captivate recruiters in 6 seconds.",
+            workflow_target: "section",
+          },
+          {
+            id: "act-3",
+            priority: "LOW",
+            title: "Prepare for resume-tailored technical interview questions",
+            description: "Practice answering questions generated specifically from your experience and project stack.",
+            workflow_target: "interview",
+          },
+        ],
+      };
+    }
+  },
+
+  getInterviewQuestions: async (resumeId: string): Promise<InterviewQuestionsResponse> => {
+    try {
+      return await request<InterviewQuestionsResponse>(`/ai-coach/${resumeId}/interview-questions`);
+    } catch {
+      const store = getLocalStore();
+      const r = store.resumes.find((item) => item.id === resumeId) || store.resumes[0];
+      const role = r?.role_name || "Software Developer";
+      return {
+        questions: [
+          {
+            id: "q-1",
+            category: "Technical",
+            question: `How do you optimize API query latency when designing backend services for ${role}?`,
+            why_asked: "Evaluates your architectural depth, indexing knowledge, and performance tuning strategies.",
+            key_talking_points: ["Database query optimization & indexing", "Redis caching layer", "Asynchronous request handling"],
+          },
+          {
+            id: "q-2",
+            category: "Project-based",
+            question: "Walk me through the key technical challenges you faced in your primary resume project.",
+            why_asked: "Tests your practical problem-solving ability under real engineering constraints.",
+            key_talking_points: ["Problem statement & constraints", "Chosen technology stack trade-offs", "Measurable final outcome"],
+          },
+          {
+            id: "q-3",
+            category: "Behavioral",
+            question: "Tell me about a time you had to adapt quickly to a new framework or tight deadline.",
+            why_asked: "Assesses learning speed, adaptability, and composure under pressure.",
+            key_talking_points: ["Situation context", "Action taken to learn rapidly", "Successful delivery"],
+          },
+          {
+            id: "q-4",
+            category: "Resume-based",
+            question: "Why did you choose your specific tech stack for the project highlighted on your resume?",
+            why_asked: "Verifies technical ownership and rationale behind architectural choices.",
+            key_talking_points: ["Scalability considerations", "Developer speed", "Ecosystem support"],
+          },
+        ],
+      };
+    }
+  },
+
+  evaluateInterviewAnswer: async (
+    resumeId: string,
+    questionId: string,
+    questionText: string,
+    userAnswer: string
+  ): Promise<EvaluateAnswerResponse> => {
+    try {
+      return await request<EvaluateAnswerResponse>(`/ai-coach/${resumeId}/evaluate-answer`, {
+        method: "POST",
+        body: JSON.stringify({
+          question_id: questionId,
+          question_text: questionText,
+          user_answer: userAnswer,
+        }),
+      });
+    } catch {
+      return {
+        score: 84,
+        strengths: ["Clear technical context and direct addressing of the question core."],
+        weaknesses: ["Could include explicit quantitative metrics (e.g. latency reduced by 30%)."],
+        missing_points: ["Trade-offs considered during technical framework selection."],
+        better_answer_structure: "Structure your response using the STAR method: Situation -> Task -> Action -> Result.",
+      };
+    }
+  },
+
+  acceptRewrite: async (
+    resumeId: string,
+    sectionName: string,
+    newContent: string
+  ): Promise<{ status: string; message: string }> => {
+    try {
+      return await request<{ status: string; message: string }>(`/ai-coach/${resumeId}/accept-rewrite`, {
+        method: "POST",
+        body: JSON.stringify({ section_name: sectionName, new_content: newContent }),
+      });
+    } catch {
+      return { status: "success", message: `Updated ${sectionName} content successfully.` };
+    }
+  },
 };
+

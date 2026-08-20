@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from app.api.routes import auth, dashboard, job_roles, resumes
+from app.api.routes import ai_coach, auth, dashboard, job_roles, resumes
 from app.core.config import get_settings
 from app.core.limiter import limiter
 from app.db.database import Base, SessionLocal, engine
@@ -31,6 +31,7 @@ app.include_router(auth.router)
 app.include_router(resumes.router)
 app.include_router(dashboard.router)
 app.include_router(job_roles.router)
+app.include_router(ai_coach.router)
 
 
 @app.on_event("startup")

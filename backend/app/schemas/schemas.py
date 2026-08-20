@@ -165,3 +165,115 @@ class AtsReportDetailOut(BaseModel):
     weak_bullet_points: list[WeakBulletOut]
     ai_suggestions: list[str]
     download_url: str
+
+
+# --- AI Coach Schemas ---
+
+class AIChatMessage(BaseModel):
+    role: str  # "user" | "assistant"
+    content: str
+
+
+class AIChatRequest(BaseModel):
+    question: str
+    history: list[AIChatMessage] = []
+
+
+class AIChatResponse(BaseModel):
+    reply: str
+    suggested_questions: list[str] = []
+
+
+class SectionCoachRequest(BaseModel):
+    section_name: str  # "Summary" | "Experience" | "Projects" | "Skills" | "Achievements"
+    section_text: str | None = None
+
+
+class SectionCoachResponse(BaseModel):
+    section_name: str
+    strong: list[str]
+    weak: list[str]
+    missing: list[str]
+    changes: list[str]
+    why_improve: str
+    suggested_version: str
+
+
+class BulletCoachRequest(BaseModel):
+    original_bullet: str
+    context: str | None = None
+
+
+class BulletCoachResponse(BaseModel):
+    original: str
+    clarity_assessment: str
+    impact_assessment: str
+    specificity_assessment: str
+    recommendation: str
+    suggested_version: str
+
+
+class ProjectRecommendationOut(BaseModel):
+    title: str
+    why: str
+    skills_demonstrated: list[str]
+    potential_value: str
+
+
+class ImprovementPlanItemOut(BaseModel):
+    priority: str  # "HIGH" | "MEDIUM" | "LOW"
+    category: str
+    title: str
+    recommendation: str
+    action_tab: str  # "rewriter" | "section" | "bullet" | "skills"
+
+
+class CareerGuidanceOut(BaseModel):
+    suited_roles: list[str]
+    potential_next_skills: list[dict[str, str]]  # [{"skill": str, "why": str}]
+    project_recommendations: list[ProjectRecommendationOut]
+    improvement_plan: list[ImprovementPlanItemOut]
+
+
+class ActionCenterItemOut(BaseModel):
+    id: str
+    priority: str  # "HIGH" | "MEDIUM" | "LOW"
+    title: str
+    description: str
+    workflow_target: str  # "rewriter" | "section" | "bullet" | "interview"
+
+
+class ActionCenterResponse(BaseModel):
+    items: list[ActionCenterItemOut]
+
+
+class InterviewQuestionOut(BaseModel):
+    id: str
+    category: str  # "Technical" | "Project-based" | "Behavioral" | "Resume-based"
+    question: str
+    why_asked: str
+    key_talking_points: list[str]
+
+
+class InterviewQuestionsResponse(BaseModel):
+    questions: list[InterviewQuestionOut]
+
+
+class EvaluateAnswerRequest(BaseModel):
+    question_id: str
+    question_text: str
+    user_answer: str
+
+
+class EvaluateAnswerResponse(BaseModel):
+    score: int
+    strengths: list[str]
+    weaknesses: list[str]
+    missing_points: list[str]
+    better_answer_structure: str
+
+
+class AcceptRewriteRequest(BaseModel):
+    section_name: str
+    new_content: str
+

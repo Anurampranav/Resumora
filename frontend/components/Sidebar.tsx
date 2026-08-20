@@ -23,7 +23,7 @@ import clsx from "clsx";
 const NAV_ITEMS = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
   { label: "My Resumes", icon: FileText, href: "/resumes" },
-  { label: "AI Analysis", icon: BrainCircuit, href: "/resumes" },
+  { label: "AI Analysis", icon: BrainCircuit, href: "/ai-analysis" },
   { label: "Job Match", icon: Users2, href: "/job-roles" },
   { label: "ATS Reports", icon: BarChart3, href: "/ats-reports" },
   { label: "Resume Builder", icon: PenSquare, href: "/resumes", badge: "PREMIUM" },

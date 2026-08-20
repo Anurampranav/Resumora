@@ -110,7 +110,7 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
 
       <div className="mt-4 pt-3 border-t border-gray-200 dark:border-white/10">
         <Link
-          href="/resumes"
+          href="/ai-analysis"
           className="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-500 dark:hover:text-violet-300 flex items-center gap-1.5 transition-colors group/link"
         >
           <span>View All Suggestions</span>

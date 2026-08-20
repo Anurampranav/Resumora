@@ -82,7 +82,7 @@ export default function MyResumesPage() {
   return (
     <>
       <Sidebar />
-      <main className="ml-[280px] min-h-screen flex flex-col">
+      <main className="ml-[260px] min-h-screen flex flex-col">
         <TopNav onUploadSuccess={load} />
         <div className="flex-1 px-container-padding pb-section-margin pt-4 flex flex-col gap-section-margin">
           <section>

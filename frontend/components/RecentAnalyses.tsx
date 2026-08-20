@@ -65,7 +65,7 @@ export default function RecentAnalyses({
         )}
 
         {recent.length === 0 ? (
-          <div className="py-8 text-center text-gray-400 text-xs bg-white/[0.02] border border-dashed border-white/10 rounded-xl">
+          <div className="py-8 text-center text-gray-500 dark:text-gray-400 text-xs bg-gray-50 dark:bg-white/[0.02] border border-dashed border-gray-300 dark:border-white/10 rounded-xl">
             No resume analyzed yet. Upload one to see analysis history.
           </div>
         ) : (
@@ -73,24 +73,24 @@ export default function RecentAnalyses({
             {recent.map((r, idx) => (
               <div
                 key={r.id}
-                className="bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 hover:border-violet-500/30 p-3.5 rounded-xl flex items-center justify-between transition-all duration-200 group"
+                className="bg-gray-50 dark:bg-white/[0.02] hover:bg-gray-100 dark:hover:bg-white/[0.05] border border-gray-200 dark:border-white/5 hover:border-violet-500/30 p-3.5 rounded-xl flex items-center justify-between transition-all duration-200 group"
               >
                 <div className="flex items-center gap-3 min-w-0 pr-2">
-                  <div className="w-9 h-9 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-500 dark:text-rose-400 shrink-0">
                     <FileText size={18} />
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="text-xs font-semibold text-gray-200 group-hover:text-white truncate">
+                      <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white truncate">
                         {r.file_name}
                       </p>
                       {idx === 0 && (
-                        <span className="bg-violet-600/30 text-violet-300 border border-violet-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0">
+                        <span className="bg-violet-600/20 dark:bg-violet-600/30 text-violet-700 dark:text-violet-300 border border-violet-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0">
                           Latest
                         </span>
                       )}
                     </div>
-                    <p className="text-[10px] text-gray-400 truncate mt-0.5">
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400 truncate mt-0.5">
                       {formatDate(r.created_at)}
                     </p>
                   </div>
@@ -99,17 +99,17 @@ export default function RecentAnalyses({
                 <div className="flex items-center gap-3 shrink-0">
                   {r.overall_score !== null && (
                     <div className="flex flex-col items-center">
-                      <span className="text-sm font-extrabold text-violet-400 leading-none">
+                      <span className="text-sm font-extrabold text-violet-600 dark:text-violet-400 leading-none">
                         {r.overall_score}
                       </span>
-                      <span className="text-[9px] text-gray-500 font-mono mt-0.5 uppercase">ATS Score</span>
+                      <span className="text-[9px] text-gray-500 dark:text-gray-400 font-mono mt-0.5 uppercase">ATS Score</span>
                     </div>
                   )}
 
                   <div className="flex items-center gap-1">
                     <Link
                       href={`/resumes/${r.id}`}
-                      className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-white/10 rounded-lg transition-colors"
                       title="View Report"
                     >
                       <Eye size={15} />
@@ -117,7 +117,7 @@ export default function RecentAnalyses({
                     <button
                       suppressHydrationWarning
                       onClick={() => handleDownload(r.id, r.file_name)}
-                      className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-white/10 rounded-lg transition-colors"
                       title="Download File"
                     >
                       <Download size={15} />
@@ -125,7 +125,7 @@ export default function RecentAnalyses({
                     <button
                       suppressHydrationWarning
                       onClick={() => handleDelete(r.id)}
-                      className="p-1.5 text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-rose-500 dark:hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors"
                       title="Delete Resume"
                     >
                       <Trash2 size={15} />
@@ -138,10 +138,10 @@ export default function RecentAnalyses({
         )}
       </div>
 
-      <div className="mt-4 pt-3 border-t border-white/5">
+      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-white/10">
         <Link
           href="/resumes"
-          className="text-xs font-semibold text-violet-400 hover:text-violet-300 flex items-center gap-1.5 transition-colors group/link"
+          className="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-500 dark:hover:text-violet-300 flex items-center gap-1.5 transition-colors group/link"
         >
           <span>View All Resumes</span>
           <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />

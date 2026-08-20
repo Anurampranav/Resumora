@@ -32,6 +32,7 @@ export default function AiImproveModal({
     if (isOpen && originalText) {
       handleFetchImprovement();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, originalText]);
 
   const handleFetchImprovement = async () => {

@@ -121,7 +121,7 @@ export default function ResumeReportPage() {
   return (
     <>
       <Sidebar />
-      <main className="ml-[280px] min-h-screen flex flex-col">
+      <main className="ml-[260px] min-h-screen flex flex-col">
         <TopNav />
         <div className="flex-1 px-container-padding pb-section-margin pt-4 flex flex-col gap-section-margin">
           <button suppressHydrationWarning

@@ -1,6 +1,6 @@
 "use client";
 
-import { Target, ArrowRight, PlusCircle } from "lucide-react";
+import { Target, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 interface JobMatchScoreCardProps {
@@ -17,10 +17,10 @@ export default function JobMatchScoreCard({
   const isConfigured = hasTargetJob && matchPercent !== null && matchPercent > 0;
 
   return (
-    <div className="bg-[#121324]/80 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group hover:border-violet-500/40 transition-all duration-300">
+    <div className="glass-card glass-card-hover rounded-2xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-gray-300 flex items-center gap-2">
-          <Target size={16} className="text-emerald-400" />
+        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <Target size={16} className="text-emerald-500 dark:text-emerald-400" />
           Job Match Score
         </h3>
       </div>
@@ -36,7 +36,7 @@ export default function JobMatchScoreCard({
                 r="34"
                 stroke="currentColor"
                 strokeWidth="7"
-                className="text-emerald-950/60"
+                className="text-emerald-200/50 dark:text-emerald-950/60"
                 fill="transparent"
               />
               <circle
@@ -53,15 +53,15 @@ export default function JobMatchScoreCard({
               />
             </svg>
             <div className="absolute flex flex-col items-center justify-center">
-              <span className="text-xl font-extrabold text-white leading-none">{matchPercent}%</span>
+              <span className="text-xl font-extrabold text-gray-900 dark:text-white leading-none">{matchPercent}%</span>
             </div>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-emerald-400 mb-1">
+            <h4 className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-1">
               {targetRoleName || "Target Role Match"}
             </h4>
-            <p className="text-[11px] text-gray-400 leading-relaxed">
+            <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed">
               Your profile match for this specific job position.
             </p>
           </div>
@@ -82,22 +82,22 @@ export default function JobMatchScoreCard({
                 strokeDasharray="4 4"
               />
             </svg>
-            <span className="absolute text-gray-500 font-bold text-xs">%</span>
+            <span className="absolute text-gray-400 font-bold text-xs">%</span>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-white mb-1">No target job set</h4>
-            <p className="text-[11px] text-gray-400 leading-relaxed">
+            <h4 className="text-xs font-bold text-gray-900 dark:text-white mb-1">No target job set</h4>
+            <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed">
               Select a job role or paste a job description to see your match score.
             </p>
           </div>
         </div>
       )}
 
-      <div className="mt-3 pt-3 border-t border-white/5">
+      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-white/10">
         <Link
           href="/job-roles"
-          className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5 transition-colors group/link"
+          className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 flex items-center gap-1.5 transition-colors group/link"
         >
           <span>{isConfigured ? "Manage Target Job" : "Set Target Job"}</span>
           <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />

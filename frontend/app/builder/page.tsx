@@ -236,7 +236,7 @@ export default function BuilderPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-[#070814] text-gray-900 dark:text-gray-100 gradient-mesh">
       <Sidebar />
 
-      <main className="pl-[260px] flex flex-col min-h-screen">
+      <main className="ml-[260px] flex flex-col min-h-screen">
         <TopNav />
 
         {/* Builder Toolbar */}

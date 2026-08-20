@@ -114,6 +114,7 @@ export default function AiAnalysisPage() {
       }
     }
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle resume selection change
@@ -285,12 +286,12 @@ export default function AiAnalysisPage() {
   return (
     <>
       <Sidebar />
-      <main className="ml-[260px] min-h-screen flex flex-col bg-[#060713] text-gray-100">
+      <main className="ml-[260px] min-h-screen flex flex-col bg-background text-on-surface transition-colors duration-300">
         <TopNav />
 
         <div className="flex-1 px-6 pb-12 pt-6 max-w-7xl w-full mx-auto flex flex-col gap-6">
           {/* Header Banner */}
-          <div className="glass-panel p-6 rounded-3xl relative overflow-hidden bg-gradient-to-r from-violet-900/40 via-indigo-900/30 to-purple-900/40 border border-violet-500/30 shadow-2xl">
+          <div className="glass-panel p-6 rounded-3xl relative overflow-hidden bg-gradient-to-r from-violet-600/15 via-indigo-600/10 to-purple-600/15 dark:from-violet-900/40 dark:via-indigo-900/30 dark:to-purple-900/40 border border-violet-500/30 shadow-2xl">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white shadow-xl shadow-violet-600/30 border border-white/20">
@@ -298,30 +299,30 @@ export default function AiAnalysisPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h1 className="font-extrabold text-2xl text-white tracking-tight">RESUMORA AI</h1>
-                    <span className="bg-violet-500/20 border border-violet-500/40 text-violet-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                    <h1 className="font-extrabold text-2xl text-gray-900 dark:text-white tracking-tight">RESUMORA AI</h1>
+                    <span className="bg-violet-500/20 border border-violet-500/40 text-violet-700 dark:text-violet-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                       Live AI Coach
                     </span>
                   </div>
-                  <p className="text-xs text-gray-300 mt-1">
+                  <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">
                     Your personal resume coach powered by Google Gemini API &amp; your actual uploaded resume.
                   </p>
                 </div>
               </div>
 
               {/* Resume Selector */}
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 p-2.5 rounded-2xl backdrop-blur-md">
-                <FileCheck size={18} className="text-violet-400" />
+              <div className="flex items-center gap-3 bg-white/60 dark:bg-white/5 border border-gray-200 dark:border-white/10 p-2.5 rounded-2xl backdrop-blur-md">
+                <FileCheck size={18} className="text-violet-600 dark:text-violet-400" />
                 <div className="flex flex-col">
-                  <span className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Active Resume Context</span>
+                  <span className="text-[10px] text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wider">Active Resume Context</span>
                   <select
                     value={selectedResumeId}
                     onChange={(e) => handleResumeChange(e.target.value)}
-                    className="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer pr-4"
+                    className="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer pr-4"
                   >
                     {resumes.length === 0 && <option value="">No resumes found</option>}
                     {resumes.map((r) => (
-                      <option key={r.id} value={r.id} className="bg-[#0b0d1e] text-white">
+                      <option key={r.id} value={r.id} className="bg-white dark:bg-[#0b0d1e] text-gray-900 dark:text-white">
                         {r.file_name} {r.role_name ? `(${r.role_name})` : ""}
                       </option>
                     ))}
@@ -333,22 +334,22 @@ export default function AiAnalysisPage() {
 
           {/* AI Action Center */}
           {actionItems.length > 0 && (
-            <section className="glass-panel p-5 rounded-2xl border border-violet-500/20 bg-violet-950/20">
+            <section className="glass-panel p-5 rounded-2xl border border-violet-500/20 bg-violet-500/5 dark:bg-violet-950/20">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <Zap size={18} className="text-amber-400 animate-pulse" />
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">AI Action Center</h3>
+                  <Zap size={18} className="text-amber-500 dark:text-amber-400 animate-pulse" />
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">AI Action Center</h3>
                 </div>
-                <span className="text-[11px] text-gray-400">Gemini High-Priority Fixes</span>
+                <span className="text-[11px] text-gray-500 dark:text-gray-400">Gemini High-Priority Fixes</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {actionItems.map((item, idx) => {
                   const badgeColor =
                     item.priority === "HIGH"
-                      ? "bg-rose-500/20 border-rose-500/40 text-rose-400"
+                      ? "bg-rose-500/20 border-rose-500/40 text-rose-600 dark:text-rose-400"
                       : item.priority === "MEDIUM"
-                      ? "bg-amber-500/20 border-amber-500/40 text-amber-400"
-                      : "bg-yellow-500/20 border-yellow-500/40 text-yellow-400";
+                      ? "bg-amber-500/20 border-amber-500/40 text-amber-600 dark:text-amber-400"
+                      : "bg-yellow-500/20 border-yellow-500/40 text-yellow-600 dark:text-yellow-400";
                   const priorityDot = item.priority === "HIGH" ? "🔴" : item.priority === "MEDIUM" ? "🟠" : "🟡";
                   return (
                     <div
@@ -361,14 +362,14 @@ export default function AiAnalysisPage() {
                           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${badgeColor}`}>
                             {priorityDot} {item.priority} PRIORITY
                           </span>
-                          <ChevronRight size={14} className="text-gray-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                          <ChevronRight size={14} className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all" />
                         </div>
-                        <h4 className="text-xs font-bold text-white mb-1 group-hover:text-violet-300 transition-colors">
+                        <h4 className="text-xs font-bold text-gray-900 dark:text-white mb-1 group-hover:text-violet-600 dark:group-hover:text-violet-300 transition-colors">
                           {item.title}
                         </h4>
-                        <p className="text-[11px] text-gray-400 line-clamp-2">{item.description}</p>
+                        <p className="text-[11px] text-gray-600 dark:text-gray-400 line-clamp-2">{item.description}</p>
                       </div>
-                      <button className="mt-3 text-[11px] font-semibold text-violet-400 flex items-center gap-1 group-hover:text-violet-300">
+                      <button className="mt-3 text-[11px] font-semibold text-violet-600 dark:text-violet-400 flex items-center gap-1 group-hover:text-violet-500 dark:group-hover:text-violet-300">
                         <span>Start Improving</span>
                         <ArrowRight size={12} />
                       </button>
@@ -380,7 +381,7 @@ export default function AiAnalysisPage() {
           )}
 
           {/* Navigation Tool Tabs */}
-          <div className="flex flex-wrap gap-2 border-b border-white/10 pb-3">
+          <div className="flex flex-wrap gap-2 border-b border-gray-200 dark:border-white/10 pb-3">
             {[
               { id: "chat", label: "Ask Resumora AI", icon: MessageSquare },
               { id: "rewriter", label: "AI Resume Rewriter & Section Coach", icon: Wand2 },
@@ -402,7 +403,7 @@ export default function AiAnalysisPage() {
                   className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
                     active
                       ? "bg-violet-600 text-white shadow-lg shadow-violet-600/30 border border-violet-400/30"
-                      : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 border border-white/5"
+                      : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200/60 dark:hover:bg-white/10 border border-gray-200 dark:border-white/5"
                   }`}
                 >
                   <Icon size={16} />

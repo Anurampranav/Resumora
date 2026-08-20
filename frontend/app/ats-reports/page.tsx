@@ -74,7 +74,7 @@ export default function AtsReportsPage() {
     <div className="bg-background min-h-screen text-on-surface font-sans transition-colors duration-300">
       <Sidebar />
 
-      <main className="ml-[280px] min-h-screen flex flex-col">
+      <main className="ml-[260px] min-h-screen flex flex-col">
         <TopNav />
 
         <div className="flex-1 p-6 lg:p-10 space-y-8">
@@ -101,17 +101,17 @@ export default function AtsReportsPage() {
 
           {/* Report List */}
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-3">
-              <Loader2 className="animate-spin text-violet-400" size={32} />
+            <div className="flex flex-col items-center justify-center py-20 text-gray-500 dark:text-gray-400 gap-3">
+              <Loader2 className="animate-spin text-violet-600 dark:text-violet-400" size={32} />
               <p className="text-xs">Loading ATS Audit Reports...</p>
             </div>
           ) : resumes.length === 0 ? (
-            <div className="bg-[#121324]/50 border border-violet-500/20 rounded-3xl p-12 text-center space-y-4 max-w-md mx-auto my-12">
-              <div className="w-16 h-16 rounded-2xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-violet-400 mx-auto">
+            <div className="glass-panel border border-gray-200 dark:border-violet-500/20 rounded-3xl p-12 text-center space-y-4 max-w-md mx-auto my-12">
+              <div className="w-16 h-16 rounded-2xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-violet-600 dark:text-violet-400 mx-auto">
                 <FileText size={32} />
               </div>
-              <h3 className="text-lg font-bold text-white">No ATS reports yet.</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">No ATS reports yet.</h3>
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                 Analyze your resume to generate your first professional report and vector PDF download.
               </p>
               <Link
@@ -137,22 +137,22 @@ export default function AtsReportsPage() {
                 return (
                   <div
                     key={r.id}
-                    className="bg-[#121324]/80 border border-violet-500/20 hover:border-violet-500/40 rounded-2xl p-6 flex flex-col justify-between transition-all duration-200 group hover:shadow-xl hover:shadow-violet-900/10"
+                    className="glass-card glass-card-hover border border-gray-200 dark:border-violet-500/20 hover:border-violet-500/40 rounded-2xl p-6 flex flex-col justify-between transition-all duration-200 group hover:shadow-xl hover:shadow-violet-900/10"
                   >
                     <div className="space-y-4">
                       {/* Top status */}
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
-                          <ShieldCheck size={13} className="text-violet-400" />
+                        <span className="text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                          <ShieldCheck size={13} className="text-violet-600 dark:text-violet-400" />
                           ATS AUDIT REPORT
                         </span>
                         <span
                           className={
                             isExcellent
-                              ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"
+                              ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"
                               : isGood
-                              ? "bg-blue-500/20 text-blue-300 border border-blue-500/40 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"
-                              : "bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"
+                              ? "bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/40 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"
+                              : "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full"
                           }
                         >
                           {isExcellent ? "EXCELLENT" : isGood ? "GOOD" : "NEEDS WORK"}
@@ -161,39 +161,39 @@ export default function AtsReportsPage() {
 
                       {/* File details */}
                       <div>
-                        <h3 className="text-base font-bold text-white group-hover:text-violet-300 transition-colors truncate">
+                        <h3 className="text-base font-bold text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-300 transition-colors truncate">
                           {r.file_name}
                         </h3>
-                        <p className="text-xs text-gray-400 mt-1">
-                          Role: <span className="text-gray-200">{r.role_name || "General Software Engineer"}</span>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          Role: <span className="text-gray-800 dark:text-gray-200">{r.role_name || "General Software Engineer"}</span>
                         </p>
-                        <p className="text-[11px] text-gray-500 font-mono mt-0.5">
+                        <p className="text-[11px] text-gray-500 dark:text-gray-400 font-mono mt-0.5">
                           Analyzed on {dateStr}
                         </p>
                       </div>
 
                       {/* Score display */}
-                      <div className="bg-white/[0.03] border border-white/5 p-4 rounded-xl flex items-center justify-between">
-                        <span className="text-xs font-semibold text-gray-400">ATS Audit Score</span>
-                        <div className="text-2xl font-extrabold text-white">
+                      <div className="bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 p-4 rounded-xl flex items-center justify-between">
+                        <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">ATS Audit Score</span>
+                        <div className="text-2xl font-extrabold text-gray-900 dark:text-white">
                           {score}
-                          <span className="text-xs font-normal text-gray-400 font-mono"> / 100</span>
+                          <span className="text-xs font-normal text-gray-500 dark:text-gray-400 font-mono"> / 100</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Action buttons */}
-                    <div className="grid grid-cols-2 gap-2 mt-6 pt-4 border-t border-white/5">
+                    <div className="grid grid-cols-2 gap-2 mt-6 pt-4 border-t border-gray-200 dark:border-white/5">
                       <button
                         suppressHydrationWarning
                         onClick={() => handleOpenReport(r.id)}
                         disabled={loadingReportId === r.id}
-                        className="bg-white/5 hover:bg-white/10 text-white text-xs font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-all"
+                        className="bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-gray-800 dark:text-white text-xs font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-all"
                       >
                         {loadingReportId === r.id ? (
-                          <Loader2 size={14} className="animate-spin text-violet-400" />
+                          <Loader2 size={14} className="animate-spin text-violet-600 dark:text-violet-400" />
                         ) : (
-                          <Eye size={14} className="text-violet-400" />
+                          <Eye size={14} className="text-violet-600 dark:text-violet-400" />
                         )}
                         <span>View Report</span>
                       </button>
@@ -201,7 +201,7 @@ export default function AtsReportsPage() {
                       <button
                         suppressHydrationWarning
                         onClick={() => handleDownloadPdf(r.id, r.file_name)}
-                        className="bg-violet-600/20 hover:bg-violet-600/30 text-violet-300 border border-violet-500/30 text-xs font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-all"
+                        className="bg-violet-600/15 dark:bg-violet-600/20 hover:bg-violet-600/25 dark:hover:bg-violet-600/30 text-violet-700 dark:text-violet-300 border border-violet-500/30 text-xs font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-all"
                       >
                         <Download size={14} />
                         <span>Download PDF</span>

@@ -126,9 +126,9 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
       {/* Global Search Modal */}
       {searchOpen && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-start justify-center pt-20 p-4">
-          <div className="bg-[#121324] border border-violet-500/30 rounded-2xl max-w-xl w-full p-4 shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center gap-3 border-b border-white/10 pb-3">
-              <Search size={18} className="text-violet-400" />
+          <div className="bg-white dark:bg-[#121324] border border-gray-200 dark:border-violet-500/30 rounded-2xl max-w-xl w-full p-4 shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center gap-3 border-b border-gray-200 dark:border-white/10 pb-3">
+              <Search size={18} className="text-violet-600 dark:text-violet-400" />
               <input
                 suppressHydrationWarning
                 type="text"
@@ -136,11 +136,11 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search resumes, job roles, skills, or reports..."
-                className="w-full bg-transparent text-sm text-white placeholder:text-gray-500 focus:outline-none"
+                className="w-full bg-transparent text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none"
               />
               <button
                 onClick={() => setSearchOpen(false)}
-                className="text-gray-400 hover:text-white p-1"
+                className="text-gray-400 hover:text-gray-900 dark:hover:text-white p-1"
               >
                 <X size={18} />
               </button>
@@ -149,7 +149,7 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
             <div className="space-y-4 max-h-80 overflow-y-auto pr-1">
               {/* Job Roles */}
               <div>
-                <span className="text-[10px] font-bold text-violet-400 uppercase tracking-wider block mb-2">
+                <span className="text-[10px] font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider block mb-2">
                   Job Roles ({filteredRoles.length})
                 </span>
                 <div className="space-y-1">
@@ -160,10 +160,10 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
                         setSearchOpen(false);
                         router.push(`/job-roles`);
                       }}
-                      className="p-2 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] cursor-pointer text-xs text-gray-200 flex items-center justify-between"
+                      className="p-2 rounded-xl bg-gray-50 dark:bg-white/[0.02] hover:bg-gray-100 dark:hover:bg-white/[0.06] cursor-pointer text-xs text-gray-800 dark:text-gray-200 flex items-center justify-between"
                     >
                       <span className="font-semibold">{role.name}</span>
-                      <span className="text-[10px] text-gray-400">{role.industry || "Technology"}</span>
+                      <span className="text-[10px] text-gray-500 dark:text-gray-400">{role.industry || "Technology"}</span>
                     </div>
                   ))}
                 </div>
@@ -171,7 +171,7 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
 
               {/* Resumes */}
               <div>
-                <span className="text-[10px] font-bold text-violet-400 uppercase tracking-wider block mb-2">
+                <span className="text-[10px] font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider block mb-2">
                   My Resumes ({filteredResumes.length})
                 </span>
                 <div className="space-y-1">
@@ -182,13 +182,13 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
                         setSearchOpen(false);
                         router.push(`/resumes/${res.id}`);
                       }}
-                      className="p-2 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] cursor-pointer text-xs text-gray-200 flex items-center justify-between"
+                      className="p-2 rounded-xl bg-gray-50 dark:bg-white/[0.02] hover:bg-gray-100 dark:hover:bg-white/[0.06] cursor-pointer text-xs text-gray-800 dark:text-gray-200 flex items-center justify-between"
                     >
                       <div className="flex items-center gap-2">
-                        <FileText size={14} className="text-rose-400" />
+                        <FileText size={14} className="text-rose-500 dark:text-rose-400" />
                         <span className="font-medium truncate">{res.file_name}</span>
                       </div>
-                      <span className="text-[10px] text-violet-400 font-bold">{res.overall_score ?? 35} ATS</span>
+                      <span className="text-[10px] text-violet-600 dark:text-violet-400 font-bold">{res.overall_score ?? 35} ATS</span>
                     </div>
                   ))}
                 </div>

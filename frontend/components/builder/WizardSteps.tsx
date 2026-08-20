@@ -218,7 +218,7 @@ export default function WizardSteps({
             className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/5 rounded-xl transition-all"
           >
             <FileText size={16} />
-            <span>"I already have a resume" (Upload &amp; Analyze)</span>
+            <span>&quot;I already have a resume&quot; (Upload &amp; Analyze)</span>
           </button>
         </div>
       </div>
@@ -835,7 +835,7 @@ export default function WizardSteps({
 
           {!data.has_experience ? (
             <div className="p-4 rounded-xl bg-violet-500/10 border border-violet-500/20 text-xs text-violet-800 dark:text-violet-300">
-              No problem! We'll focus on your projects, education, skills, achievements, and other experience.
+              No problem! We&apos;ll focus on your projects, education, skills, achievements, and other experience.
             </div>
           ) : (
             <div className="space-y-4">
@@ -2043,7 +2043,7 @@ export default function WizardSteps({
           <div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">Additional Information</h2>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Is there anything else you'd like recruiters to know about you?
+              Is there anything else you&apos;d like recruiters to know about you?
             </p>
           </div>
 

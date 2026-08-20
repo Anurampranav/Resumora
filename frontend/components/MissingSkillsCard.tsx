@@ -12,19 +12,19 @@ export default function MissingSkillsCard({ missingCount, criticalCount = 0 }: M
   const displayCount = missingCount !== undefined ? missingCount : 0;
 
   return (
-    <div className="bg-[#121324]/80 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group hover:border-violet-500/40 transition-all duration-300">
+    <div className="glass-card glass-card-hover rounded-2xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold text-gray-300 flex items-center gap-2">
-          <Zap size={16} className="text-amber-400" />
+        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <Zap size={16} className="text-amber-500 dark:text-amber-400" />
           Missing Skills
         </h3>
       </div>
 
       <div className="my-2">
-        <div className="text-3xl font-extrabold text-white mb-1 tracking-tight">
+        <div className="text-3xl font-extrabold text-gray-900 dark:text-white mb-1 tracking-tight">
           {displayCount}
         </div>
-        <p className="text-[11px] text-gray-400 leading-relaxed">
+        <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed">
           {displayCount === 0
             ? "Great! No critical skills are missing."
             : criticalCount > 0
@@ -33,10 +33,10 @@ export default function MissingSkillsCard({ missingCount, criticalCount = 0 }: M
         </p>
       </div>
 
-      <div className="mt-3 pt-3 border-t border-white/5">
+      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-white/10">
         <Link
           href="/resumes"
-          className="text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1.5 transition-colors group/link"
+          className="text-xs font-semibold text-amber-600 dark:text-amber-400 hover:text-amber-500 dark:hover:text-amber-300 flex items-center gap-1.5 transition-colors group/link"
         >
           <span>View Details</span>
           <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />

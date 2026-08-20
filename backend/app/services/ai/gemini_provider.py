@@ -69,7 +69,7 @@ class GeminiProvider(AIProvider):
             import google.generativeai as genai  # imported lazily so mock mode has no dependency
 
             genai.configure(api_key=self._api_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-3.6-flash")
 
             prompt = PROMPT_TEMPLATE.format(
                 target_role=ctx.target_role,
@@ -97,7 +97,7 @@ class GeminiProvider(AIProvider):
             import google.generativeai as genai
 
             genai.configure(api_key=self._api_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-3.6-flash")
             prompt = (
                 f"Rewrite this resume bullet for a {target_role} role. Make it "
                 f"stronger with an action verb and structure for impact, but do "
@@ -116,7 +116,7 @@ class GeminiProvider(AIProvider):
             import google.generativeai as genai
 
             genai.configure(api_key=self._api_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-3.6-flash")
 
             history_str = ""
             for item in history[-6:]:  # keep recent conversation memory
@@ -163,7 +163,7 @@ Respond ONLY in JSON matching this exact structure:
             import google.generativeai as genai
 
             genai.configure(api_key=self._api_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-3.6-flash")
 
             prompt = f"""You are RESUMORA AI Coach. Analyze the user's '{section_name}' section of their resume for a {target_role} target role.
 
@@ -208,7 +208,7 @@ Respond ONLY with JSON matching:
             import google.generativeai as genai
 
             genai.configure(api_key=self._api_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-3.6-flash")
 
             prompt = f"""You are BULLET POINT COACH in Resumora. Evaluate this bullet point for a {target_role} role.
 
@@ -244,7 +244,7 @@ Respond ONLY with JSON:
             import google.generativeai as genai
 
             genai.configure(api_key=self._api_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-3.6-flash")
 
             prompt = f"""You are RESUMORA AI Career Coach. Analyze the user's resume for targeted career guidance.
 
@@ -337,7 +337,7 @@ Respond ONLY with JSON matching:
             import google.generativeai as genai
 
             genai.configure(api_key=self._api_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-3.6-flash")
 
             prompt = f"""Generate 3 top AI Action Center items based on this resume for a {target_role} role. Missing skills: {missing_skills}.
 Resume Text snippet: {raw_text[:4000]}
@@ -397,7 +397,7 @@ Respond ONLY in JSON:
             import google.generativeai as genai
 
             genai.configure(api_key=self._api_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-3.6-flash")
 
             prompt = f"""Generate 4 tailored interview questions based strictly on the candidate's actual resume.
 Target Role: {target_role}
@@ -469,7 +469,7 @@ Respond ONLY with JSON:
             import google.generativeai as genai
 
             genai.configure(api_key=self._api_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-3.6-flash")
 
             prompt = f"""Evaluate candidate's interview answer to a question.
 Question: "{question}"

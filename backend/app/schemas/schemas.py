@@ -277,3 +277,194 @@ class AcceptRewriteRequest(BaseModel):
     section_name: str
     new_content: str
 
+
+# --- Resume Builder Schemas ---
+
+class PersonalInfoData(BaseModel):
+    full_name: str = ""
+    professional_title: str = ""
+    email: str = ""
+    phone: str = ""
+    location: str = ""
+    linkedin: str = ""
+    github: str = ""
+    portfolio: str = ""
+    website: str = ""
+
+class CareerGoalData(BaseModel):
+    target_role: str = ""
+    target_company_type: str = ""
+    work_mode: str = ""
+
+class SummaryQuestionnaireData(BaseModel):
+    self_description: str = ""
+    qualities: list[str] = []
+    interest_areas: str = ""
+    generated_summary: str = ""
+
+class EducationData(BaseModel):
+    id: str = ""
+    degree: str = ""
+    field_of_study: str = ""
+    institution: str = ""
+    location: str = ""
+    start_year: str = ""
+    end_year: str = ""
+    grade: str = ""
+    coursework: str = ""
+    achievements: str = ""
+    level: str = "higher"  # "higher" | "12th" | "10th"
+
+class ExperienceData(BaseModel):
+    id: str = ""
+    company: str = ""
+    job_title: str = ""
+    location: str = ""
+    start_date: str = ""
+    end_date: str = ""
+    is_current: bool = False
+    responsibilities: str = ""
+    technologies: str = ""
+    accomplishments: str = ""
+    bullets: list[str] = []
+
+class InternshipData(BaseModel):
+    id: str = ""
+    company: str = ""
+    role: str = ""
+    duration: str = ""
+    responsibilities: str = ""
+    technologies: str = ""
+    achievements: str = ""
+    bullets: list[str] = []
+
+class ProjectData(BaseModel):
+    id: str = ""
+    name: str = ""
+    problem_solved: str = ""
+    what_built: str = ""
+    role: str = ""
+    technologies: str = ""
+    github_url: str = ""
+    live_url: str = ""
+    start_date: str = ""
+    end_date: str = ""
+    contributions: str = ""
+    bullets: list[str] = []
+
+class CategorizedSkillsData(BaseModel):
+    languages: list[str] = []
+    frameworks: list[str] = []
+    databases: list[str] = []
+    cloud_tools: list[str] = []
+    ai_ml: list[str] = []
+    soft_skills: list[str] = []
+
+class CertificationData(BaseModel):
+    id: str = ""
+    name: str = ""
+    issuer: str = ""
+    issue_date: str = ""
+    credential_id: str = ""
+    credential_url: str = ""
+
+class AchievementData(BaseModel):
+    id: str = ""
+    title: str = ""
+    description: str = ""
+    date: str = ""
+    category: str = ""  # hackathon | competition | award | academic | publication
+
+class ExtracurricularData(BaseModel):
+    id: str = ""
+    organization: str = ""
+    role: str = ""
+    description: str = ""
+
+class LeadershipData(BaseModel):
+    id: str = ""
+    organization: str = ""
+    position: str = ""
+    duration: str = ""
+    description: str = ""
+
+class LanguageData(BaseModel):
+    language: str = ""
+    proficiency: str = ""
+
+class TargetJobData(BaseModel):
+    has_target_job: bool = False
+    job_description: str = ""
+    target_role: str = ""
+
+class ResumeQuestionnairePayload(BaseModel):
+    personal_info: PersonalInfoData = PersonalInfoData()
+    career_goal: CareerGoalData = CareerGoalData()
+    summary: SummaryQuestionnaireData = SummaryQuestionnaireData()
+    education: list[EducationData] = []
+    has_experience: bool = False
+    experience: list[ExperienceData] = []
+    has_internships: bool = False
+    internships: list[InternshipData] = []
+    has_projects: bool = False
+    projects: list[ProjectData] = []
+    raw_skills_input: str = ""
+    skills: CategorizedSkillsData = CategorizedSkillsData()
+    has_certifications: bool = False
+    certifications: list[CertificationData] = []
+    has_achievements: bool = False
+    achievements: list[AchievementData] = []
+    has_extracurriculars: bool = False
+    extracurriculars: list[ExtracurricularData] = []
+    has_leadership: bool = False
+    leadership: list[LeadershipData] = []
+    languages: list[LanguageData] = []
+    interests: list[str] = []
+    additional_info: str = ""
+    target_job: TargetJobData = TargetJobData()
+    template: str = "modern_professional"
+    section_order: list[str] = ["summary", "experience", "projects", "skills", "education", "certifications", "achievements"]
+
+class BuiltResumeData(BaseModel):
+    id: str | None = None
+    title: str = "Untitled Resume"
+    version: int = 1
+    template: str = "modern_professional"
+    section_order: list[str] = ["summary", "experience", "projects", "skills", "education", "certifications", "achievements"]
+    personal_info: PersonalInfoData
+    summary: str
+    education: list[EducationData]
+    experience: list[ExperienceData]
+    internships: list[InternshipData]
+    projects: list[ProjectData]
+    skills: CategorizedSkillsData
+    certifications: list[CertificationData]
+    achievements: list[AchievementData]
+    extracurriculars: list[ExtracurricularData]
+    leadership: list[LeadershipData]
+    languages: list[LanguageData]
+    interests: list[str]
+    additional_info: str
+    target_role: str
+
+class BuilderImproveSectionRequest(BaseModel):
+    section_name: str
+    original_content: str
+    target_role: str = "Software Engineer"
+    context: str = ""
+
+class BuilderImproveSectionResponse(BaseModel):
+    original: str
+    why_improve: str
+    suggested: str
+
+class BuilderATSCheckRequest(BaseModel):
+    resume_data: BuiltResumeData
+
+class BuilderATSCheckResponse(BaseModel):
+    score: int
+    strengths: list[str]
+    issues: list[str]
+    recommendations: list[str]
+
+

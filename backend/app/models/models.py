@@ -178,3 +178,21 @@ class GeneratedResume(Base):
     docx_path: Mapped[str | None] = mapped_column(String, nullable=True)
     pdf_path: Mapped[str | None] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class BuilderResume(Base):
+    __tablename__ = "builder_resumes"
+
+    id: Mapped[uuid.UUID] = uuid_pk()
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"))
+    title: Mapped[str] = mapped_column(String, default="Untitled Resume")
+    target_role: Mapped[str | None] = mapped_column(String, nullable=True)
+    template_id: Mapped[str] = mapped_column(String, default="modern-professional")
+    status: Mapped[str] = mapped_column(String, default="draft")  # "draft" | "final"
+    resume_data: Mapped[dict] = mapped_column(JSON, nullable=False)
+    ats_score: Mapped[int | None] = mapped_column(SmallInteger, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+

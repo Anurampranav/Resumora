@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Recursive:wght,CASL,slnt@300..800,0,0&display=swap");
-
 :root {
   --background: 5 5 5;
   --on-background: 245 243 236;

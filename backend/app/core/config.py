@@ -32,7 +32,10 @@ class Settings(BaseSettings):
 
     @property
     def allowed_origins_list(self) -> list[str]:
-        return [o.strip() for o in self.allowed_origins.split(",") if o.strip()]
+        if self.allowed_origins.strip() == "*":
+            return ["*"]
+        origins = [o.strip() for o in self.allowed_origins.split(",") if o.strip()]
+        return origins if origins else ["*"]
 
 
 @lru_cache

@@ -153,9 +153,9 @@ export default function UploadModal({ open, onClose, onSuccess, jobRoles }: Uplo
 
         {stage === "uploading" && (
           <div className="py-8 flex flex-col items-center gap-4">
-            <Loader2 className="animate-spin text-violet-400" size={36} />
+            <Loader2 className="animate-spin text-on-surface" size={36} />
             <div className="w-full">
-              <div className="flex justify-between text-xs text-gray-300 mb-1.5 font-medium">
+              <div className="flex justify-between text-xs text-on-surface-variant mb-1.5 font-medium">
                 <span>
                   {progress < 25
                     ? "Uploading resume file..."
@@ -167,11 +167,11 @@ export default function UploadModal({ open, onClose, onSuccess, jobRoles }: Uplo
                     ? "Running deterministic ATS scoring engine..."
                     : "Generating AI suggestions & insights..."}
                 </span>
-                <span className="font-mono font-bold text-violet-400">{progress}%</span>
+                <span className="font-mono font-bold text-on-surface">{progress}%</span>
               </div>
-              <div className="w-full h-2.5 rounded-full bg-white/5 overflow-hidden border border-white/10">
+              <div className="w-full h-2.5 rounded-full bg-surface-variant/50 overflow-hidden border border-outline-variant/30">
                 <div
-                  className="h-full bg-gradient-to-r from-violet-600 via-indigo-500 to-purple-500 transition-all duration-300 rounded-full"
+                  className="h-full bg-on-surface transition-all duration-300 rounded-full"
                   style={{ width: `${progress}%` }}
                 />
               </div>

@@ -22,7 +22,7 @@ const DEFAULT_SUGGESTIONS: SuggestionItem[] = [
     id: "sug-1",
     title: "Improve your summary for more impact",
     icon: Target,
-    color: "text-amber-400 bg-amber-500/10 border-amber-500/30",
+    color: "text-amber-500 bg-amber-500/10 border-amber-500/30",
     borderColor: "border-amber-500/30",
     whatIsWrong: "Summary statement uses passive phrasing without explicit engineering achievements.",
     whyItMatters: "Recruiters spend 6 seconds on initial scan. A weak summary reduces immediate callback interest.",
@@ -34,8 +34,8 @@ const DEFAULT_SUGGESTIONS: SuggestionItem[] = [
     id: "sug-2",
     title: "Add measurable achievements to 3 bullets",
     icon: Heart,
-    color: "text-pink-400 bg-pink-500/10 border-pink-500/30",
-    borderColor: "border-pink-500/30",
+    color: "text-rose-500 bg-rose-500/10 border-rose-500/30",
+    borderColor: "border-rose-500/30",
     whatIsWrong: "Work experience bullet points list duties ('worked on database') instead of measurable outcomes.",
     whyItMatters: "Quantifiable metrics (percentages, revenue, performance gains) prove real-world business impact.",
     whereItOccurs: "Experience section — Bullet points under recent developer roles.",
@@ -46,8 +46,8 @@ const DEFAULT_SUGGESTIONS: SuggestionItem[] = [
     id: "sug-3",
     title: "Include more relevant keywords",
     icon: Key,
-    color: "text-purple-400 bg-purple-500/10 border-purple-500/30",
-    borderColor: "border-purple-500/30",
+    color: "text-sky-500 bg-sky-500/10 border-sky-500/30",
+    borderColor: "border-sky-500/30",
     whatIsWrong: "Missing specific containerization and cloud infrastructure keywords (e.g. Docker, AWS, CI/CD).",
     whyItMatters: "ATS automated filtering discards resumes lacking key stack terms required by target job descriptions.",
     whereItOccurs: "Technical Skills matrix & project bullet points.",
@@ -58,7 +58,7 @@ const DEFAULT_SUGGESTIONS: SuggestionItem[] = [
     id: "sug-4",
     title: "Enhance project descriptions",
     icon: Edit3,
-    color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
+    color: "text-emerald-500 bg-emerald-500/10 border-emerald-500/30",
     borderColor: "border-emerald-500/30",
     whatIsWrong: "Project descriptions are short and miss architectural details or live demo links.",
     whyItMatters: "Detailed technical project breakdowns demonstrate practical engineering competence.",
@@ -76,8 +76,8 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
       <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <h3 className="text-base font-bold text-gray-900 dark:text-white">AI Resume Suggestions</h3>
-            <span className="glass-pill text-violet-700 dark:text-violet-300 border border-violet-500/40 text-[10px] font-bold px-2 py-0.5 rounded-md">
+            <h3 className="text-base font-bold text-on-surface">AI Resume Suggestions</h3>
+            <span className="glass-pill text-on-surface border border-outline-variant/30 text-[10px] font-bold px-2 py-0.5 rounded-md">
               AI
             </span>
           </div>
@@ -91,27 +91,27 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
                 key={item.id}
                 suppressHydrationWarning
                 onClick={() => setSelectedSuggestion(item)}
-                className="w-full glass-card hover:border-violet-500/40 p-3 rounded-xl flex items-center justify-between text-left transition-all duration-200 group"
+                className="w-full glass-card hover:border-outline-variant/50 p-3 rounded-xl flex items-center justify-between text-left transition-all duration-200 group"
               >
                 <div className="flex items-center gap-3 pr-2">
                   <div className={`w-7 h-7 rounded-lg border flex items-center justify-center shrink-0 ${item.color}`}>
                     <Icon size={14} />
                   </div>
-                  <span className="text-xs font-medium text-gray-800 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                  <span className="text-xs font-medium text-on-surface transition-colors">
                     {item.title}
                   </span>
                 </div>
-                <ChevronRight size={16} className="text-gray-400 group-hover:text-violet-500 dark:group-hover:text-violet-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+                <ChevronRight size={16} className="text-on-surface-variant group-hover:text-on-surface group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
             );
           })}
         </div>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-white/10">
+      <div className="mt-4 pt-3 border-t border-outline-variant/30">
         <Link
           href="/ai-analysis"
-          className="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-500 dark:hover:text-violet-300 flex items-center gap-1.5 transition-colors group/link"
+          className="text-xs font-semibold text-on-surface hover:text-on-surface-variant flex items-center gap-1.5 transition-colors group/link"
         >
           <span>View All Suggestions</span>
           <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
@@ -125,7 +125,7 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
             <button
               suppressHydrationWarning
               onClick={() => setSelectedSuggestion(null)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 dark:hover:text-white p-1 rounded-lg hover:bg-white/10"
+              className="absolute top-4 right-4 text-on-surface-variant hover:text-on-surface p-1 rounded-lg hover:bg-surface-variant/50"
             >
               <X size={18} />
             </button>
@@ -134,28 +134,28 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
               <div className={`w-8 h-8 rounded-xl border flex items-center justify-center ${selectedSuggestion.color}`}>
                 <Sparkles size={16} />
               </div>
-              <h3 className="text-base font-bold text-gray-900 dark:text-white pr-6">{selectedSuggestion.title}</h3>
+              <h3 className="text-base font-bold text-on-surface pr-6">{selectedSuggestion.title}</h3>
             </div>
 
-            <div className="space-y-3 text-xs text-gray-300">
+            <div className="space-y-3 text-xs text-on-surface-variant">
               <div className="bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl">
-                <span className="text-rose-400 font-bold block mb-0.5 uppercase text-[10px]">What is wrong:</span>
-                <p className="text-gray-200">{selectedSuggestion.whatIsWrong}</p>
+                <span className="text-rose-500 font-bold block mb-0.5 uppercase text-[10px]">What is wrong:</span>
+                <p className="text-on-surface">{selectedSuggestion.whatIsWrong}</p>
               </div>
 
               <div className="bg-amber-500/10 border border-amber-500/20 p-3 rounded-xl">
-                <span className="text-amber-400 font-bold block mb-0.5 uppercase text-[10px]">Why it matters:</span>
-                <p className="text-gray-200">{selectedSuggestion.whyItMatters}</p>
+                <span className="text-amber-500 font-bold block mb-0.5 uppercase text-[10px]">Why it matters:</span>
+                <p className="text-on-surface">{selectedSuggestion.whyItMatters}</p>
               </div>
 
-              <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                <span className="text-gray-400 font-bold block mb-0.5 uppercase text-[10px]">Where it occurs:</span>
-                <p className="text-gray-300">{selectedSuggestion.whereItOccurs}</p>
+              <div className="bg-surface-variant/40 border border-outline-variant/30 p-3 rounded-xl">
+                <span className="text-on-surface-variant font-bold block mb-0.5 uppercase text-[10px]">Where it occurs:</span>
+                <p className="text-on-surface">{selectedSuggestion.whereItOccurs}</p>
               </div>
 
               <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-xl">
-                <span className="text-emerald-400 font-bold block mb-0.5 uppercase text-[10px]">Suggested Rewrite:</span>
-                <p className="text-emerald-200 font-medium italic mt-1">&quot;{selectedSuggestion.suggestedRewrite}&quot;</p>
+                <span className="text-emerald-500 font-bold block mb-0.5 uppercase text-[10px]">Suggested Rewrite:</span>
+                <p className="text-emerald-600 dark:text-emerald-300 font-medium italic mt-1">&quot;{selectedSuggestion.suggestedRewrite}&quot;</p>
               </div>
             </div>
 
@@ -163,7 +163,7 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
               <button
                 suppressHydrationWarning
                 onClick={() => setSelectedSuggestion(null)}
-                className="bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all"
+                className="btn-gradient text-xs font-semibold px-4 py-2 rounded-xl transition-all"
               >
                 Got It
               </button>
@@ -174,4 +174,3 @@ export default function AiSuggestionCard({ summary }: { summary?: string }) {
     </div>
   );
 }
-

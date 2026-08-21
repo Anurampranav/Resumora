@@ -35,7 +35,7 @@ export default function AnimatedAsciiBackground() {
     let height = (canvas.height = window.innerHeight);
 
     // Mouse tracking
-    let mouse = { x: -1000, y: -1000, targetX: -1000, targetY: -1000 };
+    const mouse = { x: -1000, y: -1000, targetX: -1000, targetY: -1000 };
 
     const handleMouseMove = (e: MouseEvent) => {
       mouse.targetX = e.clientX;
@@ -116,6 +116,10 @@ export default function AnimatedAsciiBackground() {
       const mouseRadius = 160;
       const mouseRadiusSq = mouseRadius * mouseRadius;
 
+      // Theme detection for particle colors
+      const isDark = typeof document !== "undefined" && document.documentElement.classList.contains("dark");
+      const baseRgb = isDark ? "242, 240, 234" : "20, 20, 20";
+
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
@@ -152,13 +156,14 @@ export default function AnimatedAsciiBackground() {
 
         // Calculate opacity based on depth & cursor proximity
         let opacity = 0.08;
-        if (p.depth === 1) opacity = 0.25;
-        if (p.depth === 2) opacity = 0.50;
+        if (p.depth === 1) opacity = 0.22;
+        if (p.depth === 2) opacity = 0.45;
 
-        opacity = Math.min(0.95, opacity + cursorBoost + densityFactor * 0.25);
+        opacity = Math.min(0.85, opacity + cursorBoost + densityFactor * 0.20);
+        const finalAlpha = isDark ? (opacity * 0.45).toFixed(2) : (opacity * 0.35).toFixed(2);
 
-        // Render warm cream character
-        ctx.fillStyle = `rgba(245, 243, 236, ${opacity.toFixed(2)})`;
+        // Render character with theme-aware color
+        ctx.fillStyle = `rgba(${baseRgb}, ${finalAlpha})`;
         ctx.fillText(char, p.x, p.y);
       }
 
@@ -179,8 +184,7 @@ export default function AnimatedAsciiBackground() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="fixed inset-0 z-0 pointer-events-none w-full h-full block"
-      style={{ background: "#050505" }}
+      className="fixed inset-0 z-0 pointer-events-none w-full h-full block bg-transparent"
     />
   );
 }

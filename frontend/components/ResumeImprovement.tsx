@@ -1,6 +1,6 @@
 "use client";
 
-import { TrendingUp, ArrowRight, ArrowUpRight, FileCheck } from "lucide-react";
+import { TrendingUp, ArrowRight, FileCheck } from "lucide-react";
 import Link from "next/link";
 import { VersionComparisonMetrics } from "@/lib/api";
 
@@ -10,10 +10,8 @@ interface ResumeImprovementProps {
 }
 
 export default function ResumeImprovement({ comparison, resumeCount }: ResumeImprovementProps) {
-  // If user has only 1 resume or no comparison, show real single resume metrics or single state prompt
   const hasMultipleResumes = resumeCount >= 2 && comparison !== null;
 
-  // Fallback demo data if user has multiple resumes, or clean fallback values
   const comp = comparison || {
     oldest_resume_name: "Resume_v1.pdf",
     latest_resume_name: "Resume_v2.pdf",
@@ -42,12 +40,12 @@ export default function ResumeImprovement({ comparison, resumeCount }: ResumeImp
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
-          <TrendingUp size={18} className="text-violet-600 dark:text-violet-400" />
-          <h3 className="text-base font-bold text-gray-900 dark:text-white">Resume Improvement</h3>
+          <TrendingUp size={18} className="text-on-surface" />
+          <h3 className="text-base font-bold text-on-surface">Resume Improvement</h3>
         </div>
         <select
           suppressHydrationWarning
-          className="glass-input rounded-lg px-2.5 py-1 text-xs text-gray-800 dark:text-gray-200 focus:outline-none"
+          className="glass-input rounded-lg px-2.5 py-1 text-xs text-on-surface focus:outline-none"
         >
           <option value="all">Compare: All Resumes</option>
           <option value="latest">Latest 2 Resumes</option>
@@ -55,17 +53,17 @@ export default function ResumeImprovement({ comparison, resumeCount }: ResumeImp
       </div>
 
       {!hasMultipleResumes ? (
-        <div className="my-auto py-8 text-center flex flex-col items-center justify-center bg-gray-50 dark:bg-white/[0.02] border border-dashed border-gray-300 dark:border-white/10 rounded-xl p-6">
-          <div className="w-12 h-12 rounded-full bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-600 dark:text-violet-400 mb-3">
+        <div className="my-auto py-8 text-center flex flex-col items-center justify-center bg-surface-variant/30 border border-dashed border-outline-variant/30 rounded-xl p-6">
+          <div className="w-12 h-12 rounded-full bg-on-surface/10 border border-on-surface/20 flex items-center justify-center text-on-surface mb-3">
             <FileCheck size={22} />
           </div>
-          <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Single Resume Analyzed</h4>
-          <p className="text-xs text-gray-600 dark:text-gray-400 max-w-xs mb-4">
+          <h4 className="text-sm font-semibold text-on-surface mb-1">Single Resume Analyzed</h4>
+          <p className="text-xs text-on-surface-variant max-w-xs mb-4">
             Upload another resume to compare version improvements side-by-side.
           </p>
           <Link
             href="/resumes"
-            className="bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all"
+            className="btn-gradient text-xs font-semibold px-4 py-2 rounded-lg transition-all"
           >
             Upload Resume to Compare
           </Link>
@@ -73,26 +71,26 @@ export default function ResumeImprovement({ comparison, resumeCount }: ResumeImp
       ) : (
         <div className="space-y-5">
           {/* Old vs New Top Card Banner */}
-          <div className="flex items-center justify-center gap-6 bg-gray-50 dark:bg-white/[0.02] border border-gray-200 dark:border-white/5 rounded-xl p-4">
+          <div className="flex items-center justify-center gap-6 bg-surface-variant/30 border border-outline-variant/30 rounded-xl p-4">
             <div className="text-center">
-              <span className="text-[11px] font-medium text-gray-600 dark:text-gray-400 block mb-1">Before (Oldest)</span>
-              <span className="text-2xl font-extrabold text-gray-900 dark:text-white">{comp.ats_score_old}</span>
-              <span className="text-[10px] text-gray-500 dark:text-gray-400 block font-mono">ATS Score</span>
+              <span className="text-[11px] font-medium text-on-surface-variant block mb-1">Before (Oldest)</span>
+              <span className="text-2xl font-extrabold text-on-surface">{comp.ats_score_old}</span>
+              <span className="text-[10px] text-on-surface-variant block font-mono">ATS Score</span>
             </div>
 
-            <div className="text-gray-400 dark:text-gray-500 text-lg font-bold">→</div>
+            <div className="text-on-surface-variant text-lg font-bold">→</div>
 
             <div className="text-center">
-              <span className="text-[11px] font-medium text-gray-600 dark:text-gray-400 block mb-1">After (Latest)</span>
-              <span className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">{comp.ats_score_new}</span>
-              <span className="text-[10px] text-gray-500 dark:text-gray-400 block font-mono">ATS Score</span>
+              <span className="text-[11px] font-medium text-on-surface-variant block mb-1">After (Latest)</span>
+              <span className="text-2xl font-extrabold text-amber-500">{comp.ats_score_new}</span>
+              <span className="text-[10px] text-on-surface-variant block font-mono">ATS Score</span>
             </div>
 
             <div className="bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-center">
-              <span className="text-emerald-600 dark:text-emerald-400 text-xs font-extrabold flex items-center justify-center gap-0.5">
+              <span className="text-emerald-500 text-xs font-extrabold flex items-center justify-center gap-0.5">
                 ↑ {comp.ats_score_diff}
               </span>
-              <span className="text-[9px] text-emerald-700 dark:text-emerald-400/80 font-bold block uppercase tracking-wider">
+              <span className="text-[9px] text-emerald-600 dark:text-emerald-400/80 font-bold block uppercase tracking-wider">
                 Improvement
               </span>
             </div>
@@ -102,85 +100,85 @@ export default function ResumeImprovement({ comparison, resumeCount }: ResumeImp
           <div className="space-y-3">
             {/* Skills Matched */}
             <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 w-36">
-                <span className="w-2 h-2 rounded-full bg-indigo-500 dark:bg-indigo-400" />
+              <div className="flex items-center gap-2 text-on-surface w-36">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 <span>Skills Matched</span>
               </div>
-              <div className="flex-1 max-w-[140px] mx-3 bg-gray-200 dark:bg-white/5 h-2 rounded-full overflow-hidden">
-                <div className="bg-indigo-500 h-full rounded-full" style={{ width: "100%" }} />
+              <div className="flex-1 max-w-[140px] mx-3 bg-surface-variant/50 h-2 rounded-full overflow-hidden">
+                <div className="bg-emerald-500 h-full rounded-full" style={{ width: "100%" }} />
               </div>
-              <span className="text-gray-500 dark:text-gray-400 font-mono text-[11px] w-20 text-right">
+              <span className="text-on-surface-variant font-mono text-[11px] w-20 text-right">
                 {comp.skills_matched_old} → {comp.skills_matched_new}
               </span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[11px] w-12 text-right">
+              <span className="text-emerald-500 font-bold text-[11px] w-12 text-right">
                 ↑ {comp.skills_matched_diff}
               </span>
             </div>
 
             {/* Keywords Found */}
             <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 w-36">
-                <span className="w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-400" />
+              <div className="flex items-center gap-2 text-on-surface w-36">
+                <span className="w-2 h-2 rounded-full bg-blue-500" />
                 <span>Keywords Found</span>
               </div>
-              <div className="flex-1 max-w-[140px] mx-3 bg-gray-200 dark:bg-white/5 h-2 rounded-full overflow-hidden">
+              <div className="flex-1 max-w-[140px] mx-3 bg-surface-variant/50 h-2 rounded-full overflow-hidden">
                 <div className="bg-blue-500 h-full rounded-full" style={{ width: "70%" }} />
               </div>
-              <span className="text-gray-500 dark:text-gray-400 font-mono text-[11px] w-20 text-right">
+              <span className="text-on-surface-variant font-mono text-[11px] w-20 text-right">
                 {comp.keywords_found_old} → {comp.keywords_found_new}
               </span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[11px] w-12 text-right">
+              <span className="text-emerald-500 font-bold text-[11px] w-12 text-right">
                 ↑ {comp.keywords_found_diff}
               </span>
             </div>
 
             {/* Readability */}
             <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 w-36">
-                <span className="w-2 h-2 rounded-full bg-amber-500 dark:bg-amber-400" />
+              <div className="flex items-center gap-2 text-on-surface w-36">
+                <span className="w-2 h-2 rounded-full bg-amber-500" />
                 <span>Readability</span>
               </div>
-              <div className="flex-1 max-w-[140px] mx-3 bg-gray-200 dark:bg-white/5 h-2 rounded-full overflow-hidden">
+              <div className="flex-1 max-w-[140px] mx-3 bg-surface-variant/50 h-2 rounded-full overflow-hidden">
                 <div className="bg-amber-500 h-full rounded-full" style={{ width: `${comp.readability_new}%` }} />
               </div>
-              <span className="text-gray-500 dark:text-gray-400 font-mono text-[11px] w-20 text-right">
+              <span className="text-on-surface-variant font-mono text-[11px] w-20 text-right">
                 {comp.readability_old}% → {comp.readability_new}%
               </span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[11px] w-12 text-right">
+              <span className="text-emerald-500 font-bold text-[11px] w-12 text-right">
                 ↑ {comp.readability_diff}%
               </span>
             </div>
 
             {/* Formatted Score */}
             <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 w-36">
-                <span className="w-2 h-2 rounded-full bg-purple-500 dark:bg-purple-400" />
+              <div className="flex items-center gap-2 text-on-surface w-36">
+                <span className="w-2 h-2 rounded-full bg-sky-500" />
                 <span>Formatted Score</span>
               </div>
-              <div className="flex-1 max-w-[140px] mx-3 bg-gray-200 dark:bg-white/5 h-2 rounded-full overflow-hidden">
-                <div className="bg-purple-500 h-full rounded-full" style={{ width: `${comp.formatting_new}%` }} />
+              <div className="flex-1 max-w-[140px] mx-3 bg-surface-variant/50 h-2 rounded-full overflow-hidden">
+                <div className="bg-sky-500 h-full rounded-full" style={{ width: `${comp.formatting_new}%` }} />
               </div>
-              <span className="text-gray-500 dark:text-gray-400 font-mono text-[11px] w-20 text-right">
+              <span className="text-on-surface-variant font-mono text-[11px] w-20 text-right">
                 {comp.formatting_old}% → {comp.formatting_new}%
               </span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[11px] w-12 text-right">
+              <span className="text-emerald-500 font-bold text-[11px] w-12 text-right">
                 ↑ {comp.formatting_diff}%
               </span>
             </div>
 
             {/* Impact Score */}
             <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 w-36">
-                <span className="w-2 h-2 rounded-full bg-rose-500 dark:bg-rose-400" />
+              <div className="flex items-center gap-2 text-on-surface w-36">
+                <span className="w-2 h-2 rounded-full bg-rose-500" />
                 <span>Impact Score</span>
               </div>
-              <div className="flex-1 max-w-[140px] mx-3 bg-gray-200 dark:bg-white/5 h-2 rounded-full overflow-hidden">
+              <div className="flex-1 max-w-[140px] mx-3 bg-surface-variant/50 h-2 rounded-full overflow-hidden">
                 <div className="bg-rose-500 h-full rounded-full" style={{ width: `${comp.impact_new}%` }} />
               </div>
-              <span className="text-gray-500 dark:text-gray-400 font-mono text-[11px] w-20 text-right">
+              <span className="text-on-surface-variant font-mono text-[11px] w-20 text-right">
                 {comp.impact_old}% → {comp.impact_new}%
               </span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[11px] w-12 text-right">
+              <span className="text-emerald-500 font-bold text-[11px] w-12 text-right">
                 ↑ {comp.impact_diff}%
               </span>
             </div>
@@ -189,10 +187,10 @@ export default function ResumeImprovement({ comparison, resumeCount }: ResumeImp
       )}
 
       {/* Footer */}
-      <div className="mt-5 pt-3 border-t border-gray-200 dark:border-white/10 flex items-center justify-between">
+      <div className="mt-5 pt-3 border-t border-outline-variant/30 flex items-center justify-between">
         <Link
           href="/resumes"
-          className="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-500 dark:hover:text-violet-300 flex items-center gap-1.5 transition-colors group/link"
+          className="text-xs font-semibold text-on-surface hover:text-on-surface-variant flex items-center gap-1.5 transition-colors group/link"
         >
           <span>View Detailed Comparison</span>
           <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />

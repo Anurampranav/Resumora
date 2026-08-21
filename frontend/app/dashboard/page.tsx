@@ -74,7 +74,7 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-on-surface font-sans selection:bg-violet-500/30 selection:text-white transition-colors duration-300">
+    <div className="min-h-screen bg-background text-on-surface font-sans transition-colors duration-300">
       <Sidebar />
       <main className="ml-[260px] min-h-screen flex flex-col">
         <TopNav onUploadSuccess={loadData} />
@@ -82,7 +82,7 @@ export default function DashboardPage() {
           {/* Welcome Header */}
           <section>
             <h2 className="text-2xl lg:text-3xl font-extrabold text-on-surface mb-1 tracking-tight flex items-center gap-2.5">
-              Welcome back, <span className="bg-gradient-to-r from-violet-600 via-indigo-500 to-purple-600 dark:from-violet-400 dark:via-indigo-300 dark:to-purple-400 bg-clip-text text-transparent">{displayName}</span>! 👋
+              Welcome back, <span className="text-on-surface underline underline-offset-4 decoration-outline-variant/40">{displayName}</span>! 👋
             </h2>
             <p className="text-xs lg:text-sm text-on-surface-variant font-medium">
               Let&apos;s improve your resume and land your dream job.

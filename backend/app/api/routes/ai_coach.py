@@ -32,16 +32,22 @@ settings = get_settings()
 logger = logging.getLogger(__name__)
 
 
-def _get_resume_and_text(resume_id: str, current_user: User, db: Session) -> tuple[Resume, str, str]:
+def _get_resume_and_text(resume_id: str, current_user: Any, db: Session) -> tuple[Resume, str, str]:
     """Helper to fetch user resume, download stored file, extract raw text, and get target role."""
     try:
         res_uuid = uuid.UUID(resume_id)
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid resume ID format")
 
+    user_id_str = current_user.get("id") if isinstance(current_user, dict) else getattr(current_user, "id", str(current_user))
+    try:
+        user_uuid = uuid.UUID(str(user_id_str))
+    except (ValueError, TypeError):
+        user_uuid = user_id_str
+
     resume = (
         db.query(Resume)
-        .filter(Resume.id == res_uuid, Resume.user_id == current_user.id)
+        .filter(Resume.id == res_uuid, Resume.user_id == user_uuid)
         .first()
     )
     if not resume:

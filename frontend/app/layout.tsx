@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </head>
         <body
           suppressHydrationWarning
-          className="bg-[#050505] text-[#F5F3EC] font-body-md overflow-x-hidden antialiased min-h-screen relative"
+          className="bg-background text-on-background font-body-md overflow-x-hidden antialiased min-h-screen relative transition-colors duration-200"
         >
           <AnimatedAsciiBackground />
           <div className="relative z-10">

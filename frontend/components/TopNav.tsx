@@ -43,12 +43,12 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
   ];
 
   return (
-    <header className="flex justify-between items-center w-full px-8 py-4 bg-[#050505]/75 backdrop-blur-xl border-b border-[#F5F3EC]/10 z-40 sticky top-0 shadow-sm">
+    <header className="flex justify-between items-center w-full px-8 py-4 bg-surface/80 dark:bg-[#050505]/75 backdrop-blur-xl border-b border-outline-variant/30 z-40 sticky top-0 shadow-sm transition-colors duration-200">
       {/* Global Search Bar Trigger */}
       <div className="relative w-80 md:w-96 group">
         <Search
           size={18}
-          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#96938B] group-focus-within:text-[#F5F3EC] transition-colors"
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant/70 group-focus-within:text-on-surface transition-colors"
         />
         <input
           suppressHydrationWarning
@@ -56,11 +56,11 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
           readOnly
           onClick={() => setSearchOpen(true)}
           placeholder="Search anything..."
-          className="w-full glass-input rounded-xl py-2 pl-10 pr-12 text-xs font-medium text-[#F5F3EC] placeholder:text-[#96938B] cursor-pointer shadow-sm"
+          className="w-full glass-input rounded-xl py-2 pl-10 pr-12 text-xs font-medium text-on-surface placeholder:text-on-surface-variant/70 cursor-pointer shadow-sm"
         />
         <div
           onClick={() => setSearchOpen(true)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 glass-pill px-1.5 py-0.5 rounded text-[10px] font-bold text-[#BDB8AC] shadow-sm cursor-pointer"
+          className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 glass-pill px-1.5 py-0.5 rounded text-[10px] font-bold text-on-surface-variant shadow-sm cursor-pointer"
         >
           <span>⌘</span>
           <span>K</span>
@@ -75,20 +75,20 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
           <button
             suppressHydrationWarning
             onClick={() => setNotifOpen(!notifOpen)}
-            className="relative p-2 text-[#BDB8AC] hover:text-[#F5F3EC] transition-colors hover:bg-[#F5F3EC]/10 rounded-full"
+            className="relative p-2 text-on-surface-variant hover:text-on-surface transition-colors hover:bg-surface-variant/50 rounded-full"
             title="Notifications"
           >
             <Bell size={20} />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-400 rounded-full ring-2 ring-[#050505]" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-400 rounded-full ring-2 ring-background" />
           </button>
 
           {notifOpen && (
             <div className="absolute right-0 mt-2 w-80 glass-panel rounded-2xl p-4 shadow-2xl z-50 space-y-3">
-              <div className="flex items-center justify-between border-b border-[#F5F3EC]/10 pb-2">
-                <h4 className="text-xs font-bold text-[#F5F3EC]">Notifications</h4>
+              <div className="flex items-center justify-between border-b border-outline-variant/30 pb-2">
+                <h4 className="text-xs font-bold text-on-surface">Notifications</h4>
                 <button
                   onClick={() => setNotifOpen(false)}
-                  className="text-[#96938B] hover:text-[#F5F3EC] p-0.5"
+                  className="text-on-surface-variant/70 hover:text-on-surface p-0.5"
                 >
                   <X size={14} />
                 </button>
@@ -98,12 +98,12 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
                 {notifications.map((n) => (
                   <div
                     key={n.id}
-                    className="flex items-start gap-2.5 p-2 rounded-xl glass-card text-xs text-[#F5F3EC]"
+                    className="flex items-start gap-2.5 p-2 rounded-xl glass-card text-xs text-on-surface"
                   >
-                    <CheckCircle2 size={15} className="text-emerald-400 shrink-0 mt-0.5" />
+                    <CheckCircle2 size={15} className="text-emerald-500 shrink-0 mt-0.5" />
                     <div className="flex-1 min-w-0">
                       <p className="font-medium leading-tight">{n.title}</p>
-                      <span className="text-[10px] text-[#BDB8AC]">{n.time}</span>
+                      <span className="text-[10px] text-on-surface-variant">{n.time}</span>
                     </div>
                   </div>
                 ))}
@@ -116,7 +116,7 @@ export default function TopNav({ onUploadSuccess }: { onUploadSuccess?: () => vo
         <button
           suppressHydrationWarning
           onClick={() => setModalOpen(true)}
-          className="btn-gradient text-[#050505] px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 shadow-md active:scale-95 transition-all"
+          className="btn-gradient px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 shadow-md active:scale-95 transition-all"
         >
           <UploadCloud size={16} />
           Upload Resume

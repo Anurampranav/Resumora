@@ -42,15 +42,15 @@ export default function Sidebar() {
   const initial = displayName.charAt(0).toUpperCase();
 
   return (
-    <nav className="fixed left-0 top-0 h-full w-[260px] bg-[#0A0A09]/80 backdrop-blur-2xl border-r border-[#F5F3EC]/10 shadow-2xl z-50 flex flex-col p-5 text-[#F5F3EC]">
+    <nav className="fixed left-0 top-0 h-full w-[260px] bg-surface/90 dark:bg-[#0A0A09]/80 backdrop-blur-2xl border-r border-outline-variant/30 shadow-2xl z-50 flex flex-col p-5 text-on-surface transition-colors duration-200">
       {/* Brand Header */}
       <div className="flex items-center gap-3 mb-8 px-2">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E8E3D7] to-[#BDB8AC] flex items-center justify-center text-[#050505] shadow-lg shadow-black/40 border border-[#F5F3EC]/30">
-          <Sparkles size={22} className="text-[#050505]" />
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-indigo-600 dark:from-[#E8E3D7] dark:to-[#BDB8AC] flex items-center justify-center text-white dark:text-[#050505] shadow-lg shadow-primary/20 dark:shadow-black/40 border border-white/20 dark:border-[#F5F3EC]/30">
+          <Sparkles size={22} className="text-white dark:text-[#050505]" />
         </div>
         <div>
-          <h1 className="font-extrabold text-lg text-[#F5F3EC] tracking-tight leading-none">Resumora</h1>
-          <p className="text-[11px] text-[#BDB8AC] font-semibold tracking-wide">AI Resume Analyzer</p>
+          <h1 className="font-extrabold text-lg text-on-surface tracking-tight leading-none">Resumora</h1>
+          <p className="text-[11px] text-on-surface-variant font-semibold tracking-wide">AI Resume Analyzer</p>
         </div>
       </div>
 
@@ -66,8 +66,8 @@ export default function Sidebar() {
               className={clsx(
                 "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 group",
                 active
-                  ? "bg-[#F5F3EC]/12 text-[#F5F3EC] border border-[#F5F3EC]/20 shadow-[0_4px_16px_rgba(245,243,236,0.08)]"
-                  : "text-[#BDB8AC] hover:text-[#F5F3EC] hover:bg-[#F5F3EC]/5 border border-transparent hover:border-[#F5F3EC]/10"
+                  ? "bg-primary/10 dark:bg-[#F5F3EC]/12 text-primary dark:text-[#F5F3EC] border border-primary/20 dark:border-[#F5F3EC]/20 shadow-sm"
+                  : "text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 dark:hover:bg-[#F5F3EC]/5 border border-transparent"
               )}
             >
               <div className="flex items-center gap-3">
@@ -75,13 +75,13 @@ export default function Sidebar() {
                   size={18}
                   className={clsx(
                     "transition-colors",
-                    active ? "text-[#F5F3EC]" : "text-[#96938B] group-hover:text-[#F5F3EC]"
+                    active ? "text-primary dark:text-[#F5F3EC]" : "text-on-surface-variant/70 group-hover:text-on-surface"
                   )}
                 />
                 <span>{label}</span>
               </div>
               {badge && (
-                <span className="glass-pill text-[#F5F3EC] border border-[#F5F3EC]/30 text-[9px] font-bold px-2 py-0.5 rounded-md tracking-wider">
+                <span className="glass-pill text-xs text-primary dark:text-[#F5F3EC] border border-primary/30 dark:border-[#F5F3EC]/30 text-[9px] font-bold px-2 py-0.5 rounded-md tracking-wider">
                   {badge}
                 </span>
               )}
@@ -91,56 +91,56 @@ export default function Sidebar() {
       </div>
 
       {/* Unlock Premium Card */}
-      <div className="mt-4 mb-4 glass-card bg-[#141412]/60 p-4 rounded-2xl border border-[#F5F3EC]/15 relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-[#F5F3EC]/5 rounded-full blur-xl group-hover:bg-[#F5F3EC]/10 transition-all" />
-        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 mb-2.5">
+      <div className="mt-4 mb-4 glass-card p-4 rounded-2xl border border-outline-variant/30 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/20 transition-all" />
+        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-500 dark:text-amber-400 mb-2.5">
           <Crown size={16} />
         </div>
-        <h3 className="text-sm font-bold text-[#F5F3EC] mb-1">Unlock Premium</h3>
-        <p className="text-[11px] text-[#BDB8AC] mb-3 leading-relaxed">
+        <h3 className="text-sm font-bold text-on-surface mb-1">Unlock Premium</h3>
+        <p className="text-[11px] text-on-surface-variant mb-3 leading-relaxed">
           Get ATS-optimized resume and boost your chances!
         </p>
         <button
           suppressHydrationWarning
           onClick={() => router.push("/resumes")}
-          className="w-full btn-gradient text-[#050505] text-xs font-semibold py-2 px-3 rounded-xl transition-all shadow-md active:scale-95"
+          className="w-full btn-gradient text-xs font-semibold py-2 px-3 rounded-xl transition-all shadow-md active:scale-95"
         >
           Upgrade Now
         </button>
       </div>
 
       {/* Footer Navigation & Profile */}
-      <div className="border-t border-[#F5F3EC]/10 pt-3 space-y-2">
+      <div className="border-t border-outline-variant/30 pt-3 space-y-2">
         <a
           href="#"
-          className="flex items-center gap-3 px-3 py-2 text-xs font-medium text-[#BDB8AC] hover:text-[#F5F3EC] hover:bg-[#F5F3EC]/5 rounded-xl transition-all"
+          className="flex items-center gap-3 px-3 py-2 text-xs font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 rounded-xl transition-all"
         >
-          <HelpCircle size={16} className="text-[#96938B]" />
+          <HelpCircle size={16} className="text-on-surface-variant/70" />
           <span>Help &amp; Support</span>
         </a>
-        <div className="flex items-center gap-3 px-2.5 py-2 rounded-xl glass-card border border-[#F5F3EC]/10">
+        <div className="flex items-center gap-3 px-2.5 py-2 rounded-xl glass-card border border-outline-variant/30">
           {user?.imageUrl ? (
             <Image
               src={user.imageUrl}
               alt={displayName}
               width={34}
               height={34}
-              className="w-8 h-8 rounded-full object-cover ring-2 ring-[#F5F3EC]/20"
+              className="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20"
             />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#E8E3D7] to-[#BDB8AC] flex items-center justify-center text-[#050505] font-bold text-xs shadow-sm ring-2 ring-[#F5F3EC]/20">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-sm ring-2 ring-primary/20">
               {initial}
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-[#F5F3EC] truncate">{displayName}</p>
-            <p className="text-[10px] text-[#BDB8AC] truncate">{displayEmail}</p>
+            <p className="text-xs font-semibold text-on-surface truncate">{displayName}</p>
+            <p className="text-[10px] text-on-surface-variant truncate">{displayEmail}</p>
           </div>
           <button
             suppressHydrationWarning
             onClick={() => signOut(() => router.push("/sign-in"))}
             title="Sign out"
-            className="text-[#96938B] hover:text-rose-400 transition-colors p-1"
+            className="text-on-surface-variant/70 hover:text-rose-500 transition-colors p-1"
           >
             <ChevronsUpDown size={16} />
           </button>

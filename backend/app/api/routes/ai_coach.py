@@ -248,8 +248,9 @@ def get_action_center(
     ai = get_ai_provider(settings.ai_provider)
 
     missing_skills = []
-    if resume.latest_analysis:
-        missing_skills = resume.latest_analysis.missing_skills or []
+    latest_analysis = db.query(ResumeAnalysis).filter(ResumeAnalysis.resume_id == resume.id).order_by(ResumeAnalysis.created_at.desc()).first()
+    if latest_analysis:
+        missing_skills = latest_analysis.missing_skills or []
 
     if hasattr(ai, "generate_action_center"):
         res = ai.generate_action_center(raw_text, target_role, missing_skills)

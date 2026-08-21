@@ -110,11 +110,11 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex bg-background gradient-mesh relative overflow-hidden">
+    <div className="min-h-screen w-full flex gradient-mesh relative overflow-hidden text-on-surface">
       {/* Ambient floating glass orbs — the "3D" depth cues */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute top-1/3 -right-20 w-80 h-80 bg-secondary/20 rounded-full blur-[110px] pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-tertiary/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/3 -right-20 w-80 h-80 bg-secondary/10 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-tertiary/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
@@ -124,7 +124,7 @@ export default function SignInPage() {
       <div className="hidden lg:flex flex-col justify-center flex-1 px-16 relative z-10">
         <div className="max-w-md">
           <div className="flex items-center gap-3 mb-10">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white shadow-lg shadow-primary/30">
+            <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-on-primary shadow-lg">
               <ScrollText size={26} />
             </div>
             <div>
@@ -190,7 +190,7 @@ export default function SignInPage() {
             style={{ transform: "perspective(1200px) rotateY(-1deg)" }}
           >
             <div className="flex lg:hidden items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white shadow-lg">
+              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-md">
                 <ScrollText size={22} />
               </div>
               <p className="font-headline-md text-headline-md font-bold text-on-surface">Resumora</p>

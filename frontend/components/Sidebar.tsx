@@ -45,7 +45,7 @@ export default function Sidebar() {
     <nav className="fixed left-0 top-0 h-full w-[260px] bg-surface/90 dark:bg-[#0A0A09]/80 backdrop-blur-2xl border-r border-outline-variant/30 shadow-2xl z-50 flex flex-col p-5 text-on-surface transition-colors duration-200">
       {/* Brand Header */}
       <div className="flex items-center gap-3 mb-8 px-2">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-indigo-600 dark:from-[#E8E3D7] dark:to-[#BDB8AC] flex items-center justify-center text-white dark:text-[#050505] shadow-lg shadow-primary/20 dark:shadow-black/40 border border-white/20 dark:border-[#F5F3EC]/30">
+        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-lg border border-outline-variant/30">
           <Sparkles size={22} className="text-white dark:text-[#050505]" />
         </div>
         <div>
@@ -128,7 +128,7 @@ export default function Sidebar() {
               className="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20"
             />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-sm ring-2 ring-primary/20">
+            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-xs shadow-sm ring-2 ring-primary/20">
               {initial}
             </div>
           )}

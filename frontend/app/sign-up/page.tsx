@@ -128,9 +128,9 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-background gradient-mesh relative overflow-hidden p-6">
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 -right-20 w-80 h-80 bg-tertiary/15 rounded-full blur-[110px] pointer-events-none" />
+    <div className="min-h-screen w-full flex items-center justify-center gradient-mesh relative overflow-hidden p-6 text-on-surface">
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 -right-20 w-80 h-80 bg-tertiary/10 rounded-full blur-[110px] pointer-events-none" />
       <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
       </div>
@@ -138,7 +138,7 @@ export default function SignUpPage() {
       <div className="w-full max-w-[420px] relative z-10">
         <div className="glass-panel rounded-[28px] p-8 shadow-2xl" style={{ transform: "perspective(1200px) rotateY(1deg)" }}>
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white shadow-lg">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-md">
               <ScrollText size={22} />
             </div>
             <p className="font-headline-md text-headline-md font-bold text-on-surface">Resumora</p>

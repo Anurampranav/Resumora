@@ -74,7 +74,7 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-on-surface font-sans transition-colors duration-300">
+    <div className="min-h-screen text-on-surface font-sans transition-colors duration-300">
       <Sidebar />
       <main className="ml-[260px] min-h-screen flex flex-col">
         <TopNav onUploadSuccess={loadData} />

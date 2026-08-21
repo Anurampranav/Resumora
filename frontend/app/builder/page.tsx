@@ -233,7 +233,7 @@ export default function BuilderPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#070814] text-gray-900 dark:text-gray-100 gradient-mesh">
+    <div className="min-h-screen text-on-surface gradient-mesh">
       <Sidebar />
 
       <main className="ml-[260px] flex flex-col min-h-screen">

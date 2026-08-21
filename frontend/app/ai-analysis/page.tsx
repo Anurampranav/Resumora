@@ -286,33 +286,33 @@ export default function AiAnalysisPage() {
   return (
     <>
       <Sidebar />
-      <main className="ml-[260px] min-h-screen flex flex-col bg-background text-on-surface transition-colors duration-300">
+      <main className="ml-[260px] min-h-screen flex flex-col text-on-surface transition-colors duration-300">
         <TopNav />
 
         <div className="flex-1 px-6 pb-12 pt-6 max-w-7xl w-full mx-auto flex flex-col gap-6">
           {/* Header Banner */}
-          <div className="glass-panel p-6 rounded-3xl relative overflow-hidden bg-gradient-to-r from-violet-600/15 via-indigo-600/10 to-purple-600/15 dark:from-violet-900/40 dark:via-indigo-900/30 dark:to-purple-900/40 border border-violet-500/30 shadow-2xl">
+          <div className="glass-panel p-6 rounded-3xl relative overflow-hidden border border-outline-variant/30 shadow-xl">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white shadow-xl shadow-violet-600/30 border border-white/20">
+                <div className="w-14 h-14 rounded-2xl bg-surface-variant/50 border border-outline-variant/30 flex items-center justify-center text-on-surface shadow-md">
                   <Sparkles size={28} />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h1 className="font-extrabold text-2xl text-gray-900 dark:text-white tracking-tight">RESUMORA AI</h1>
-                    <span className="bg-violet-500/20 border border-violet-500/40 text-violet-700 dark:text-violet-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                    <h1 className="font-extrabold text-2xl text-on-surface tracking-tight">RESUMORA AI</h1>
+                    <span className="glass-pill text-on-surface border border-outline-variant/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                       Live AI Coach
                     </span>
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">
+                  <p className="text-xs text-on-surface-variant mt-1">
                     Your personal resume coach
                   </p>
                 </div>
               </div>
 
               {/* Resume Selector */}
-              <div className="flex items-center gap-3 bg-white/60 dark:bg-white/5 border border-gray-200 dark:border-white/10 p-2.5 rounded-2xl backdrop-blur-md">
-                <FileCheck size={18} className="text-violet-600 dark:text-violet-400" />
+              <div className="flex items-center gap-3 glass-card border border-outline-variant/30 p-2.5 rounded-2xl backdrop-blur-md">
+                <FileCheck size={18} className="text-on-surface" />
                 <div className="flex flex-col">
                   <span className="text-[10px] text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wider">Active Resume Context</span>
                   <select

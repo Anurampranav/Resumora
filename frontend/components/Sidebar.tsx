@@ -7,7 +7,6 @@ import {
   BarChart3,
   Users2,
   PenSquare,
-  Download,
   Settings,
   HelpCircle,
   ChevronsUpDown,
@@ -27,7 +26,6 @@ const NAV_ITEMS = [
   { label: "Job Match", icon: Users2, href: "/job-roles" },
   { label: "ATS Reports", icon: BarChart3, href: "/ats-reports" },
   { label: "Resume Builder", icon: PenSquare, href: "/builder", badge: "NEW" },
-  { label: "Downloads", icon: Download, href: "/ats-reports" },
   { label: "Settings", icon: Settings, href: "/resumes" },
 ];
 

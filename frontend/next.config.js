@@ -13,5 +13,10 @@ const nextConfig = {
       { source: "/signup", destination: "/sign-up" },
     ];
   },
+  async redirects() {
+    return [
+      { source: "/downloads", destination: "/resumes", permanent: false },
+    ];
+  },
 };
 module.exports = nextConfig;

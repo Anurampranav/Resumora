@@ -285,53 +285,6 @@ npm run dev
 # Frontend runs at http://localhost:3000
 ```
 
----
-
-## Environment Variables
-
-### Backend — `backend/.env`
-
-```env
-# PostgreSQL connection string
-DATABASE_URL=postgresql://user:password@host:port/dbname
-
-# Clerk authentication (RS256 JWT verification)
-CLERK_SECRET_KEY=sk_test_...
-CLERK_JWKS_URL=https://<your-clerk-instance>.clerk.accounts.dev/.well-known/jwks.json
-
-# Supabase Storage (optional — leave blank to use local disk storage)
-SUPABASE_URL=https://<project>.supabase.co
-SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-
-# AI provider: mock | gemini | openai | claude
-# Leave as "mock" during development — no API key needed
-AI_PROVIDER=mock
-GEMINI_API_KEY=
-OPENAI_API_KEY=
-ANTHROPIC_API_KEY=
-
-# App settings
-JWT_SECRET=change-me-in-production
-ENVIRONMENT=development
-ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-```
-
-### Frontend — `frontend/.env.local`
-
-```env
-# Backend API URL
-NEXT_PUBLIC_API_URL=http://localhost:8000
-
-# Clerk (get from Clerk Dashboard → API Keys)
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_SECRET_KEY=sk_test_...
-```
-
-> **Never commit `.env` or `.env.local` files.** Both are in `.gitignore`. Only `.env.example` files are committed.
-
----
-
 ## Authentication
 
 Resumora uses **[Clerk](https://clerk.dev)** for authentication:
